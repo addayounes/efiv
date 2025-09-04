@@ -1,5 +1,11 @@
+import { Button } from "antd";
+
 function App() {
-  return <></>;
+  return (
+    <>
+      <Button type="primary">Primary</Button>
+    </>
+  );
 }
 
 export default App;
