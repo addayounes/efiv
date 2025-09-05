@@ -1,5 +1,6 @@
 import Loading from "../pages/loading";
 import { Navigate } from "react-router-dom";
+import { useAppSelector } from "../redux/utils";
 import { __routes__ } from "../constants/routes";
 
 interface PrivateRouteProps {
@@ -7,7 +8,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ Element }) => {
-  const { authState } = useAuth();
+  const authState = useAppSelector((state) => state.auth);
 
   const isAuth = authState.isAuth;
   const isLoading = authState.isLoading;

@@ -1,5 +1,6 @@
-import App from "../App";
+import Dashboard from "../pages/dashboard";
 import { __routes__ } from "../constants/routes";
+import Login from "../pages/auth/login";
 
 export interface RouteType {
   path: string;
@@ -10,7 +11,7 @@ export interface RouteType {
 export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Dashboard,
-    element: <App />,
+    element: <Dashboard />,
     withLayout: true,
   },
 ];
@@ -18,6 +19,6 @@ export const privateRoutes: RouteType[] = [
 export const publicRoutes: RouteType[] = [
   {
     path: __routes__.Auth.Login,
-    element: <></>,
+    element: <Login />,
   },
 ];
