@@ -24,7 +24,9 @@ const CirculationsList: React.FC = () => {
           </Button>
         }
       />
-      <CirculationsListHeader />
+      <div className="px-6">
+        <CirculationsListHeader />
+      </div>
       <CirculationsTable />
     </div>
   );
