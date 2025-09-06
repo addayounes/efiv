@@ -1,17 +1,29 @@
+import Login from "../pages/auth/login";
 import Dashboard from "../pages/dashboard";
 import { __routes__ } from "../constants/routes";
-import Login from "../pages/auth/login";
+import CirculationsList from "../pages/circulations/list";
+import CreateCirculationForm from "../pages/circulations/create-form";
 
 export interface RouteType {
   path: string;
-  element: React.JSX.Element;
   withLayout?: boolean;
+  element: React.JSX.Element;
 }
 
 export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Dashboard,
     element: <Dashboard />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Circulations.Main,
+    element: <CirculationsList />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Circulations.Create,
+    element: <CreateCirculationForm />,
     withLayout: true,
   },
 ];

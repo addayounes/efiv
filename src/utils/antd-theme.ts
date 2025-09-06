@@ -1,3 +1,6 @@
 export const AntdTheme = {
-  token: {},
+  token: {
+    colorPrimary: "#003366",
+    borderRadius: 5,
+  },
 };

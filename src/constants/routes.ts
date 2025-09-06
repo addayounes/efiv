@@ -3,8 +3,8 @@ export const __routes__ = {
   Circulations: {
     Main: "/circulations",
     Details: "/circulations/:id",
-    Create: "/circulations/create",
-    Update: "/circulations/:id/update",
+    Create: "/circulations/create/:step",
+    Update: "/circulations/:id/update/:step",
   },
   Auth: {
     Login: "/auth/login",
