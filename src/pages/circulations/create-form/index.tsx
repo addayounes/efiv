@@ -3,6 +3,7 @@ import {
   CREATE_CIRCULATION_FORM_STEPS,
 } from "../../../constants/create-form-steps";
 import { useState } from "react";
+import FormActions from "./actions";
 import type { StepProps } from "antd";
 import { useParams } from "react-router-dom";
 import CirculationFormStepper from "./stepper";
@@ -22,7 +23,14 @@ const CreateCirculationForm: React.FC<CreateCirculationFormProps> = ({}) => {
       <PageHeader title="Créer une circulation" />
       <main className="px-6">
         <CirculationFormStepper steps={steps} setSteps={setSteps} />
-        <FormContentRenderer step={step as CreateCirculationSteps} />
+        <div className="flex flex-col border border-gray-200 rounded h-[calc(100vh-174px)] overflow-y-auto">
+          <div className="p-4 flex-1">
+            <FormContentRenderer step={step as CreateCirculationSteps} />
+          </div>
+          <div className="justify-end border-t border-gray-200 mt-4 p-4">
+            <FormActions />
+          </div>
+        </div>
       </main>
     </div>
   );

@@ -1,6 +1,7 @@
 import {
+  isStepValid,
+  getStepIndex,
   CreateCirculationSteps,
-  CREATE_CIRCULATION_FORM_STEPS_KEYS,
 } from "../../../constants/create-form-steps";
 import { useEffect, useMemo } from "react";
 import { Steps, type StepProps } from "antd";
@@ -21,18 +22,13 @@ const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
   const navigate = useNavigate();
 
   const currentStep = useMemo(
-    () => CREATE_CIRCULATION_FORM_STEPS_KEYS.findIndex((s) => s === step),
+    () => getStepIndex(step as CreateCirculationSteps),
     [step]
   );
 
   // reset to first step if step param is invalid
   useEffect(() => {
-    if (
-      CREATE_CIRCULATION_FORM_STEPS_KEYS.includes(
-        step as CreateCirculationSteps
-      )
-    )
-      return;
+    if (isStepValid(step as CreateCirculationSteps)) return;
 
     navigate(
       __routes__.Circulations.Create.replace(
@@ -42,7 +38,11 @@ const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
     );
   }, [step]);
 
-  return <Steps items={steps} current={currentStep} />;
+  return (
+    <div className="pt-6 pb-8">
+      <Steps items={steps} current={currentStep} />
+    </div>
+  );
 };
 
 export default CirculationFormStepper;
