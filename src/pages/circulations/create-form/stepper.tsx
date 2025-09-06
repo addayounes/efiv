@@ -42,11 +42,7 @@ const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
     );
   }, [step]);
 
-  return (
-    <div>
-      <Steps items={steps} current={currentStep} />
-    </div>
-  );
+  return <Steps items={steps} current={currentStep} />;
 };
 
 export default CirculationFormStepper;
