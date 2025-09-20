@@ -1,4 +1,5 @@
-export interface CreateCirculationDto {
+export interface CreateCirculationDto extends CreateCirculationAddOnsDto {
+  date?: string;
   destination?: string;
   origine?: string;
   marqueCommerciale?: string;
@@ -12,4 +13,10 @@ export interface CreateCirculationDto {
   libelleCourseSpeciale?: string;
   videVoyageur?: boolean;
   serviceDeCourse?: string[];
+}
+
+export interface CreateCirculationAddOnsDto {
+  dateType?: string;
+  startDate?: string;
+  endDate?: string;
 }

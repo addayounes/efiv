@@ -8,7 +8,7 @@ import { Field, useFormikContext } from "formik";
 import Select from "../../../../components/formik/select";
 import Switch from "../../../../components/formik/switch";
 import TextField from "../../../../components/formik/textfield";
-import FormGroupTitle from "../../../../components/formik/group-title";
+import FormGroupTitle from "../../../../components/group-title";
 import { TRAIN_LENGTH_OPTIONS } from "../../../../constants/train-length";
 import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
 import { OnboardServices } from "../../../../constants/onboard-services";

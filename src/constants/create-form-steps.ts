@@ -2,16 +2,16 @@ import type { StepProps } from "antd";
 
 export const CREATE_CIRCULATION_FORM_STEPS: StepProps[] = [
   {
-    title: "Informations générales",
+    title: "Générale",
   },
   {
-    title: "Date & Calendrier",
+    title: "Régime",
   },
   {
     title: "Parcours",
   },
   {
-    title: "Récapitulatif & Confirmation",
+    title: "Récapitulatif",
   },
 ];
 
