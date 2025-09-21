@@ -36,8 +36,8 @@ const FormContent: React.FC<FormContentProps> = () => {
         return (
           <main className="px-6">
             <CirculationFormStepper steps={steps} setSteps={setSteps} />
-            <div className="flex flex-col border border-gray-200 rounded h-[calc(100vh-174px)] overflow-y-auto">
-              <div className="flex-1">
+            <div className="flex flex-col border border-gray-200 rounded h-[calc(100vh-174px)]">
+              <div className="flex-1 overflow-y-auto">
                 <FormContentRenderer step={step as CreateCirculationSteps} />
               </div>
               <div className="justify-end border-t border-gray-200 p-4">

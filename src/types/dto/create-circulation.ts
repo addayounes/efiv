@@ -13,6 +13,8 @@ export interface CreateCirculationDto extends CreateCirculationAddOnsDto {
   libelleCourseSpeciale?: string;
   videVoyageur?: boolean;
   serviceDeCourse?: string[];
+
+  parcours: any[];
 }
 
 export interface CreateCirculationAddOnsDto {

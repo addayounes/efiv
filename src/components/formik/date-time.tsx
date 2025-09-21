@@ -16,7 +16,7 @@ const DateTimePicker: React.FC<DateTimePickerProps & DatePickerProps> = (
   const id = `formik-datetime-${props.name}`;
 
   return (
-    <div className="w-full">
+    <div>
       {props.label && (
         <label className="text-sm text-gray-700 font-medium" htmlFor={id}>
           {props.label}
@@ -25,6 +25,7 @@ const DateTimePicker: React.FC<DateTimePickerProps & DatePickerProps> = (
       <div>
         <DatePicker
           id={id}
+          size="large"
           {...field}
           {...props}
           needConfirm={false}

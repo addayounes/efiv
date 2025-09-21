@@ -21,7 +21,7 @@ const Radio: React.FC<RadioProps & AntdRadioProps> = (props) => {
         </label>
       )}
       <div>
-        <AntdRadio.Group id={id} {...field} {...props} />
+        <AntdRadio.Group size="large" id={id} {...field} {...props} />
       </div>
       {error && <p className="text-xs font-medium text-red-500">{error}</p>}
     </div>

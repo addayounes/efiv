@@ -19,7 +19,13 @@ const TextField: React.FC<TextFieldProps> = (props) => {
           {props.label}
         </label>
       )}
-      <Input id={id} {...field} {...props} status={error ? "error" : ""} />
+      <Input
+        id={id}
+        size="large"
+        {...field}
+        {...props}
+        status={error ? "error" : ""}
+      />
       {error && <p className="text-xs font-medium text-red-500">{error}</p>}
     </div>
   );
