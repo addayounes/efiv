@@ -22,16 +22,27 @@ const RoutesConfig: React.FC<RouteStepProps> = ({}) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
 
   const handleAddStop = () => {
-    setFieldValue("parcours", [
-      { uic: undefined, arrival: undefined, departure: undefined },
-      ...(values.parcours || []),
-    ]);
+    const newStop = {
+      uic: undefined,
+      arrival: undefined,
+      departure: undefined,
+    };
+
+    if ((values.parcours?.length ?? 0) < 2)
+      setFieldValue("parcours", [newStop, ...(values.parcours || [])]);
+    else {
+      const _parcours = [...values.parcours];
+      _parcours.splice(_parcours.length - 1, 0, newStop);
+      setFieldValue("parcours", _parcours);
+    }
   };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <FormGroupTitle>Dessertes</FormGroupTitle>
+        <FormGroupTitle>
+          Dessertes ({values.parcours?.length ?? 0})
+        </FormGroupTitle>
         <Button onClick={handleAddStop} htmlType="button">
           Ajouter une desserte
         </Button>
