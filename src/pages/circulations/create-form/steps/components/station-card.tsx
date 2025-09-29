@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import CouplageTab from "./stops/couplage";
 import StepsGeneralTab from "./stops/general";
 import { Field, useFormikContext } from "formik";
 import Select from "../../../../../components/formik/select";
 import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
+import { useStations } from "../../../../../hooks/use-stations";
+import { mapStations } from "../../../../../services/search-stops";
 import type { CreateCirculationDto } from "../../../../../types/dto/create-circulation";
 
 interface StationCardProps {
@@ -12,6 +15,9 @@ interface StationCardProps {
 
 const StationCard: React.FC<StationCardProps> = ({ index }) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
+
+  const [stationSearchKeyword, setStationSearchKeyword] = useState("");
+  const { stations } = useStations(stationSearchKeyword);
 
   const isOrigin = index === 0;
   const isDestination = index === values.parcours?.length - 1;
@@ -46,13 +52,17 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                     {index + 1}
                   </span>
                   <Field
+                    showSearch
+                    searchValue={stationSearchKeyword}
+                    onSearch={(value: string) => setStationSearchKeyword(value)}
+                    //
                     allowClear
                     as={Select}
                     size="medium"
                     className="min-w-[350px]"
                     name={`parcours.${index}.uic`}
                     placeholder="Choisir une gare"
-                    options={[]}
+                    options={mapStations(stations)}
                   />
                 </div>
 

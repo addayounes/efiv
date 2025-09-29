@@ -2,21 +2,26 @@ import {
   getSubModesForMode,
   CIRCULATION_MODE_OPTIONS,
 } from "../../../../constants/mode-sub-mode";
-import { useMemo } from "react";
 import { Collapse } from "antd";
+import { useMemo, useState } from "react";
 import { Field, useFormikContext } from "formik";
 import Select from "../../../../components/formik/select";
 import Switch from "../../../../components/formik/switch";
+import { useStations } from "../../../../hooks/use-stations";
 import TextField from "../../../../components/formik/textfield";
 import FormGroupTitle from "../../../../components/group-title";
+import { mapStations } from "../../../../services/search-stops";
+import { OnboardServices } from "../../../../constants/onboard-services";
 import { TRAIN_LENGTH_OPTIONS } from "../../../../constants/train-length";
 import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
-import { OnboardServices } from "../../../../constants/onboard-services";
 
 interface GeneralStepProps {}
 
 const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
+
+  const [stationSearchKeyword, setStationSearchKeyword] = useState("");
+  const { stations } = useStations(stationSearchKeyword);
 
   const subModes = useMemo(
     () => getSubModesForMode(values.mode as any),
@@ -96,7 +101,6 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
 
         <div className="mt-8">
           <Collapse
-            size="small"
             items={[
               {
                 key: "1",
@@ -146,13 +150,17 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
         <FormGroupTitle>Origine et destination</FormGroupTitle>
         <div className="space-y-4">
           <Field
+            showSearch
+            searchValue={stationSearchKeyword}
+            onSearch={(value: string) => setStationSearchKeyword(value)}
+            //
             allowClear
             as={Select}
             name="origine"
             label="Origine"
             className="w-full"
             placeholder="Sélectionner l'origine"
-            options={[]}
+            options={mapStations(stations)}
           />
           <div className="relative ml-3">
             {/* Line */}
@@ -161,13 +169,17 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             <div className="w-2 h-2 rounded-full bg-gray-300 absolute right-[12.5px]" />
           </div>
           <Field
+            showSearch
+            searchValue={stationSearchKeyword}
+            onSearch={(value: string) => setStationSearchKeyword(value)}
+            //
             allowClear
             as={Select}
             name="destination"
             label="Destination"
             className="w-full"
             placeholder="Sélectionner la destination"
-            options={[]}
+            options={mapStations(stations)}
           />
         </div>
 
