@@ -1,31 +1,23 @@
 import type { StepProps } from "antd";
 
 export const CREATE_CIRCULATION_FORM_STEPS: StepProps[] = [
-  {
-    title: "Générale",
-  },
-  {
-    title: "Régime",
-  },
-  {
-    title: "Parcours",
-  },
-  {
-    title: "Récapitulatif",
-  },
+  { title: "Générale" },
+  { title: "Parcours" },
+  { title: "Régime" },
+  { title: "Récapitulatif" },
 ];
 
 export enum CreateCirculationSteps {
   GENERAL = "general",
-  DATE = "date",
   ROUTE = "route",
+  DATE = "date",
   SUMMARY = "summary",
 }
 
 export const CREATE_CIRCULATION_FORM_STEPS_KEYS = [
   CreateCirculationSteps.GENERAL,
-  CreateCirculationSteps.DATE,
   CreateCirculationSteps.ROUTE,
+  CreateCirculationSteps.DATE,
   CreateCirculationSteps.SUMMARY,
 ];
 

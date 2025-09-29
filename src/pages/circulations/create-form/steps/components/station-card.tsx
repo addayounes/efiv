@@ -56,7 +56,10 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                   />
                 </div>
 
-                <Tag className="font-medium" color="#003366">
+                <Tag
+                  className="font-medium"
+                  color={isDestination || isOrigin ? "#003366" : "gray"}
+                >
                   {tagLabel}
                 </Tag>
               </div>

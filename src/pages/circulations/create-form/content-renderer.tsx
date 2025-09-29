@@ -10,8 +10,8 @@ interface FormContentRendererProps {
 
 const CONTENT_MAP: Record<CreateCirculationSteps, React.JSX.Element> = {
   [CreateCirculationSteps.GENERAL]: <GeneralStep />,
-  [CreateCirculationSteps.DATE]: <DateStep />,
   [CreateCirculationSteps.ROUTE]: <RouteStep />,
+  [CreateCirculationSteps.DATE]: <DateStep />,
   [CreateCirculationSteps.SUMMARY]: <SummaryStep />,
 };
 
