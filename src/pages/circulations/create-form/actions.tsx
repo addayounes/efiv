@@ -43,13 +43,23 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
         {isFirstStep ? "Annuler" : "Précédent"}
       </Button>
 
-      <Button
-        type="primary"
-        onClick={isLastStep ? undefined : onNext}
-        htmlType={isLastStep ? "submit" : "button"}
-      >
-        {isLastStep ? "Terminer" : "Suivant"}
-      </Button>
+      <div className="flex items-center gap-4">
+        <Button
+          type="default"
+          htmlType="button"
+          onClick={isFirstStep ? onCancel : onPrevious}
+        >
+          Enregistrer en brouillon
+        </Button>
+
+        <Button
+          type="primary"
+          onClick={isLastStep ? undefined : onNext}
+          htmlType={isLastStep ? "submit" : "button"}
+        >
+          {isLastStep ? "Terminer" : "Suivant"}
+        </Button>
+      </div>
     </div>
   );
 };

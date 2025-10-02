@@ -8,6 +8,7 @@ import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
 import { useStations } from "../../../../../hooks/use-stations";
 import { mapStations } from "../../../../../services/search-stops";
 import type { CreateCirculationDto } from "../../../../../types/dto/create-circulation";
+import InfoConjoncturelle from "./stops/info-conj";
 
 interface StationCardProps {
   index: number;
@@ -94,7 +95,9 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                   tab={
                     <p className="text-sm font-medium">Info conjoncturelle</p>
                   }
-                ></Tabs.TabPane>
+                >
+                  <InfoConjoncturelle index={index} />
+                </Tabs.TabPane>
 
                 <Tabs.TabPane
                   key="4"

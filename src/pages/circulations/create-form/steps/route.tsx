@@ -10,7 +10,7 @@ const RouteStep: React.FC<RouteStepProps> = ({}) => {
   return (
     <div className="flex h-full">
       <div className="flex-2/3 p-4 space-y-6 border-r border-gray-200">
-        {/* <CompositionConfig /> */}
+        <CompositionConfig />
         <RoutesConfig />
       </div>
       <div className="flex-1/3 p-4 overflow-y-auto"></div>
