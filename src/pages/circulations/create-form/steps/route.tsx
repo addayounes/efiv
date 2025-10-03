@@ -9,11 +9,11 @@ interface RouteStepProps {}
 const RouteStep: React.FC<RouteStepProps> = ({}) => {
   return (
     <div className="flex h-full">
-      <div className="flex-2/3 p-4 space-y-6 border-r border-gray-200">
+      <div className="w-2/3 p-4 space-y-6 border-r border-gray-200">
         <CompositionConfig />
         <RoutesConfig />
       </div>
-      <div className="flex-1/3 p-4 overflow-y-auto"></div>
+      <div className="w-1/3 p-4 overflow-y-auto"></div>
     </div>
   );
 };
@@ -24,8 +24,8 @@ const RoutesConfig: React.FC<RouteStepProps> = ({}) => {
   const handleAddStop = () => {
     const newStop = {
       uic: undefined,
-      arrival: undefined,
-      departure: undefined,
+      arrivee: undefined,
+      depart: undefined,
     };
 
     if ((values.parcours?.length ?? 0) < 2)

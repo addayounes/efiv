@@ -9,6 +9,7 @@ import { Field, useFormikContext } from "formik";
 import Table from "../../../../../../components/table";
 import Select from "../../../../../../components/formik/select";
 import TextArea from "../../../../../../components/formik/textarea";
+import DateTimePicker from "../../../../../../components/formik/date-time";
 import type { CreateCirculationDto } from "../../../../../../types/dto/create-circulation";
 
 interface InfoConjoncturelleProps {
@@ -57,19 +58,20 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
           data={infos}
           bordered
           size="small"
-          scroll={infos.length ? { y: 300 } : undefined}
+          scroll={infos.length ? { y: 300, x: 300 } : undefined}
           head={[
             {
               title: "Type",
               dataIndex: "type",
               key: "type",
+              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
                     allowClear
                     as={Select}
                     size="medium"
-                    className="min-w-[200px]"
+                    className="min-w-[170px]"
                     placeholder="Choisir un type"
                     options={INFO_CONJ_TYPE_OPTIONS}
                     name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.typeInformation`}
@@ -81,13 +83,14 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
               title: "Catégorie",
               dataIndex: "categorie",
               key: "categorie",
+              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
                     allowClear
                     as={Select}
                     size="medium"
-                    className="min-w-[200px]"
+                    className="min-w-[170px]"
                     placeholder="Choisir une catégorie"
                     options={INFO_CONJ_CATEGORY_OPTIONS}
                     name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.categorie`}
@@ -99,14 +102,52 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
               title: "Contenu",
               dataIndex: "texte",
               key: "texte",
+              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
-                    size="small"
-                    as={TextArea}
                     rows={1}
+                    size="medium"
+                    as={TextArea}
                     placeholder="Texte"
+                    className="min-w-[170px]"
                     name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.texte`}
+                  />
+                );
+              },
+            },
+            {
+              title: "Date de début de publication",
+              dataIndex: "dateHeureDebutPublication",
+              key: "dateHeureDebutPublication",
+              width: 200,
+              render(_v, _r, infoIndex) {
+                return (
+                  <Field
+                    showTime
+                    size="medium"
+                    as={DateTimePicker}
+                    format="DD/MM/YYYY HH:mm"
+                    className="min-w-[170px]"
+                    name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureDebutPublication`}
+                  />
+                );
+              },
+            },
+            {
+              title: "Date de fin de publication",
+              dataIndex: "dateHeureFinPublication",
+              key: "dateHeureFinPublication",
+              width: 200,
+              render(_v, _r, infoIndex) {
+                return (
+                  <Field
+                    showTime
+                    size="medium"
+                    as={DateTimePicker}
+                    format="DD/MM/YYYY HH:mm"
+                    className="min-w-[170px]"
+                    name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureFinPublication`}
                   />
                 );
               },
@@ -115,6 +156,7 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
               title: "Actions",
               dataIndex: "actions",
               key: "actions",
+              width: 80,
               render(_v, _r, infoIndex) {
                 return (
                   <div>

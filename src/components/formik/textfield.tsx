@@ -1,5 +1,6 @@
 import { Input } from "antd";
 import { useField } from "formik";
+import FieldError from "./field-error";
 import type { FieldInputProps } from "formik";
 
 interface TextFieldProps extends FieldInputProps<string> {
@@ -26,7 +27,7 @@ const TextField: React.FC<TextFieldProps> = (props) => {
         {...props}
         status={error ? "error" : ""}
       />
-      {error && <p className="text-xs font-medium text-red-500">{error}</p>}
+      {error && <FieldError>{error}</FieldError>}
     </div>
   );
 };

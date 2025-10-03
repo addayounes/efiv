@@ -1,17 +1,25 @@
 import {
+  flattenErrors,
+  buildNestedTouched,
+} from "../../../utils/formik-helpers";
+import {
   getNextStep,
   getPreviousStep,
   CreateCirculationSteps,
 } from "../../../constants/create-form-steps";
 import { Button } from "antd";
+import { useFormikContext } from "formik";
 import { __routes__ } from "../../../constants/routes";
 import { useNavigate, useParams } from "react-router-dom";
+import type { CreateCirculationDto } from "../../../types/dto/create-circulation";
+import { FieldsToValidateByStep } from "../../../validation/create-circulation.validation";
 
 interface FormActionsProps {}
 
 const FormActions: React.FC<FormActionsProps> = ({}) => {
   const { step } = useParams();
   const navigate = useNavigate();
+  const { validateForm, setTouched } = useFormikContext<CreateCirculationDto>();
 
   const isFirstStep = step === CreateCirculationSteps.GENERAL;
   const isLastStep = step === CreateCirculationSteps.SUMMARY;
@@ -26,11 +34,35 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
     navigate(__routes__.Circulations.Main);
   };
 
-  const onNext = () => {
+  const onNext = async () => {
+    const isStepValid = await validateStep();
+
+    if (!isStepValid) return;
+
     const nextStep = getNextStep(step as CreateCirculationSteps);
-    console.log(nextStep);
     if (!nextStep) return;
     navigate(__routes__.Circulations.Create.replace(":step", nextStep));
+  };
+
+  const validateStep = async () => {
+    const errors = await validateForm();
+
+    const fieldsToValidate =
+      FieldsToValidateByStep[step as CreateCirculationSteps];
+
+    const flattenedErrors = flattenErrors(errors);
+
+    const stepErrors = flattenedErrors.filter((errPath) =>
+      fieldsToValidate.some((field) => errPath.startsWith(field))
+    );
+
+    if (stepErrors.length > 0) {
+      const nestedTouched = buildNestedTouched(stepErrors);
+      setTouched(nestedTouched, true);
+      return false;
+    }
+
+    return true;
   };
 
   return (

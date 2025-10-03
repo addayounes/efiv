@@ -9,6 +9,7 @@ import Radio from "../../../../components/formik/radio";
 import FormGroupTitle from "../../../../components/group-title";
 import DateTimePicker from "../../../../components/formik/date-time";
 import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
+import dayjs from "dayjs";
 
 interface DateStepProps {}
 
@@ -22,7 +23,10 @@ const DateStep: React.FC<DateStepProps> = ({}) => {
           name="dateType"
           optionType="button"
           buttonStyle="solid"
-          options={CIRCULATION_DATE_OPTIONS}
+          // TODO: Enable calendar option when feature is ready
+          options={CIRCULATION_DATE_OPTIONS.map((_, i) =>
+            i === 1 ? { ..._, disabled: true } : _
+          )}
           defaultValue={CirculationDateType.Single}
         />
       </div>
@@ -41,11 +45,11 @@ const DateSettingsRenderer: React.FC = () => {
     [CirculationDateType.Single]: (
       <div className="space-y-4">
         <Field
-          showTime
           name="date"
+          label="Date"
+          minDate={dayjs()}
           as={DateTimePicker}
-          label="Date et heure"
-          format="YYYY-MM-DD HH:mm"
+          format="YYYY-MM-DD"
         />
       </div>
     ),

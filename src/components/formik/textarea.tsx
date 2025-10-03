@@ -1,5 +1,6 @@
 import { Input } from "antd";
 import { useField } from "formik";
+import FieldError from "./field-error";
 import type { FieldInputProps } from "formik";
 
 interface TextAreaProps extends FieldInputProps<string> {}
@@ -10,13 +11,15 @@ const TextArea: React.FC<TextAreaProps> = (props) => {
 
   return (
     <div>
-      <Input.TextArea
-        {...field}
-        size="large"
-        {...props}
-        status={error ? "error" : ""}
-      />
-      {error && <p className="text-xs font-medium text-red-500">{error}</p>}
+      <div>
+        <Input.TextArea
+          {...field}
+          size="large"
+          {...props}
+          status={error ? "error" : ""}
+        />
+      </div>
+      {error && <FieldError>{error}</FieldError>}
     </div>
   );
 };

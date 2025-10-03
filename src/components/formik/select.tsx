@@ -1,4 +1,5 @@
 import { useField } from "formik";
+import FieldError from "./field-error";
 import { Select as AntSelect } from "antd";
 import type { FieldInputProps } from "formik";
 
@@ -8,7 +9,7 @@ interface SelectProps extends FieldInputProps<any> {
 
 const Select: React.FC<SelectProps> = (props) => {
   const [field, meta, helpers] = useField(props);
-  const error = meta.touched && meta.error ? true : false;
+  const error = meta.touched && meta.error ? meta.error : null;
 
   const id = `formik-select-${props.name}`;
 
@@ -34,6 +35,8 @@ const Select: React.FC<SelectProps> = (props) => {
           }}
         />
       </div>
+
+      {error && <FieldError>{error}</FieldError>}
     </div>
   );
 };

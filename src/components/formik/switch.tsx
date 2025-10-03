@@ -1,4 +1,5 @@
 import { useField } from "formik";
+import FieldError from "./field-error";
 import { Switch as AntSwitch } from "antd";
 import type { FieldInputProps } from "formik";
 
@@ -7,7 +8,8 @@ interface SwitchProps extends FieldInputProps<any> {
 }
 
 const Switch: React.FC<SwitchProps> = (props) => {
-  const [field, , helpers] = useField(props);
+  const [field, meta, helpers] = useField(props);
+  const error = meta.touched && meta.error ? meta.error : null;
 
   const id = `formik-switch-${props.name}`;
 
@@ -18,16 +20,20 @@ const Switch: React.FC<SwitchProps> = (props) => {
           {props.label}
         </label>
       )}
-      <AntSwitch
-        id={id}
-        {...field}
-        {...props}
-        checked={field.value}
-        onChange={(checked) => {
-          helpers.setValue(checked);
-          props.onChange?.(checked);
-        }}
-      />
+      <div>
+        <AntSwitch
+          id={id}
+          {...field}
+          {...props}
+          checked={field.value}
+          onChange={(checked) => {
+            helpers.setValue(checked);
+            props.onChange?.(checked);
+          }}
+        />
+      </div>
+
+      {error && <FieldError>{error}</FieldError>}
     </div>
   );
 };

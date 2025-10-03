@@ -1,5 +1,6 @@
 import { useField } from "formik";
 import { DatePicker } from "antd";
+import FieldError from "./field-error";
 import type { DatePickerProps } from "antd";
 import type { FieldInputProps } from "formik";
 
@@ -33,7 +34,7 @@ const DateTimePicker: React.FC<DateTimePickerProps & DatePickerProps> = (
           onChange={(value) => helpers.setValue(value)}
         />
       </div>
-      {error && <p className="text-xs font-medium text-red-500">{error}</p>}
+      {error && <FieldError>{error}</FieldError>}
     </div>
   );
 };

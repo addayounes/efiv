@@ -9,11 +9,16 @@ import { useParams } from "react-router-dom";
 import CirculationFormStepper from "./stepper";
 import FormContentRenderer from "./content-renderer";
 import FormikForm from "../../../components/formik/form";
+import { CirculationDateType } from "../../../constants/circulation-date-types";
 import type { CreateCirculationDto } from "../../../types/dto/create-circulation";
+import { CreateCirculationSchema } from "../../../validation/create-circulation.validation";
 
 interface FormContentProps {}
 
-const initialValues: CreateCirculationDto = {};
+const initialValues: CreateCirculationDto = {
+  dateType: CirculationDateType.Single,
+  parcours: [],
+};
 
 const FormContent: React.FC<FormContentProps> = () => {
   const { step } = useParams();
@@ -31,6 +36,7 @@ const FormContent: React.FC<FormContentProps> = () => {
       withLoadingToast
       onSubmit={handleSubmitForm}
       initialValues={initialValues}
+      validationSchema={CreateCirculationSchema}
     >
       {() => {
         return (
