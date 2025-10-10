@@ -1,6 +1,8 @@
 import { Button } from "antd";
+import { defaultStop } from "../form";
 import { useFormikContext } from "formik";
 import StationCard from "./components/station-card";
+import InfoConjConfig from "./components/info-conj";
 import FormGroupTitle from "../../../../components/group-title";
 import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
 
@@ -9,8 +11,9 @@ interface RouteStepProps {}
 const RouteStep: React.FC<RouteStepProps> = ({}) => {
   return (
     <div className="flex h-full">
-      <div className="w-2/3 p-4 space-y-6 border-r border-gray-200">
-        <CompositionConfig />
+      <div className="w-2/3 p-4 space-y-10 border-r border-gray-200">
+        {/* <CompositionConfig /> */}
+        <InfoConjConfig />
         <RoutesConfig />
       </div>
       <div className="w-1/3 p-4 overflow-y-auto"></div>
@@ -22,17 +25,11 @@ const RoutesConfig: React.FC<RouteStepProps> = ({}) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
 
   const handleAddStop = () => {
-    const newStop = {
-      uic: undefined,
-      arrivee: undefined,
-      depart: undefined,
-    };
-
     if ((values.parcours?.length ?? 0) < 2)
-      setFieldValue("parcours", [newStop, ...(values.parcours || [])]);
+      setFieldValue("parcours", [defaultStop, ...(values.parcours || [])]);
     else {
       const _parcours = [...values.parcours];
-      _parcours.splice(_parcours.length - 1, 0, newStop);
+      _parcours.splice(_parcours.length - 1, 0, defaultStop);
       setFieldValue("parcours", _parcours);
     }
   };
@@ -43,7 +40,7 @@ const RoutesConfig: React.FC<RouteStepProps> = ({}) => {
         <FormGroupTitle>
           Dessertes ({values.parcours?.length ?? 0})
         </FormGroupTitle>
-        <Button onClick={handleAddStop} htmlType="button">
+        <Button onClick={handleAddStop} htmlType="button" type="primary">
           Ajouter une desserte
         </Button>
       </div>

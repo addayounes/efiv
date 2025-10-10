@@ -1,14 +1,11 @@
-import { useState } from "react";
 import { Trash2 } from "lucide-react";
+import { useFormikContext } from "formik";
 import CouplageTab from "./stops/couplage";
+import StationsField from "./stations-field";
 import StepsGeneralTab from "./stops/general";
-import { Field, useFormikContext } from "formik";
-import Select from "../../../../../components/formik/select";
-import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
-import { useStations } from "../../../../../hooks/use-stations";
-import { mapStations } from "../../../../../services/search-stops";
-import type { CreateCirculationDto } from "../../../../../types/dto/create-circulation";
 import InfoConjoncturelle from "./stops/info-conj";
+import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
+import type { CreateCirculationDto } from "../../../../../types/dto/create-circulation";
 
 interface StationCardProps {
   index: number;
@@ -16,9 +13,6 @@ interface StationCardProps {
 
 const StationCard: React.FC<StationCardProps> = ({ index }) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
-
-  const [stationSearchKeyword, setStationSearchKeyword] = useState("");
-  const { stations } = useStations(stationSearchKeyword);
 
   const isOrigin = index === 0;
   const isDestination = index === values.parcours?.length - 1;
@@ -52,18 +46,11 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                   <span className="font-medium w-6 h-6 rounded-full text-primary flex items-center justify-center">
                     {index + 1}
                   </span>
-                  <Field
-                    showSearch
-                    searchValue={stationSearchKeyword}
-                    onSearch={(value: string) => setStationSearchKeyword(value)}
-                    //
-                    allowClear
-                    as={Select}
+                  <StationsField
                     size="medium"
                     className="min-w-[350px]"
-                    name={`parcours.${index}.uic`}
+                    name={`parcours.${index}.station`}
                     placeholder="Choisir une gare"
-                    options={mapStations(stations)}
                   />
                 </div>
 

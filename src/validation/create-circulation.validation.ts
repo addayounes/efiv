@@ -16,26 +16,26 @@ export const CreateCirculationSchema = yup
     videVoyageur: yup.boolean(),
     courseSpeciale: yup.boolean(),
     libelleCourseSpeciale: yup.string(),
-    origine: yup.string().required("L'origine est requise"),
-    destination: yup.string().required("La destination est requise"),
+    origine: yup.mixed().required("L'origine est requise"),
+    destination: yup.mixed().required("La destination est requise"),
     serviceDeCourse: yup.array().of(yup.string()),
     parcours: yup
       .array()
       .of(
         yup.object().shape({
-          uic: yup.string().required("La gare est requise"),
+          station: yup.mixed().required("La gare est requise"),
           voieTransporteur: yup.string(),
           monteeInterdite: yup.boolean(),
           descenteInterdite: yup.boolean(),
           inversionComposition: yup.boolean(),
 
           arrivee: yup.object().shape({
-            horaire: yup.string().required("L'heure d'arrivée est requise"),
+            // horaire: yup.string().required("L'heure d'arrivée est requise"),
             numeroSillon: yup.string(),
             couplageId: yup.string(),
           }),
           depart: yup.object().shape({
-            horaire: yup.string().required("L'heure de départ est requise"),
+            // horaire: yup.string().required("L'heure de départ est requise"),
             numeroSillon: yup.string(),
             couplageId: yup.string(),
           }),
@@ -70,8 +70,8 @@ export const FieldsToValidateByStep: Record<string, string[]> = {
     "videVoyageur",
     "courseSpeciale",
     "libelleCourseSpeciale",
-    // "origine",
-    // "destination",
+    "origine",
+    "destination",
     "serviceDeCourse",
   ],
   [CreateCirculationSteps.ROUTE]: ["parcours"],

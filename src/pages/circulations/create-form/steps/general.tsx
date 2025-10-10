@@ -3,14 +3,13 @@ import {
   CIRCULATION_MODE_OPTIONS,
 } from "../../../../constants/mode-sub-mode";
 import { Collapse } from "antd";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Field, useFormikContext } from "formik";
+import StationsField from "./components/stations-field";
 import Select from "../../../../components/formik/select";
 import Switch from "../../../../components/formik/switch";
-import { useStations } from "../../../../hooks/use-stations";
 import TextField from "../../../../components/formik/textfield";
 import FormGroupTitle from "../../../../components/group-title";
-import { mapStations } from "../../../../services/search-stops";
 import { OnboardServices } from "../../../../constants/onboard-services";
 import { TRAIN_LENGTH_OPTIONS } from "../../../../constants/train-length";
 import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
@@ -20,13 +19,24 @@ interface GeneralStepProps {}
 const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
 
-  const [stationSearchKeyword, setStationSearchKeyword] = useState("");
-  const { stations } = useStations(stationSearchKeyword);
-
   const subModes = useMemo(
     () => getSubModesForMode(values.mode as any),
     [values.mode]
   );
+
+  const handleOriginDestinationChange = async (
+    field: "origin" | "destination",
+    newStation: any
+  ) => {
+    const newParcours = [...(values.parcours ?? [])];
+
+    if (field === "origin") newParcours[0] = { station: newStation };
+
+    if (field === "destination")
+      newParcours[newParcours.length - 1] = { station: newStation };
+
+    await setFieldValue("parcours", newParcours);
+  };
 
   return (
     <div className="flex h-full">
@@ -149,37 +159,30 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
       <div className="flex-1/3 p-4 space-y-4">
         <FormGroupTitle>Origine et destination</FormGroupTitle>
         <div className="space-y-4">
-          <Field
-            showSearch
-            searchValue={stationSearchKeyword}
-            onSearch={(value: string) => setStationSearchKeyword(value)}
-            //
-            allowClear
-            as={Select}
+          <StationsField
             name="origine"
             label="Origine"
             className="w-full"
             placeholder="Sélectionner l'origine"
-            options={mapStations(stations)}
+            onChange={async (stationValue: any) => {
+              await handleOriginDestinationChange("origin", stationValue);
+            }}
           />
           <div className="relative ml-3">
             {/* Line */}
-            <div className="absolute right-4 -top-4 w-px h-10 bg-gray-300" />
+            <div className="absolute left-1/2 -top-4 w-px h-10 bg-gray-300" />
             {/* Bubble */}
-            <div className="w-2 h-2 rounded-full bg-gray-300 absolute right-[12.5px]" />
+            <div className="w-2 h-2 rounded-full bg-gray-300 absolute left-[calc(50%-3.1px)]" />
+            {/* right-[12.5px] */}
           </div>
-          <Field
-            showSearch
-            searchValue={stationSearchKeyword}
-            onSearch={(value: string) => setStationSearchKeyword(value)}
-            //
-            allowClear
-            as={Select}
+          <StationsField
             name="destination"
             label="Destination"
             className="w-full"
             placeholder="Sélectionner la destination"
-            options={mapStations(stations)}
+            onChange={async (stationValue: any) => {
+              await handleOriginDestinationChange("destination", stationValue);
+            }}
           />
         </div>
 

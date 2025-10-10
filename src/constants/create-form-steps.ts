@@ -3,7 +3,7 @@ import type { StepProps } from "antd";
 export const CREATE_CIRCULATION_FORM_STEPS: StepProps[] = [
   { title: "Générale" },
   { title: "Parcours" },
-  { title: "Régime" },
+  { title: "Planification" },
   { title: "Récapitulatif" },
 ];
 
