@@ -2,6 +2,10 @@ import {
   CREATE_CIRCULATION_FORM_STEPS,
   type CreateCirculationSteps,
 } from "../../../constants/create-form-steps";
+import type {
+  ParcoursDto,
+  CreateCirculationDto,
+} from "../../../types/dto/create-circulation";
 import FormActions from "./actions";
 import type { StepProps } from "antd";
 import React, { useState } from "react";
@@ -13,16 +17,15 @@ import FormikForm from "../../../components/formik/form";
 import { createCirculationService } from "../../../services/circulations";
 import { useCirculationMapper } from "../../../mappers/create-circulation";
 import { CirculationDateType } from "../../../constants/circulation-date-types";
-import type { CreateCirculationDto } from "../../../types/dto/create-circulation";
 import { CreateCirculationSchema } from "../../../validation/create-circulation.validation";
 
 interface FormContentProps {}
 
-export const defaultStop = {
+export const defaultStop: ParcoursDto = {
   station: undefined,
   voieTransporteur: undefined,
-  monteeInterdite: undefined,
-  descenteInterdite: undefined,
+  monteeInterdite: false,
+  descenteInterdite: false,
   inversionComposition: undefined,
   arrivee: {
     horaire: undefined,
@@ -39,7 +42,10 @@ export const defaultStop = {
 
 const initialValues: CreateCirculationDto = {
   dateType: CirculationDateType.Single,
-  parcours: [defaultStop, defaultStop],
+  parcours: [
+    { ...defaultStop, descenteInterdite: true },
+    { ...defaultStop, monteeInterdite: true },
+  ],
   informationsConjoncturelles: [],
 };
 

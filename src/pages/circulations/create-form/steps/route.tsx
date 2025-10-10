@@ -3,12 +3,14 @@ import { defaultStop } from "../form";
 import { useFormikContext } from "formik";
 import StationCard from "./components/station-card";
 import InfoConjConfig from "./components/info-conj";
+import StopsLine from "../../../../components/stops";
 import FormGroupTitle from "../../../../components/group-title";
 import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
 
 interface RouteStepProps {}
 
 const RouteStep: React.FC<RouteStepProps> = ({}) => {
+  const { values } = useFormikContext<CreateCirculationDto>();
   return (
     <div className="flex h-full">
       <div className="w-2/3 p-4 space-y-10 border-r border-gray-200">
@@ -16,7 +18,9 @@ const RouteStep: React.FC<RouteStepProps> = ({}) => {
         <InfoConjConfig />
         <RoutesConfig />
       </div>
-      <div className="w-1/3 p-4 overflow-y-auto"></div>
+      <div className="w-1/3 p-4 overflow-y-auto">
+        <StopsLine stops={values.parcours ?? []} />
+      </div>
     </div>
   );
 };
