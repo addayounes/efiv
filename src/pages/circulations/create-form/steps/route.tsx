@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Tabs } from "antd";
 import { defaultStop } from "../form";
 import { useFormikContext } from "formik";
 import StationCard from "./components/station-card";
@@ -12,15 +12,38 @@ interface RouteStepProps {}
 const RouteStep: React.FC<RouteStepProps> = ({}) => {
   const { values } = useFormikContext<CreateCirculationDto>();
   return (
-    <div className="flex h-full">
-      <div className="w-2/3 p-4 space-y-10 border-r border-gray-200">
-        {/* <CompositionConfig /> */}
-        <InfoConjConfig />
-        <RoutesConfig />
-      </div>
-      <div className="w-1/3 p-4 overflow-y-auto">
-        <StopsLine stops={values.parcours ?? []} />
-      </div>
+    <div className="h-full p-4 pt-2">
+      <Tabs>
+        <Tabs.TabPane
+          key="stops"
+          tab={
+            <p className="font-medium">
+              Dessertes ({values.parcours?.length || ""})
+            </p>
+          }
+        >
+          <div className="flex">
+            <div className="w-2/3 pr-4 space-y-10 border-r border-gray-200">
+              <RoutesConfig />
+            </div>
+            <div className="w-1/3 overflow-y-auto">
+              <StopsLine stops={values.parcours ?? []} />
+            </div>
+          </div>
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          key="info-conj"
+          tab={<p className="font-medium">Informations conjoncturelles</p>}
+        >
+          <InfoConjConfig />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          key="composition-outer"
+          tab={<p className="font-medium">Composition</p>}
+        >
+          <CompositionConfig />
+        </Tabs.TabPane>
+      </Tabs>
     </div>
   );
 };

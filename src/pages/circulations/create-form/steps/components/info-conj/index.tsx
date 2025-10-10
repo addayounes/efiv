@@ -52,9 +52,9 @@ const InfoConjConfig: React.FC = ({}) => {
 
       <div className="mt-4">
         <Table
-          data={infos}
           bordered
-          size="small"
+          data={infos}
+          size="middle"
           scroll={infos.length ? { y: 300, x: 300 } : undefined}
           head={[
             {
