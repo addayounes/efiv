@@ -31,7 +31,9 @@ const RouteStep: React.FC<RouteStepProps> = ({}) => {
           key="info-conj"
           tab={<p className="font-medium">Informations conjoncturelles</p>}
         >
-          <InfoConjConfig />
+          <div className="w-[99%]">
+            <InfoConjConfig />
+          </div>
         </Tabs.TabPane>
         <Tabs.TabPane
           key="composition-outer"

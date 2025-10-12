@@ -3,6 +3,7 @@ import { useFormikContext } from "formik";
 import CouplageTab from "./stops/couplage";
 import StationsField from "./stations-field";
 import StepsGeneralTab from "./stops/general";
+import { dayjs } from "../../../../../lib/dayjs";
 import InfoConjoncturelle from "./stops/info-conj";
 import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
 import type { CreateCirculationDto } from "../../../../../types/dto/create-circulation";
@@ -30,6 +31,8 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
     );
   };
 
+  const currentStation = values.parcours?.[index];
+
   return (
     <div className="flex gap-4">
       <div className="flex-1">
@@ -49,9 +52,19 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                   <StationsField
                     size="medium"
                     className="min-w-[350px]"
-                    name={`parcours.${index}.station`}
                     placeholder="Choisir une gare"
+                    name={`parcours.${index}.station`}
+                    bordered={!currentStation?.station?.value}
                   />
+                  <div className="min-w-[150px] font-medium">
+                    {[
+                      currentStation.arrivee?.horaire,
+                      currentStation.depart?.horaire,
+                    ]
+                      .filter(Boolean)
+                      .map((_) => dayjs(_).format("HH:mm"))
+                      .join(" - ")}
+                  </div>
                 </div>
 
                 <Tag

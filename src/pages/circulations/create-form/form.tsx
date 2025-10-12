@@ -18,6 +18,7 @@ import { createCirculationService } from "../../../services/circulations";
 import { useCirculationMapper } from "../../../mappers/create-circulation";
 import { CirculationDateType } from "../../../constants/circulation-date-types";
 import { CreateCirculationSchema } from "../../../validation/create-circulation.validation";
+import dayjs from "dayjs";
 
 interface FormContentProps {}
 
@@ -36,7 +37,7 @@ const sampleCirculation = {
       descenteInterdite: true,
       arrivee: {},
       depart: {
-        horaire: "2025-10-12T11:08:00.000Z",
+        horaire: dayjs("2025-10-12T11:08:00.000Z"),
       },
       informationsConjoncturelles: [],
     },
@@ -51,10 +52,10 @@ const sampleCirculation = {
       monteeInterdite: false,
       descenteInterdite: false,
       arrivee: {
-        horaire: "2025-10-12T12:04:00.000Z",
+        horaire: dayjs("2025-10-12T12:04:00.000Z"),
       },
       depart: {
-        horaire: "2025-10-12T12:08:00.000Z",
+        horaire: dayjs("2025-10-12T12:08:00.000Z"),
       },
       informationsConjoncturelles: [],
     },
@@ -68,10 +69,10 @@ const sampleCirculation = {
       monteeInterdite: false,
       descenteInterdite: false,
       arrivee: {
-        horaire: "2025-10-12T14:35:00.000Z",
+        horaire: dayjs("2025-10-12T14:35:00.000Z"),
       },
       depart: {
-        horaire: "2025-10-12T14:38:00.000Z",
+        horaire: dayjs("2025-10-12T14:38:00.000Z"),
       },
       informationsConjoncturelles: [],
     },
@@ -87,10 +88,10 @@ const sampleCirculation = {
       descenteInterdite: false,
       inversionComposition: false,
       arrivee: {
-        horaire: "2025-10-12T16:19:00.000Z",
+        horaire: dayjs("2025-10-12T16:19:00.000Z"),
       },
       depart: {
-        horaire: "2025-10-12T16:25:00.000Z",
+        horaire: dayjs("2025-10-12T16:25:00.000Z"),
       },
       informationsConjoncturelles: [],
     },
@@ -104,7 +105,7 @@ const sampleCirculation = {
       monteeInterdite: true,
       descenteInterdite: false,
       arrivee: {
-        horaire: "2025-10-12T20:05:00.000Z",
+        horaire: dayjs("2025-10-12T20:05:00.000Z"),
       },
       depart: {},
       informationsConjoncturelles: [],
@@ -116,8 +117,8 @@ const sampleCirculation = {
       typeInformation: "GARE",
       texte:
         "Réutilisation d'un train - Le train a été mis à disposition tardivement à la suite du retard sur un trajet précédent.",
-      dateHeureDebutPublication: "2025-10-12T06:15:00.000Z",
-      dateHeureFinPublication: "2025-10-14T15:30:00.000Z",
+      dateHeureDebutPublication: dayjs("2025-10-12T06:15:00.000Z"),
+      dateHeureFinPublication: dayjs("2025-10-14T15:30:00.000Z"),
     },
   ],
   numeroCommercial: "6620",
@@ -140,7 +141,7 @@ const sampleCirculation = {
     title: "Marseille",
   },
   serviceDeCourse: ["OCEVP", "OCENY", "OCEWF"],
-  date: "2025-10-14T22:00:00.000Z",
+  date: dayjs("2025-10-14T22:00:00.000Z"),
 };
 
 export const defaultStop: ParcoursDto = {
@@ -208,7 +209,7 @@ const FormContent: React.FC<FormContentProps> = () => {
     <FormikForm
       withLoadingToast
       onSubmit={handleSubmitForm}
-      initialValues={initialValues}
+      initialValues={sampleCirculation as any}
       validationSchema={CreateCirculationSchema}
     >
       {() => {
