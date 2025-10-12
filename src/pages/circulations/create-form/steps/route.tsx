@@ -13,20 +13,16 @@ const RouteStep: React.FC<RouteStepProps> = ({}) => {
   const { values } = useFormikContext<CreateCirculationDto>();
   return (
     <div className="h-full p-4 pt-2">
-      <Tabs>
+      <Tabs className="h-full">
         <Tabs.TabPane
           key="stops"
-          tab={
-            <p className="font-medium">
-              Dessertes ({values.parcours?.length || ""})
-            </p>
-          }
+          tab={<p className="font-medium">Dessertes</p>}
         >
-          <div className="flex">
+          <div className="flex h-full">
             <div className="w-2/3 pr-4 space-y-10 border-r border-gray-200">
               <RoutesConfig />
             </div>
-            <div className="w-1/3 overflow-y-auto">
+            <div className="w-1/3">
               <StopsLine stops={values.parcours ?? []} />
             </div>
           </div>

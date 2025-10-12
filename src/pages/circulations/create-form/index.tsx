@@ -5,7 +5,7 @@ interface CreateCirculationFormProps {}
 
 const CreateCirculationForm: React.FC<CreateCirculationFormProps> = ({}) => {
   return (
-    <div>
+    <div className="bg-primary-bg">
       <PageHeader title="Créer une circulation" />
       <FormContent />
     </div>

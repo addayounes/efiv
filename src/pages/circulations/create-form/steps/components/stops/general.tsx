@@ -75,15 +75,11 @@ const StepsGeneralTab: React.FC<StepsGeneralTabProps> = ({ index }) => {
               label="Montée interdite"
               name={`parcours.${index}.monteeInterdite`}
               disabled={index === values.parcours?.length - 1}
-              {...(index === values.parcours?.length - 1
-                ? { value: true }
-                : {})}
             />
             <Field
               as={Switch}
               disabled={index === 0}
               label="Descente interdite"
-              {...(index === 0 ? { value: true } : {})}
               name={`parcours.${index}.descenteInterdite`}
             />
             <Field

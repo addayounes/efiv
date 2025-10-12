@@ -1,6 +1,6 @@
 import {
-  CREATE_CIRCULATION_FORM_STEPS,
   type CreateCirculationSteps,
+  CREATE_CIRCULATION_FORM_STEPS,
 } from "../../../constants/create-form-steps";
 import type {
   ParcoursDto,
@@ -93,7 +93,7 @@ const FormContent: React.FC<FormContentProps> = () => {
         return (
           <main className="px-6">
             <CirculationFormStepper steps={steps} setSteps={setSteps} />
-            <div className="flex flex-col border border-gray-200 rounded h-[calc(100vh-174px)]">
+            <div className="flex flex-col shadow border border-gray-200  rounded h-[calc(100vh-174px)] bg-white">
               <div className="flex-1 overflow-y-auto">
                 <FormContentRenderer step={step as CreateCirculationSteps} />
               </div>

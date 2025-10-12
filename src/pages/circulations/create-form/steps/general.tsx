@@ -30,10 +30,14 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
   ) => {
     const newParcours = [...(values.parcours ?? [])];
 
-    if (field === "origin") newParcours[0] = { station: newStation };
+    if (field === "origin")
+      newParcours[0] = { ...newParcours[0], station: newStation };
 
     if (field === "destination")
-      newParcours[newParcours.length - 1] = { station: newStation };
+      newParcours[newParcours.length - 1] = {
+        ...newParcours[newParcours.length - 1],
+        station: newStation,
+      };
 
     await setFieldValue("parcours", newParcours);
   };
