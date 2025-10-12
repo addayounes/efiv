@@ -5,4 +5,31 @@
   --color-primary-dark: #002850;
   --color-primary-light: #ebf5ff;
   --color-primary-bg: #f9fafb;
+
+  --color-blade-departure-50: #e3f1fa;
+  --color-blade-departure-100: #baddf3;
+  --color-blade-departure-200: #8fc8ec;
+  --color-blade-departure-500: #2393db;
+  --color-blade-departure-600: #127cc3;
+  --color-blade-departure-700: #0064ab;
+  --color-blade-departure-800: #005a9f;
+  --color-blade-departure-850: #005296;
+  --color-blade-departure-900: #003a79;
+  --color-blade-departure-accent: #40cfff;
+  --color-blade-yellow: #ffed00;
+}
+
+@layer utilities {
+  @keyframes horizontal-scroll {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  .animate-horizontal-scroll {
+    animation: horizontal-scroll 10s linear infinite;
+  }
 }

@@ -2,6 +2,7 @@ import { Descriptions } from "antd";
 import { useFormikContext } from "formik";
 import InfoConjConfig from "./components/info-conj";
 import StopsLine from "../../../../components/stops";
+import CirculationBlade from "../../../../components/blade";
 import { OnboardServices } from "../../../../constants/onboard-services";
 import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
 
@@ -11,8 +12,9 @@ const SummaryStep: React.FC<SummaryStepProps> = ({}) => {
   const { values } = useFormikContext<CreateCirculationDto>();
 
   return (
-    <div className="flex h-full overflow-y-auto">
+    <div className="flex">
       <div className="p-4 w-2/3 space-y-10">
+        <CirculationBlade circulation={values} />
         <div>
           <Descriptions
             bordered
