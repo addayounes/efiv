@@ -1,27 +1,29 @@
 import {
   type CreateCirculationSteps,
   CREATE_CIRCULATION_FORM_STEPS,
-} from "../../../constants/create-form-steps";
+} from "@/constants/create-form-steps";
 import type {
   ParcoursDto,
   CreateCirculationDto,
-} from "../../../types/dto/create-circulation";
+} from "@/types/dto/create-circulation";
 import FormActions from "./actions";
+import toast from "react-hot-toast";
+import { dayjs } from "@/lib/dayjs";
 import type { StepProps } from "antd";
 import React, { useState } from "react";
-import type { FormikHelpers } from "formik";
-import { useParams } from "react-router-dom";
 import CirculationFormStepper from "./stepper";
+import { __routes__ } from "@/constants/routes";
+import FormikForm from "@/components/formik/form";
 import FormContentRenderer from "./content-renderer";
-import FormikForm from "../../../components/formik/form";
-import { createCirculationService } from "../../../services/circulations";
-import { useCirculationMapper } from "../../../mappers/create-circulation";
-import { CirculationDateType } from "../../../constants/circulation-date-types";
-import { CreateCirculationSchema } from "../../../validation/create-circulation.validation";
-import dayjs from "dayjs";
+import { useNavigate, useParams } from "react-router-dom";
+import { createCirculationService } from "@/services/circulations";
+import { useCirculationMapper } from "@/mappers/create-circulation";
+import { CirculationDateType } from "@/constants/circulation-date-types";
+import { CreateCirculationSchema } from "@/validation/create-circulation.validation";
 
 interface FormContentProps {}
 
+// @ts-ignore
 const sampleCirculation = {
   dateType: "Single",
   parcours: [
@@ -174,48 +176,34 @@ const initialValues: CreateCirculationDto = {
 
 const FormContent: React.FC<FormContentProps> = () => {
   const { step } = useParams();
+  const navigate = useNavigate();
   const { mapCreateCirculationToDto } = useCirculationMapper();
 
-  const [steps, setSteps] = useState<StepProps[]>(
-    CREATE_CIRCULATION_FORM_STEPS
-  );
+  const [steps] = useState<StepProps[]>(CREATE_CIRCULATION_FORM_STEPS);
 
-  const handleSubmitForm = async (
-    data: CreateCirculationDto,
-    { setSubmitting }: FormikHelpers<CreateCirculationDto>
-  ) => {
-    try {
-      setSubmitting(true);
+  const handleSubmitForm = async (data: CreateCirculationDto) => {
+    const mappedData = await mapCreateCirculationToDto(data);
 
-      const mappedData = await mapCreateCirculationToDto(data);
+    const responseData = await createCirculationService(mappedData);
 
-      console.log(data);
-      console.log(mappedData);
-      return;
+    if (!responseData) throw new Error("No data returned from service");
 
-      const responseData = await createCirculationService(mappedData);
+    navigate(__routes__.Circulations.Main);
 
-      if (!responseData) throw new Error("No data returned from service");
-
-      console.log(responseData);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSubmitting(false);
-    }
+    toast.success("Circulation créée avec succès");
   };
 
   return (
     <FormikForm
       withLoadingToast
       onSubmit={handleSubmitForm}
-      initialValues={sampleCirculation as any}
+      initialValues={initialValues}
       validationSchema={CreateCirculationSchema}
     >
       {() => {
         return (
           <main className="px-6">
-            <CirculationFormStepper steps={steps} setSteps={setSteps} />
+            <CirculationFormStepper steps={steps} />
             <div className="flex flex-col shadow border border-gray-200  rounded h-[calc(100vh-174px)] bg-white">
               <div className="flex-1 overflow-y-auto">
                 <FormContentRenderer step={step as CreateCirculationSteps} />

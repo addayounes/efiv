@@ -3,8 +3,8 @@ import { Plus } from "lucide-react";
 import CirculationsTable from "./table";
 import CirculationsListHeader from "./header";
 import { useNavigate } from "react-router-dom";
-import { __routes__ } from "../../../constants/routes";
-import PageHeader from "../../../components/page-header";
+import { __routes__ } from "@/constants/routes";
+import PageHeader from "@/components/page-header";
 
 const CirculationsList: React.FC = () => {
   const navigate = useNavigate();

@@ -5,22 +5,22 @@ import {
   CategoryStatusLabelMap,
   INFO_CONJ_TYPE_OPTIONS,
   INFO_CONJ_CATEGORY_OPTIONS,
-} from "../../../../../../constants/info-conj";
+} from "@/constants/info-conj";
 import type {
   CreateCirculationDto,
   InformationsConjoncturelleDto,
-} from "../../../../../../types/dto/create-circulation";
+} from "@/types/dto/create-circulation";
 import { Button } from "antd";
 import { Trash2 } from "lucide-react";
 import { Field, useFormikContext } from "formik";
 import type { ColumnsType } from "antd/es/table";
-import { dayjs } from "../../../../../../lib/dayjs";
-import Table from "../../../../../../components/table";
-import Select from "../../../../../../components/formik/select";
-import TextArea from "../../../../../../components/formik/textarea";
-import FormGroupTitle from "../../../../../../components/group-title";
-import { DATE_FORMAT } from "../../../../../../constants/date-format";
-import DateTimePicker from "../../../../../../components/formik/date-time";
+import { dayjs } from "@/lib/dayjs";
+import Table from "@/components/table";
+import Select from "@/components/formik/select";
+import TextArea from "@/components/formik/textarea";
+import FormGroupTitle from "@/components/group-title";
+import { DATE_FORMAT } from "@/constants/date-format";
+import DateTimePicker from "@/components/formik/date-time";
 
 const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();

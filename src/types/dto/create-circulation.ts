@@ -58,6 +58,7 @@ export interface CreateCirculationAddOnsDto {
 //
 
 export interface CreateCirculationApiPayload {
+  id: string;
   date: string;
   destination: Desserte;
   destinationInitiale?: string;

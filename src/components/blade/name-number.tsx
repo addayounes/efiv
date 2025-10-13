@@ -1,5 +1,5 @@
 import ScrollText from "./scroll-text";
-import type { CreateCirculationDto } from "../../types/dto/create-circulation";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface NameNumberProps {
   circulation: CreateCirculationDto;

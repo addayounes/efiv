@@ -1,6 +1,6 @@
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
-import AppLayout from "../components/layout";
+import AppLayout from "@/components/layout";
 import { privateRoutes, publicRoutes } from "./_routes";
 import { Route, Routes as ReactRoutes } from "react-router-dom";
 

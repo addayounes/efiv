@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { searchStopsService, type StopDto } from "../services/ref";
+import { searchStopsService, type StopDto } from "@/services/ref";
 
 export const useStations = (query: string = "", limit: number = 10) => {
   const [loading, setLoading] = useState(false);

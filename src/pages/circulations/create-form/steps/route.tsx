@@ -1,11 +1,11 @@
 import { Button, Tabs } from "antd";
 import { defaultStop } from "../form";
 import { useFormikContext } from "formik";
+import StopsLine from "@/components/stops";
 import StationCard from "./components/station-card";
 import InfoConjConfig from "./components/info-conj";
-import StopsLine from "../../../../components/stops";
-import FormGroupTitle from "../../../../components/group-title";
-import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
+import FormGroupTitle from "@/components/group-title";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface RouteStepProps {}
 

@@ -1,5 +1,5 @@
-import { api } from "../lib/axios";
-import type { CreateCirculationApiPayload } from "../types/dto/create-circulation";
+import { api } from "@/lib/axios";
+import type { CreateCirculationApiPayload } from "@/types/dto/create-circulation";
 
 const SERVICE_BASE_URL = "/api/Course";
 

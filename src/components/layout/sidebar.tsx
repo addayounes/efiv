@@ -1,7 +1,7 @@
 import { Tooltip } from "antd";
-import { cn } from "../../utils/cn";
+import { cn } from "@/utils/cn";
 import { House, TrainFront } from "lucide-react";
-import { __routes__ } from "../../constants/routes";
+import { __routes__ } from "@/constants/routes";
 import { Link, useLocation } from "react-router-dom";
 
 const SidebarElements = [

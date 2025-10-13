@@ -1,5 +1,5 @@
 import FormContent from "./form";
-import PageHeader from "../../../components/page-header";
+import PageHeader from "@/components/page-header";
 
 interface CreateCirculationFormProps {}
 

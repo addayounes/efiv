@@ -1,8 +1,8 @@
 import { Field, useFormikContext } from "formik";
-import Switch from "../../../../../../components/formik/switch";
-import TextField from "../../../../../../components/formik/textfield";
-import DateTimePicker from "../../../../../../components/formik/date-time";
-import type { CreateCirculationDto } from "../../../../../../types/dto/create-circulation";
+import Switch from "@/components/formik/switch";
+import TextField from "@/components/formik/textfield";
+import DateTimePicker from "@/components/formik/date-time";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface StepsGeneralTabProps {
   index: number;

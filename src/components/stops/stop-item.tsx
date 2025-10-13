@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { X } from "lucide-react";
-import { cn } from "../../utils/cn";
-import type { ParcoursDto } from "../../types/dto/create-circulation";
+import { cn } from "@/utils/cn";
+import type { ParcoursDto } from "@/types/dto/create-circulation";
 
 const StopItem: React.FC<{
   isLast?: boolean;

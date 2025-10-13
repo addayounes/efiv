@@ -1,4 +1,4 @@
-import Table from "../../../components/table";
+import Table from "@/components/table";
 import { useCirculationsListColumns } from "./columns";
 
 interface CirculationsTableProps {}

@@ -1,16 +1,16 @@
 import {
   INFO_CONJ_TYPE_OPTIONS,
   INFO_CONJ_CATEGORY_OPTIONS,
-} from "../../../../../../constants/info-conj";
+} from "@/constants/info-conj";
 import React from "react";
 import { Button } from "antd";
 import { Trash2 } from "lucide-react";
 import { Field, useFormikContext } from "formik";
-import Table from "../../../../../../components/table";
-import Select from "../../../../../../components/formik/select";
-import TextArea from "../../../../../../components/formik/textarea";
-import DateTimePicker from "../../../../../../components/formik/date-time";
-import type { CreateCirculationDto } from "../../../../../../types/dto/create-circulation";
+import Table from "@/components/table";
+import Select from "@/components/formik/select";
+import TextArea from "@/components/formik/textarea";
+import DateTimePicker from "@/components/formik/date-time";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface InfoConjoncturelleProps {
   index: number;

@@ -1,10 +1,10 @@
 import { Descriptions } from "antd";
 import { useFormikContext } from "formik";
+import StopsLine from "@/components/stops";
+import CirculationBlade from "@/components/blade";
 import InfoConjConfig from "./components/info-conj";
-import StopsLine from "../../../../components/stops";
-import CirculationBlade from "../../../../components/blade";
-import { OnboardServices } from "../../../../constants/onboard-services";
-import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
+import { OnboardServices } from "@/constants/onboard-services";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface SummaryStepProps {}
 

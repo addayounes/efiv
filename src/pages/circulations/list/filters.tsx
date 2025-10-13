@@ -2,9 +2,9 @@ import {
   getSubModesForMode,
   CIRCULATION_MODE_OPTIONS,
   CirculationMode,
-} from "../../../constants/mode-sub-mode";
+} from "@/constants/mode-sub-mode";
 import { DatePicker, Select } from "antd";
-import { CIRCULATION_STATUS_OPTIONS } from "../../../constants/circulation-status";
+import { CIRCULATION_STATUS_OPTIONS } from "@/constants/circulation-status";
 
 interface CirculationsFiltersProps {}
 

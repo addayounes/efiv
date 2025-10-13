@@ -1,8 +1,8 @@
-import Login from "../pages/auth/login";
-import Dashboard from "../pages/dashboard";
-import { __routes__ } from "../constants/routes";
-import CirculationsList from "../pages/circulations/list";
-import CreateCirculationForm from "../pages/circulations/create-form";
+import Login from "@/pages/auth/login";
+import Dashboard from "@/pages/dashboard";
+import { __routes__ } from "@/constants/routes";
+import CirculationsList from "@/pages/circulations/list";
+import CreateCirculationForm from "@/pages/circulations/create-form";
 
 export interface RouteType {
   path: string;

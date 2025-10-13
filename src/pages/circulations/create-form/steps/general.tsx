@@ -1,18 +1,18 @@
 import {
   getSubModesForMode,
   CIRCULATION_MODE_OPTIONS,
-} from "../../../../constants/mode-sub-mode";
+} from "@/constants/mode-sub-mode";
 import { Collapse } from "antd";
 import { useMemo } from "react";
 import { Field, useFormikContext } from "formik";
 import StationsField from "./components/stations-field";
-import Select from "../../../../components/formik/select";
-import Switch from "../../../../components/formik/switch";
-import TextField from "../../../../components/formik/textfield";
-import FormGroupTitle from "../../../../components/group-title";
-import { OnboardServices } from "../../../../constants/onboard-services";
-import { TRAIN_LENGTH_OPTIONS } from "../../../../constants/train-length";
-import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
+import Select from "@/components/formik/select";
+import Switch from "@/components/formik/switch";
+import TextField from "@/components/formik/textfield";
+import FormGroupTitle from "@/components/group-title";
+import { OnboardServices } from "@/constants/onboard-services";
+import { TRAIN_LENGTH_OPTIONS } from "@/constants/train-length";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface GeneralStepProps {}
 

@@ -1,12 +1,12 @@
+import { dayjs } from "@/lib/dayjs";
 import { Trash2 } from "lucide-react";
 import { useFormikContext } from "formik";
 import CouplageTab from "./stops/couplage";
 import StationsField from "./stations-field";
 import StepsGeneralTab from "./stops/general";
-import { dayjs } from "../../../../../lib/dayjs";
 import InfoConjoncturelle from "./stops/info-conj";
 import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
-import type { CreateCirculationDto } from "../../../../../types/dto/create-circulation";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface StationCardProps {
   index: number;

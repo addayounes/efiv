@@ -2,21 +2,18 @@ import {
   isStepValid,
   getStepIndex,
   CreateCirculationSteps,
-} from "../../../constants/create-form-steps";
+} from "@/constants/create-form-steps";
 import { useEffect, useMemo } from "react";
 import { Steps, type StepProps } from "antd";
-import { __routes__ } from "../../../constants/routes";
+import { __routes__ } from "@/constants/routes";
 import { useNavigate, useParams } from "react-router-dom";
-import type { StateSetter } from "../../../types/state-setter";
 
 interface CirculationFormStepperProps {
   steps: StepProps[];
-  setSteps: StateSetter<StepProps[]>;
 }
 
 const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
   steps,
-  setSteps,
 }) => {
   const { step } = useParams();
   const navigate = useNavigate();

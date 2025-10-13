@@ -1,7 +1,7 @@
-import Loading from "../pages/loading";
+import Loading from "@/pages/loading";
 import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../redux/utils";
-import { __routes__ } from "../constants/routes";
+import { useAppSelector } from "@/redux/utils";
+import { __routes__ } from "@/constants/routes";
 
 interface PrivateRouteProps {
   Element: React.JSX.Element;

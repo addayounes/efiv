@@ -1,8 +1,8 @@
 import { ChevronRightIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { sliceArray } from "../../utils/slice-array";
-import { getLineColor } from "../../constants/line-ref";
-import type { CreateCirculationDto } from "../../types/dto/create-circulation";
+import { sliceArray } from "@/utils/slice-array";
+import { getLineColor } from "@/constants/line-ref";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface DestinationProps {
   circulation: CreateCirculationDto;

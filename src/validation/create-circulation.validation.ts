@@ -1,6 +1,6 @@
 import * as yup from "yup";
-import { CreateCirculationSteps } from "../constants/create-form-steps";
-import type { CreateCirculationDto } from "../types/dto/create-circulation";
+import { CreateCirculationSteps } from "@/constants/create-form-steps";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 export const CreateCirculationSchema = yup
   .object<CreateCirculationDto>()

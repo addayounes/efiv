@@ -3,12 +3,12 @@ import {
   CIRCULATION_DATE_OPTIONS,
   DATE_FREQUENCY_OPTIONS,
   DateFrequency,
-} from "../../../../constants/circulation-date-types";
+} from "@/constants/circulation-date-types";
 import { Field, useFormikContext } from "formik";
-import Radio from "../../../../components/formik/radio";
-import FormGroupTitle from "../../../../components/group-title";
-import DateTimePicker from "../../../../components/formik/date-time";
-import type { CreateCirculationDto } from "../../../../types/dto/create-circulation";
+import Radio from "@/components/formik/radio";
+import FormGroupTitle from "@/components/group-title";
+import DateTimePicker from "@/components/formik/date-time";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 import dayjs from "dayjs";
 
 interface DateStepProps {}

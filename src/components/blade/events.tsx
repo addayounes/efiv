@@ -1,4 +1,4 @@
-import type { CreateCirculationDto } from "../../types/dto/create-circulation";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface EventsProps {
   circulation: CreateCirculationDto;

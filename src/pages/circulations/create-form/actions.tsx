@@ -1,25 +1,23 @@
-import {
-  flattenErrors,
-  buildNestedTouched,
-} from "../../../utils/formik-helpers";
+import { flattenErrors, buildNestedTouched } from "@/utils/formik-helpers";
 import {
   getNextStep,
   getPreviousStep,
   CreateCirculationSteps,
-} from "../../../constants/create-form-steps";
+} from "@/constants/create-form-steps";
 import { Button } from "antd";
 import { useFormikContext } from "formik";
-import { __routes__ } from "../../../constants/routes";
+import { __routes__ } from "@/constants/routes";
 import { useNavigate, useParams } from "react-router-dom";
-import type { CreateCirculationDto } from "../../../types/dto/create-circulation";
-import { FieldsToValidateByStep } from "../../../validation/create-circulation.validation";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
+import { FieldsToValidateByStep } from "@/validation/create-circulation.validation";
 
 interface FormActionsProps {}
 
 const FormActions: React.FC<FormActionsProps> = ({}) => {
   const { step } = useParams();
   const navigate = useNavigate();
-  const { validateForm, setTouched } = useFormikContext<CreateCirculationDto>();
+  const { validateForm, setTouched, isSubmitting } =
+    useFormikContext<CreateCirculationDto>();
 
   const isFirstStep = step === CreateCirculationSteps.GENERAL;
   const isLastStep = step === CreateCirculationSteps.SUMMARY;
@@ -70,6 +68,7 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
       <Button
         type="default"
         htmlType="button"
+        disabled={isSubmitting}
         onClick={isFirstStep ? onCancel : onPrevious}
       >
         {isFirstStep ? "Annuler" : "Précédent"}
@@ -79,6 +78,7 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
         <Button
           type="default"
           htmlType="button"
+          disabled={isSubmitting}
           onClick={isFirstStep ? onCancel : onPrevious}
         >
           Enregistrer en brouillon
@@ -86,6 +86,7 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
 
         <Button
           type="primary"
+          loading={isSubmitting}
           onClick={isLastStep ? undefined : onNext}
           htmlType={isLastStep ? "submit" : "button"}
         >

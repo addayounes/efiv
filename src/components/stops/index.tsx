@@ -1,6 +1,6 @@
 import React from "react";
 import StopItem from "./stop-item";
-import type { ParcoursDto } from "../../types/dto/create-circulation";
+import type { ParcoursDto } from "@/types/dto/create-circulation";
 
 interface StopsLineProps {
   stops: ParcoursDto[];

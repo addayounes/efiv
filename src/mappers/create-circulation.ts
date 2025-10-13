@@ -1,8 +1,8 @@
 import type {
   CreateCirculationDto,
   CreateCirculationApiPayload,
-} from "../types/dto/create-circulation";
-import { CirculationStatus } from "../constants/circulation-status";
+} from "@/types/dto/create-circulation";
+import { CirculationStatus } from "@/constants/circulation-status";
 import dayjs from "dayjs";
 
 export const useCirculationMapper = () => {
@@ -10,6 +10,7 @@ export const useCirculationMapper = () => {
     data: CreateCirculationDto
   ): Promise<CreateCirculationApiPayload> => {
     return {
+      id: "-",
       date: dayjs(data.date).toISOString().split("T")[0],
       destination: {
         codeUIC: data.destination?.value!,
@@ -99,6 +100,7 @@ export const useCirculationMapper = () => {
                     horaire: arrivalDateTime.toISOString(),
                     numeroSillon:
                       point.arrivee?.numeroSillon ?? data.numeroCommercial,
+
                     // mentionDirecte: true,
                     // mentionVia: true,
                   }

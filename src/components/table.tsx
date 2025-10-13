@@ -3,9 +3,9 @@ import type {
   TablePaginationConfig,
   TableProps as AntTableProps,
 } from "antd/es/table";
-import { cn } from "../utils/cn";
+import { cn } from "@/utils/cn";
 import { Table as AntTable } from "antd";
-import { PAGE_SIZE } from "../constants/pagination";
+import { PAGE_SIZE } from "@/constants/pagination";
 
 interface TableProps<T> extends AntTableProps<any> {
   data: T[];

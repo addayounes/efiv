@@ -2,7 +2,7 @@ import DateStep from "./steps/date";
 import RouteStep from "./steps/route";
 import SummaryStep from "./steps/summary";
 import GeneralStep from "./steps/general";
-import { CreateCirculationSteps } from "../../../constants/create-form-steps";
+import { CreateCirculationSteps } from "@/constants/create-form-steps";
 
 interface FormContentRendererProps {
   step: CreateCirculationSteps;

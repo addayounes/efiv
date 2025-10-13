@@ -1,5 +1,5 @@
 import { Field } from "formik";
-import Select from "../../../../../../components/formik/select";
+import Select from "@/components/formik/select";
 
 interface CouplageTabProps {
   index: number;

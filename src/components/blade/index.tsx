@@ -3,7 +3,7 @@ import Events from "./events";
 import NameNumber from "./name-number";
 import TimeStatus from "./time-status";
 import Destination from "./destination";
-import type { CreateCirculationDto } from "../../types/dto/create-circulation";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface CirculationBladeProps {
   circulation: CreateCirculationDto;
