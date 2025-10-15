@@ -6,7 +6,7 @@
   --color-primary-light: #ebf5ff;
   --color-primary-bg: #f9fafb;
 
-  --color-blade-departure-50: #e3f1fa;
+  /* --color-blade-departure-50: #e3f1fa;
   --color-blade-departure-100: #baddf3;
   --color-blade-departure-200: #8fc8ec;
   --color-blade-departure-500: #2393db;
@@ -15,7 +15,19 @@
   --color-blade-departure-800: #005a9f;
   --color-blade-departure-850: #005296;
   --color-blade-departure-900: #003a79;
-  --color-blade-departure-accent: #40cfff;
+  --color-blade-departure-accent: #40cfff; */
+
+  --color-blade-departure-50: #e6eef7;
+  --color-blade-departure-100: #c2d6ee;
+  --color-blade-departure-200: #99bde5;
+  --color-blade-departure-500: #336699;
+  --color-blade-departure-600: #2b5a8a;
+  --color-blade-departure-700: #204d7a;
+  --color-blade-departure-800: #19446f;
+  --color-blade-departure-850: #133c66;
+  --color-blade-departure-900: #0a2f55;
+  --color-blade-departure-accent: #3399ff;
+
   --color-blade-yellow: #ffed00;
 }
 

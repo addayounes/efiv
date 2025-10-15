@@ -12,10 +12,10 @@ const Events: React.FC<EventsProps> = ({ circulation }) => {
   return (
     <div className="mt-4">
       <div
-        className={`flex items-center gap-2 px-2 rounded-lg leading-9 bg-blade-departure-800`}
+        className={`flex items-center gap-2 px-2 py-2 rounded-lg bg-blade-departure-800`}
       >
         <InfoIcon />
-        <p className="text-white text-[16px]">{message}</p>
+        <p className="text-white text-[15px] font-medium">{message}</p>
       </div>
     </div>
   );

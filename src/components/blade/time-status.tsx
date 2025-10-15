@@ -12,9 +12,9 @@ const TimeStatus: React.FC<TimeStatusProps> = ({ circulation }) => {
   });
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex gap-4 items-center">
       <p className="text-[30px] font-bold text-blade-yellow">{formattedTime}</p>
-      <div className="flex items-center gap-2 text-[19px] font-semibold px-3 py-0.5 rounded-full text-white bg-blade-departure-700">
+      <div className="flex items-center gap-1.5 text-[16px] font-semibold px-2 py-0.5 rounded-full text-white bg-blade-departure-700">
         <CheckCircleIcon />
         <span>À l’heure</span>
       </div>
@@ -25,8 +25,8 @@ const TimeStatus: React.FC<TimeStatusProps> = ({ circulation }) => {
 const CheckCircleIcon: React.FC = () => {
   return (
     <svg
-      width="18"
-      height="18"
+      width="16"
+      height="16"
       viewBox="0 0 28 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -1,8 +1,8 @@
 import { Descriptions } from "antd";
 import { useFormikContext } from "formik";
 import StopsLine from "@/components/stops";
-import CirculationBlade from "@/components/blade";
 import InfoConjConfig from "./components/info-conj";
+import CirculationBladeAlt from "@/components/blade/index-alt";
 import { OnboardServices } from "@/constants/onboard-services";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
@@ -14,7 +14,6 @@ const SummaryStep: React.FC<SummaryStepProps> = ({}) => {
   return (
     <div className="flex">
       <div className="p-4 w-2/3 space-y-10">
-        <CirculationBlade circulation={values} />
         <div>
           <Descriptions
             bordered
@@ -71,6 +70,7 @@ const SummaryStep: React.FC<SummaryStepProps> = ({}) => {
         </div>
       </div>
       <div className="w-1/3 p-4 border-l border-gray-200">
+        <CirculationBladeAlt circulation={values} />
         <StopsLine stops={values.parcours ?? []} />
       </div>
     </div>
