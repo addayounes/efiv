@@ -2,6 +2,37 @@ import * as yup from "yup";
 import { CreateCirculationSteps } from "@/constants/create-form-steps";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
+const parcoursItemSchema = yup.object().shape({
+  station: yup.mixed().required("La gare est requise"),
+  voieTransporteur: yup.string(),
+  monteeInterdite: yup.boolean(),
+  descenteInterdite: yup.boolean(),
+  inversionComposition: yup.boolean(),
+
+  arrivee: yup.object().shape({
+    horaire: yup.string().nullable(),
+    numeroSillon: yup.string(),
+    couplageId: yup.string(),
+  }),
+  depart: yup.object().shape({
+    horaire: yup.string().nullable(),
+    numeroSillon: yup.string(),
+    couplageId: yup.string(),
+  }),
+
+  informationsConjoncturelles: yup.array().of(
+    yup.object().shape({
+      categorie: yup.string().required("La catégorie est requise"),
+      typeInformation: yup
+        .string()
+        .required("Le type d'information est requis"),
+      texte: yup.string().required("Le texte est requis"),
+      dateHeureDebutPublication: yup.string().required("Ce champ est requis"),
+      dateHeureFinPublication: yup.string(),
+    })
+  ),
+});
+
 export const CreateCirculationSchema = yup
   .object<CreateCirculationDto>()
   .shape({
@@ -21,41 +52,33 @@ export const CreateCirculationSchema = yup
     serviceDeCourse: yup.array().of(yup.string()),
     parcours: yup
       .array()
-      .of(
-        yup.object().shape({
-          station: yup.mixed().required("La gare est requise"),
-          voieTransporteur: yup.string(),
-          monteeInterdite: yup.boolean(),
-          descenteInterdite: yup.boolean(),
-          inversionComposition: yup.boolean(),
+      .of(parcoursItemSchema)
+      .min(2, "Veuillez ajouter au moins une origine et une destination")
+      .test("horaire-conditions", function (parcours) {
+        if (!parcours || parcours.length === 0) return true;
 
-          arrivee: yup.object().shape({
-            // horaire: yup.string().required("L'heure d'arrivée est requise"),
-            numeroSillon: yup.string(),
-            couplageId: yup.string(),
-          }),
-          depart: yup.object().shape({
-            // horaire: yup.string().required("L'heure de départ est requise"),
-            numeroSillon: yup.string(),
-            couplageId: yup.string(),
-          }),
+        for (let i = 0; i < parcours.length; i++) {
+          const item = parcours[i];
+          const isFirst = i === 0;
+          const isLast = i === parcours.length - 1;
 
-          informationsConjoncturelles: yup.array().of(
-            yup.object().shape({
-              categorie: yup.string().required("La catégorie est requise"),
-              typeInformation: yup
-                .string()
-                .required("Le type d'information est requis"),
-              texte: yup.string().required("Le texte est requis"),
-              dateHeureDebutPublication: yup
-                .string()
-                .required("Ce champ est requis"),
-              dateHeureFinPublication: yup.string(),
-            })
-          ),
-        })
-      )
-      .min(2, "Veuillez ajouter au moins une origine et une destination"),
+          if (!isFirst && !item.arrivee?.horaire) {
+            return this.createError({
+              path: `parcours[${i}].arrivee.horaire`,
+              message: "L'heure d'arrivée est requise",
+            });
+          }
+
+          if (!isLast && !item.depart?.horaire) {
+            return this.createError({
+              path: `parcours[${i}].depart.horaire`,
+              message: "L'heure de départ est requise",
+            });
+          }
+        }
+
+        return true;
+      }),
   });
 
 export const FieldsToValidateByStep: Record<string, string[]> = {

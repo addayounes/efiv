@@ -55,8 +55,8 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
 
       <div className="mt-4">
         <Table
-          data={infos}
           bordered
+          data={infos}
           size="small"
           scroll={infos.length ? { y: 300, x: 300 } : undefined}
           head={[

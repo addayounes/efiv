@@ -177,7 +177,6 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             <div className="absolute left-1/2 -top-4 w-px h-10 bg-gray-300" />
             {/* Bubble */}
             <div className="w-2 h-2 rounded-full bg-gray-300 absolute left-[calc(50%-3.1px)]" />
-            {/* right-[12.5px] */}
           </div>
           <StationsField
             name="destination"

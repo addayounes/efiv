@@ -16,6 +16,7 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
 
   const isOrigin = index === 0;
+  const currentStation = values.parcours?.[index];
   const isDestination = index === values.parcours?.length - 1;
 
   const tagLabel = isOrigin
@@ -31,7 +32,12 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
     );
   };
 
-  const currentStation = values.parcours?.[index];
+  const handleStationChange = (option: any) => {
+    console.log(index, option);
+    if (index === 0) setFieldValue("origin", option?.value);
+    else if (index === values.parcours?.length - 1)
+      setFieldValue("destination", option?.value);
+  };
 
   return (
     <div className="flex gap-4">
@@ -39,7 +45,6 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
         <Collapse>
           <Collapse.Panel
             key={index}
-            showArrow={false}
             header={
               <div className="flex items-center justify-between cursor-pointer">
                 <div
@@ -50,13 +55,13 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                     {index + 1}
                   </span>
                   <StationsField
-                    size="medium"
+                    size="small"
                     className="min-w-[350px]"
                     placeholder="Choisir une gare"
+                    onChange={handleStationChange}
                     name={`parcours.${index}.station`}
-                    bordered={!currentStation?.station?.value}
                   />
-                  <div className="min-w-[150px] font-medium">
+                  <div className="min-w-[80px] font-medium">
                     {[
                       currentStation.arrivee?.horaire,
                       currentStation.depart?.horaire,
