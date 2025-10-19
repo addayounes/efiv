@@ -9,3 +9,10 @@ export const createCirculationService = async (
   const { data } = await api.post(`${SERVICE_BASE_URL}/postCourse`, body);
   return data;
 };
+
+export const createDraftCirculationService = async (
+  body: Partial<CreateCirculationApiPayload>
+) => {
+  const { data } = await api.post(`${SERVICE_BASE_URL}/postDraftCourse`, body);
+  return data;
+};

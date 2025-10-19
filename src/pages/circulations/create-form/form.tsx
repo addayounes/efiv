@@ -197,7 +197,8 @@ const FormContent: React.FC<FormContentProps> = () => {
     <FormikForm
       withLoadingToast
       onSubmit={handleSubmitForm}
-      initialValues={sampleCirculation as any}
+      initialValues={initialValues}
+      // initialValues={sampleCirculation as any}
       validationSchema={CreateCirculationSchema}
     >
       {() => {
