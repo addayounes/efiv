@@ -1,26 +1,11 @@
 import type { ColumnType } from "antd/es/table";
 
-export const useCirculationsListColumns = (): ColumnType[] => {
+export const useOperationalCirculationsColumns = (): ColumnType[] => {
   return [
-    {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-    },
-    {
-      title: "Parcours",
-      dataIndex: "parcours",
-      key: "parcours",
-    },
     {
       title: "Numéro Commercial",
       dataIndex: "NumeroCommercial",
       key: "NumeroCommercial",
-    },
-    {
-      title: "Marque Commerciale",
-      dataIndex: "marque",
-      key: "marque",
     },
     {
       title: "Mode",
@@ -33,14 +18,19 @@ export const useCirculationsListColumns = (): ColumnType[] => {
       key: "sousMode",
     },
     {
+      title: "Départ",
+      dataIndex: "departureTime",
+      key: "departureTime",
+    },
+    {
+      title: "Arrivée",
+      dataIndex: "ArrivalTime",
+      key: "ArrivalTime",
+    },
+    {
       title: "Statut",
       dataIndex: "statut",
       key: "statut",
-    },
-    {
-      title: "Date de création",
-      dataIndex: "createdAt",
-      key: "createdAt",
     },
     {
       title: "Actions",

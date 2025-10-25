@@ -1,7 +1,6 @@
 import { Button } from "antd";
 import { Plus } from "lucide-react";
-import CirculationsTable from "./table";
-import CirculationsListHeader from "./header";
+import CirculationsTabs from "./tabs";
 import { useNavigate } from "react-router-dom";
 import { __routes__ } from "@/constants/routes";
 import PageHeader from "@/components/page-header";
@@ -24,10 +23,7 @@ const CirculationsList: React.FC = () => {
           </Button>
         }
       />
-      <div className="px-6">
-        <CirculationsListHeader />
-      </div>
-      <CirculationsTable />
+      <CirculationsTabs />
     </div>
   );
 };

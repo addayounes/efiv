@@ -3,6 +3,7 @@ import Dashboard from "@/pages/dashboard";
 import { __routes__ } from "@/constants/routes";
 import CirculationsList from "@/pages/circulations/list";
 import CreateCirculationForm from "@/pages/circulations/create-form";
+import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
 
 export interface RouteType {
   path: string;
@@ -19,6 +20,11 @@ export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Circulations.Main,
     element: <CirculationsList />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Circulations.Operational,
+    element: <OperationalCirculations />,
     withLayout: true,
   },
   {

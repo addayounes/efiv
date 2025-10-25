@@ -1,6 +1,6 @@
 import { Tooltip } from "antd";
 import { cn } from "@/utils/cn";
-import { House, TrainFront } from "lucide-react";
+import { Activity, House, TrainFront } from "lucide-react";
 import { __routes__ } from "@/constants/routes";
 import { Link, useLocation } from "react-router-dom";
 
@@ -9,6 +9,11 @@ const SidebarElements = [
     label: "Tableau de bord",
     icon: <House color="white" />,
     route: __routes__.Dashboard,
+  },
+  {
+    label: "Suivi opérationnel",
+    icon: <Activity color="white" />,
+    route: __routes__.Circulations.Operational,
   },
   {
     label: "Circulations",
