@@ -20,7 +20,7 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
   const { step } = useParams();
   const navigate = useNavigate();
   const { mapCreateCirculationToDto } = useCirculationMapper();
-  const { validateForm, setTouched, values, isSubmitting } =
+  const { validateForm, setTouched, setSubmitting, values, isSubmitting } =
     useFormikContext<CreateCirculationDto>();
 
   const isFirstStep = step === CreateCirculationSteps.GENERAL;
@@ -71,15 +71,23 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
   };
 
   const handleCreateDraft = async () => {
-    const mappedData = await mapCreateCirculationToDto(values);
+    try {
+      setSubmitting(true);
 
-    const responseData = await createDraftCirculationService(mappedData);
+      const mappedData = await mapCreateCirculationToDto(values);
 
-    if (!responseData) throw new Error("No data returned from service");
+      const responseData = await createDraftCirculationService(mappedData);
 
-    navigate(__routes__.Circulations.Main);
+      if (!responseData) throw new Error("No data returned from service");
 
-    toast.success("Circulation créée avec succès");
+      navigate(__routes__.Circulations.Main);
+
+      toast.success("Circulation créée avec succès");
+    } catch (error) {
+      toast.error("Erreur lors de la création de la circulation");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

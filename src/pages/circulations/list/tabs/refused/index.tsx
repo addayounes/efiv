@@ -2,17 +2,27 @@ import CirculationsListHeader, {
   CirculationFilterKeys,
   DEFAULT_CIRCULATIONS_FILTERS,
 } from "../../header";
+import {
+  CirculationListActions,
+  useCirculationsListColumns,
+} from "../../columns";
 import toast from "react-hot-toast";
 import Table from "@/components/table";
 import { useEffect, useState } from "react";
-import { useCirculationsListColumns } from "../../columns";
 
 interface RefusedCirculationsProps {}
 
 const RefusedCirculations: React.FC<RefusedCirculationsProps> = ({}) => {
-  const columns = useCirculationsListColumns();
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
+
+  const columns = useCirculationsListColumns({
+    actions: [
+      CirculationListActions.VIEW,
+      CirculationListActions.EDIT,
+      CirculationListActions.HISTORY,
+    ],
+  });
 
   useEffect(() => {
     const fetchData = async () => {

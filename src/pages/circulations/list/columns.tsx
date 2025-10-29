@@ -9,12 +9,64 @@ import {
   CirculationStatus,
   StatusTagColorMap,
 } from "@/constants/circulation-status";
-import { Tag } from "antd";
 import { dayjs } from "@/lib/dayjs";
+import { Dropdown, Tag } from "antd";
 import type { ColumnType } from "antd/es/table";
+import type { ItemType } from "antd/es/menu/interface";
 import { DATE_FORMAT_NO_TIME } from "@/constants/date-format";
+import { Trash, Pencil, History, Eye, EllipsisVertical } from "lucide-react";
 
-export const useCirculationsListColumns = (): ColumnType[] => {
+export enum CirculationListActions {
+  VIEW = "view",
+  EDIT = "edit",
+  DELETE = "delete",
+  HISTORY = "history",
+}
+
+export const useCirculationsListColumns = (options?: {
+  actions: CirculationListActions[];
+}): ColumnType[] => {
+  // TODO: handle click
+  const actionsMenu: ItemType[] = [
+    {
+      key: CirculationListActions.VIEW,
+      label: (
+        <span className="flex items-center gap-2">
+          <Eye className="text-gray-600" size={16} />
+          Détails
+        </span>
+      ),
+    },
+    {
+      key: CirculationListActions.EDIT,
+      label: (
+        <span className="flex items-center gap-2">
+          <Pencil className="text-gray-600" size={16} />
+          Modifier
+        </span>
+      ),
+    },
+    {
+      key: CirculationListActions.HISTORY,
+      label: (
+        <span className="flex items-center gap-2">
+          <History className="text-gray-600" size={16} />
+          Historique des modifications
+        </span>
+      ),
+    },
+    {
+      key: CirculationListActions.DELETE,
+      label: (
+        <span className="flex items-center gap-2 group">
+          <Trash className="text-red-600 group-hover:text-white" size={16} />
+          Supprimer
+        </span>
+      ),
+      danger: true,
+    },
+  ];
+
   return [
     {
       title: "Date",
@@ -54,11 +106,19 @@ export const useCirculationsListColumns = (): ColumnType[] => {
       },
     },
     {
-      title: "Dessertes",
+      title: "Via",
       dataIndex: "parcours",
       key: "parcours",
       render(_, record) {
-        return <span>{record.parcours.length ?? 0} dessertes</span>;
+        return (
+          <span>
+            {(record.parcours?.pointDeParcours?.length ?? 0) === 2
+              ? "Direct"
+              : `${
+                  (record.parcours?.pointDeParcours?.length ?? 0) - 2
+                } dessertes`}
+          </span>
+        );
       },
     },
     {
@@ -84,9 +144,27 @@ export const useCirculationsListColumns = (): ColumnType[] => {
       },
     },
     {
+      width: 50,
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
+      render(_, record) {
+        return (
+          <div className="flex items-center gap-4">
+            <Dropdown
+              trigger={["click"]}
+              placement="bottomRight"
+              menu={{
+                items: actionsMenu.filter((a) =>
+                  options?.actions.includes(a!.key as CirculationListActions)
+                ),
+              }}
+            >
+              <EllipsisVertical className="cursor-pointer" size={20} />
+            </Dropdown>
+          </div>
+        );
+      },
     },
   ];
 };

@@ -61,7 +61,7 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                     onChange={handleStationChange}
                     name={`parcours.${index}.station`}
                   />
-                  <div className="min-w-[80px] font-medium">
+                  <div className="min-w-[85px] font-medium">
                     {[
                       currentStation.arrivee?.horaire,
                       currentStation.depart?.horaire,

@@ -1,16 +1,22 @@
+import {
+  CirculationListActions,
+  useCirculationsListColumns,
+} from "../../columns";
 import toast from "react-hot-toast";
 import Table from "@/components/table";
 import { useEffect, useState } from "react";
-import { useCirculationsListColumns } from "../../columns";
 import type { ICirculation } from "@/types/entity/circulation";
 import { fetchDraftCirculationService } from "@/services/circulations";
 
 interface DraftCirculationsProps {}
 
 const DraftCirculations: React.FC<DraftCirculationsProps> = ({}) => {
-  const columns = useCirculationsListColumns();
   const [loading, setLoading] = useState(false);
   const [circulations, setCirculations] = useState<ICirculation[]>([]);
+
+  const columns = useCirculationsListColumns({
+    actions: [CirculationListActions.DELETE, CirculationListActions.EDIT],
+  });
 
   useEffect(() => {
     const fetchData = async () => {
