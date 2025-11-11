@@ -24,7 +24,7 @@ const CirculationsTabs: React.FC<CirculationsTabsProps> = ({}) => {
         >
           <PreOperationalCirculations />
         </Tabs.TabPane>
-        <Tabs.TabPane
+        {/* <Tabs.TabPane
           tab={
             <Tooltip
               placement="bottom"
@@ -37,7 +37,7 @@ const CirculationsTabs: React.FC<CirculationsTabsProps> = ({}) => {
           key="refused"
         >
           <RefusedCirculations />
-        </Tabs.TabPane>
+        </Tabs.TabPane> */}
         <Tabs.TabPane
           tab={
             <Tooltip

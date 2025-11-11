@@ -34,7 +34,6 @@ function Table<T>({
               disabled: loading,
               pageSize: PAGE_SIZE,
               position: ["bottomRight"],
-              hideOnSinglePage: true,
               ...pagination,
             }
           : false

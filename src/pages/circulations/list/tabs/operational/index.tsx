@@ -6,9 +6,12 @@ import { Tabs } from "antd";
 import toast from "react-hot-toast";
 import { dayjs } from "@/lib/dayjs";
 import Table from "@/components/table";
-import { useEffect, useState } from "react";
 import PageHeader from "@/components/page-header";
+import { useEffect, useMemo, useState } from "react";
+import { usePagination } from "@/hooks/use-pagination";
 import { useOperationalCirculationsColumns } from "./columns";
+import type { ICirculation } from "@/types/entity/circulation";
+import { fetchOperationalCirculationService } from "@/services/circulations";
 
 interface OperationalCirculationsProps {}
 
@@ -26,13 +29,30 @@ const OperationalCirculations: React.FC<
   const [loading, setLoading] = useState(false);
   const columns = useOperationalCirculationsColumns();
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
+  const [circulations, setCirculations] = useState<ICirculation[]>([]);
+
+  const filteredCirculations = useMemo(() => {
+    return circulations.filter((circulation) => {
+      const departureDate = dayjs(circulation.course.date);
+      const compareDate =
+        currentTab === OperationalTabs.Today ? dayjs() : dayjs().add(1, "day");
+      return departureDate.isSame(compareDate, "day");
+    });
+  }, [circulations, currentTab]);
+
+  const pagination = usePagination(10);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
 
-        // Fetch data based on filters
+        const response = await fetchOperationalCirculationService({
+          page: pagination.current,
+          pageSize: pagination.pageSize,
+        });
+
+        setCirculations(response);
       } catch (error) {
         console.error("Error fetching circulations:", error);
         toast.error(
@@ -44,7 +64,7 @@ const OperationalCirculations: React.FC<
     };
 
     fetchData();
-  }, [filters]);
+  }, [filters, pagination.current, pagination.pageSize]);
 
   return (
     <div>
@@ -78,10 +98,10 @@ const OperationalCirculations: React.FC<
 
         <Table
           bordered
-          data={[]}
           head={columns}
           loading={loading}
-          pagination={{ pageSize: 10 }}
+          pagination={pagination}
+          data={filteredCirculations}
         />
       </div>
     </div>

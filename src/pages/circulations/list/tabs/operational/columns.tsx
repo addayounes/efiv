@@ -1,41 +1,109 @@
+import {
+  StatusLabelMap,
+  StatusTagColorMap,
+  type CirculationStatus,
+} from "@/constants/circulation-status";
+import { Dropdown, Tag } from "antd";
+import TrainParcours from "@/components/parcours";
 import type { ColumnType } from "antd/es/table";
+import { CirculationListActions } from "../../columns";
+import type { ItemType } from "antd/es/menu/interface";
+import type { ICirculation } from "@/types/entity/circulation";
+import { EllipsisVertical, History, Pencil } from "lucide-react";
 
-export const useOperationalCirculationsColumns = (): ColumnType[] => {
-  return [
-    {
-      title: "Numéro Commercial",
-      dataIndex: "NumeroCommercial",
-      key: "NumeroCommercial",
-    },
-    {
-      title: "Mode",
-      dataIndex: "mode",
-      key: "mode",
-    },
-    {
-      title: "Sous Mode",
-      dataIndex: "sousMode",
-      key: "sousMode",
-    },
-    {
-      title: "Départ",
-      dataIndex: "departureTime",
-      key: "departureTime",
-    },
-    {
-      title: "Arrivée",
-      dataIndex: "ArrivalTime",
-      key: "ArrivalTime",
-    },
-    {
-      title: "Statut",
-      dataIndex: "statut",
-      key: "statut",
-    },
-    {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-    },
-  ];
-};
+export const useOperationalCirculationsColumns =
+  (): ColumnType<ICirculation>[] => {
+    const actionsMenu: ItemType[] = [
+      {
+        key: CirculationListActions.EDIT,
+        label: (
+          <span className="flex items-center gap-2">
+            <Pencil className="text-gray-600" size={16} />
+            Modifier
+          </span>
+        ),
+      },
+      {
+        key: CirculationListActions.HISTORY,
+        label: (
+          <span className="flex items-center gap-2">
+            <History className="text-gray-600" size={16} />
+            Historique des modifications
+          </span>
+        ),
+      },
+    ];
+
+    return [
+      {
+        title: "Numéro Commercial",
+        dataIndex: "NumeroCommercial",
+        key: "NumeroCommercial",
+        render(_, record) {
+          return (
+            <span className="font-medium">
+              {record?.course?.numeroCommercial}
+            </span>
+          );
+        },
+      },
+      {
+        width: 300,
+        title: "Marque Commerciale",
+        dataIndex: "marqueCommerciale",
+        key: "marqueCommerciale",
+        render(_, record) {
+          return <span>{record?.course?.marqueCommerciale?.libelle} </span>;
+        },
+      },
+      {
+        title: "Parcours",
+        dataIndex: "parcours",
+        key: "parcours",
+        render(_, record) {
+          return (
+            <TrainParcours
+              parcours={record?.course?.parcours?.pointDeParcours ?? []}
+            />
+          );
+        },
+      },
+      {
+        title: "Statut",
+        dataIndex: "statut",
+        key: "statut",
+        render(_, record) {
+          return (
+            <Tag
+              className="font-medium"
+              color={
+                StatusTagColorMap[record.course?.statut as CirculationStatus]
+              }
+            >
+              {StatusLabelMap[record.course?.statut as CirculationStatus] ??
+                "N/A"}
+            </Tag>
+          );
+        },
+      },
+      {
+        width: 50,
+        title: "Actions",
+        dataIndex: "actions",
+        key: "actions",
+        render(_, record) {
+          return (
+            <div className="flex items-center gap-4">
+              <Dropdown
+                trigger={["click"]}
+                placement="bottomRight"
+                menu={{ items: actionsMenu }}
+              >
+                <EllipsisVertical className="cursor-pointer" size={20} />
+              </Dropdown>
+            </div>
+          );
+        },
+      },
+    ];
+  };

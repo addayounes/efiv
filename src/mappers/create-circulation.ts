@@ -26,14 +26,18 @@ export const useCirculationMapper = () => {
         libelle12: data.origine?.title!,
         libelle23: data.origine?.label!,
       },
-      ligneCommerciale: {
-        id: data.ligneCommerciale!,
-        libelle: data.ligneCommerciale,
-      },
-      marqueCommerciale: {
-        id: data.marqueCommerciale!,
-        libelle: data.marqueCommerciale,
-      },
+      ligneCommerciale: data.ligneCommerciale
+        ? {
+            id: data.ligneCommerciale!,
+            libelle: data.ligneCommerciale,
+          }
+        : undefined,
+      marqueCommerciale: data.marqueCommerciale
+        ? {
+            id: data.marqueCommerciale!,
+            libelle: data.marqueCommerciale,
+          }
+        : undefined,
       partenaire: {
         id: "EFIV",
         nom: "EFIV",

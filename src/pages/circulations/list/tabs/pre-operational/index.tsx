@@ -9,6 +9,9 @@ import {
 import toast from "react-hot-toast";
 import Table from "@/components/table";
 import { useEffect, useState } from "react";
+import { usePagination } from "@/hooks/use-pagination";
+import type { ICirculation } from "@/types/entity/circulation";
+import { fetchPreOperationalCirculationService } from "@/services/circulations";
 
 interface PreOperationalCirculationsProps {}
 
@@ -17,6 +20,9 @@ const PreOperationalCirculations: React.FC<
 > = ({}) => {
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
+  const [circulations, setCirculations] = useState<ICirculation[]>([]);
+
+  const pagination = usePagination(10);
 
   const columns = useCirculationsListColumns({
     actions: [
@@ -31,7 +37,12 @@ const PreOperationalCirculations: React.FC<
       try {
         setLoading(true);
 
-        // Fetch data based on filters
+        const response = await fetchPreOperationalCirculationService({
+          page: pagination.current,
+          pageSize: pagination.pageSize,
+        });
+
+        setCirculations(response);
       } catch (error) {
         console.error("Error fetching circulations:", error);
         toast.error(
@@ -43,7 +54,7 @@ const PreOperationalCirculations: React.FC<
     };
 
     fetchData();
-  }, [filters]);
+  }, [filters, pagination.current, pagination.pageSize]);
 
   return (
     <div className="space-y-4">
@@ -61,10 +72,10 @@ const PreOperationalCirculations: React.FC<
 
       <Table
         bordered
-        data={[]}
         head={columns}
         loading={loading}
-        pagination={{ pageSize: 10 }}
+        data={circulations}
+        pagination={pagination}
       />
     </div>
   );
