@@ -4,7 +4,9 @@ import {
   type CirculationStatus,
 } from "@/constants/circulation-status";
 import { Dropdown, Tag } from "antd";
+import { useNavigate } from "react-router-dom";
 import type { ColumnType } from "antd/es/table";
+import { __routes__ } from "@/constants/routes";
 import TrainParcours from "@/components/parcours";
 import { CirculationListActions } from "../../columns";
 import type { ItemType } from "antd/es/menu/interface";
@@ -13,7 +15,9 @@ import { EllipsisVertical, History, Pencil } from "lucide-react";
 
 export const useOperationalCirculationsColumns =
   (): ColumnType<ICirculation>[] => {
-    const actionsMenu: ItemType[] = [
+    const navigate = useNavigate();
+
+    const actionsMenu = (record: ICirculation): ItemType[] => [
       {
         key: CirculationListActions.EDIT,
         label: (
@@ -22,6 +26,13 @@ export const useOperationalCirculationsColumns =
             Modifier
           </span>
         ),
+        onClick: () =>
+          navigate(
+            __routes__.Circulations.OperationalUpdate.replace(
+              ":id",
+              record.course.id
+            )
+          ),
       },
       {
         key: CirculationListActions.HISTORY,
@@ -97,7 +108,7 @@ export const useOperationalCirculationsColumns =
               <Dropdown
                 trigger={["click"]}
                 placement="bottomRight"
-                menu={{ items: actionsMenu }}
+                menu={{ items: actionsMenu(record) }}
               >
                 <EllipsisVertical className="cursor-pointer" size={20} />
               </Dropdown>
