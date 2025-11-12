@@ -4,8 +4,8 @@ import {
   type CirculationStatus,
 } from "@/constants/circulation-status";
 import { Dropdown, Tag } from "antd";
-import TrainParcours from "@/components/parcours";
 import type { ColumnType } from "antd/es/table";
+import TrainParcours from "@/components/parcours";
 import { CirculationListActions } from "../../columns";
 import type { ItemType } from "antd/es/menu/interface";
 import type { ICirculation } from "@/types/entity/circulation";
