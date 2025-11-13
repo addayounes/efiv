@@ -30,13 +30,10 @@ const mockCirculation: ICirculationCourse = {
     pointDeParcours: [
       {
         arret: {
-          arrivee: {
-            horaire: "0001-01-01T00:00:00Z",
-            suppressionDiffusable: true,
-          },
+          arrivee: {} as any,
           depart: {
             horaire: "2025-11-13T17:38:00Z",
-            retardReel: 0,
+            retardReel: 26,
             retardVoyageur: 0,
             suppressionDiffusable: true,
           },
@@ -60,13 +57,13 @@ const mockCirculation: ICirculationCourse = {
         arret: {
           arrivee: {
             horaire: "2025-11-13T18:09:00Z",
-            retardReel: 0,
+            retardReel: 7,
             retardVoyageur: 0,
             suppressionDiffusable: true,
           },
           depart: {
             horaire: "2025-11-13T18:15:00Z",
-            retardReel: 0,
+            retardReel: 15,
             retardVoyageur: 0,
             suppressionDiffusable: true,
           },
@@ -83,6 +80,9 @@ const mockCirculation: ICirculationCourse = {
           {
             statut: "horaires modifiés",
           },
+          {
+            statut: "supprimé",
+          },
         ],
         zoneEmbarquement: {},
       },
@@ -90,14 +90,11 @@ const mockCirculation: ICirculationCourse = {
         arret: {
           arrivee: {
             horaire: "2025-11-13T19:33:00Z",
-            retardReel: 0,
+            retardReel: 126,
             retardVoyageur: 0,
             suppressionDiffusable: true,
           },
-          depart: {
-            horaire: "0001-01-01T00:00:00Z",
-            suppressionDiffusable: true,
-          },
+          depart: {} as any,
           descenteInterdite: false,
           monteeInterdite: false,
         },

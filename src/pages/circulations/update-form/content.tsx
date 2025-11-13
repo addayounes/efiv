@@ -1,7 +1,7 @@
 import { Tabs } from "antd";
 import type { ICirculationCourse } from "@/types/entity/circulation";
 import UpdateOperationalRouteTab from "./tabs/route";
-import UpdateOperationalCompositionTab from "./tabs/composition";
+import UpdateOperationalConjInfoTab from "./tabs/info-conj";
 
 interface UpdateOperationalCirculationContentProps {
   circulation: ICirculationCourse;
@@ -24,10 +24,12 @@ const UpdateOperationalCirculationContent: React.FC<
           <UpdateOperationalRouteTab circulation={circulation} />
         </Tabs.TabPane>
         <Tabs.TabPane
-          key="composition"
-          tab={<span className="font-medium">Composition</span>}
+          key="info-conj"
+          tab={
+            <span className="font-medium">Informations conjoncturelles</span>
+          }
         >
-          <UpdateOperationalCompositionTab circulation={circulation} />
+          <UpdateOperationalConjInfoTab circulation={circulation} />
         </Tabs.TabPane>
       </Tabs>
     </div>
