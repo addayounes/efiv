@@ -7,7 +7,7 @@ export interface ICirculationCourse {
   date: string;
   destination: Destination;
   origine: Origine;
-  marqueCommerciale: MarqueCommerciale;
+  marqueCommerciale: IdLabel;
   mode: string;
   numeroCommercial: string;
   parcours: Parcours;
@@ -15,7 +15,7 @@ export interface ICirculationCourse {
   serviceDeCourse: ServiceDeCourse[];
   sousMode: string;
   statut: string;
-  transporteur: Transporteur;
+  transporteur: IdLabel;
   id: string;
 }
 
@@ -31,7 +31,7 @@ export interface Origine {
   libelle23: string;
 }
 
-export interface MarqueCommerciale {
+export interface IdLabel {
   id: string;
   libelle: string;
 }
@@ -60,6 +60,11 @@ export interface ArriveeDepart {
   suppressionDiffusable: boolean;
   retardReel?: number;
   retardVoyageur?: number;
+  mentionVia?: boolean;
+  mentionDirect?: boolean;
+  numeroSillon?: string;
+  motifVoyageur?: IdLabel;
+  motifTransporteurAsync?: IdLabel;
 }
 
 export interface Desserte {
@@ -97,11 +102,6 @@ export interface ServiceDeCourse {
   id: string;
 }
 
-export interface Transporteur {
-  id: string;
-  libelle: string;
-}
-
 export interface INotification {
   id: string;
   CourseId: string;
@@ -117,5 +117,5 @@ export interface CourseMinimal {
   date: string;
   numeroCommercial: string;
   mode: string;
-  transporteur: Transporteur;
+  transporteur: IdLabel;
 }

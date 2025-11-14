@@ -41,7 +41,13 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
   const onStopDelete = () => {
     setFieldValue(`parcours.pointDeParcours.${index}.statuts`, [
       ...currentStatuses,
-      { statut: PointDeParcourStatut.SUPPRIME },
+      {
+        statut: PointDeParcourStatut.SUPPRIME,
+        motifTransporteur: {
+          id: motif,
+          libelle: motif,
+        },
+      },
     ]);
     setFieldValue(
       `parcours.pointDeParcours.${index}.arret.arrivee.suppressionDiffusable`,
@@ -68,7 +74,7 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
       onOk={onStopDelete}
       cancelText="Annuler"
       title="Supprimer la desserte"
-      okButtonProps={{ danger: true, disabled: !motif }}
+      okButtonProps={{ danger: true }}
     >
       <div className="py-4">
         <div>

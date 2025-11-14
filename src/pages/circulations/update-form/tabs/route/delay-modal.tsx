@@ -5,7 +5,7 @@ import {
 } from "@/types/entity/circulation";
 import { Info } from "lucide-react";
 import { useFormikContext } from "formik";
-import { Alert, Checkbox, Input, Modal } from "antd";
+import { Alert, Checkbox, Input, Modal, Select } from "antd";
 import { useEffect, useMemo, useState } from "react";
 
 interface DelayModalProps {
@@ -25,12 +25,24 @@ const defaultDelay: DelayState = {
   departure: 0,
 };
 
+const motifs = [
+  {
+    value: "TRAIN_EN_RETARD",
+    label: "Le train est en retard",
+  },
+  {
+    value: "AUTRE_MOTIF",
+    label: "Autre motif",
+  },
+];
+
 const DelayModal: React.FC<DelayModalProps> = ({
   open,
   stop,
   index,
   onClose,
 }) => {
+  const [motif, setMotif] = useState<string>();
   const [delay, setDelay] = useState<DelayState>(defaultDelay);
   const { values, setFieldValue } = useFormikContext<ICirculationCourse>();
   const [applyToFollowingStops, setApplyToFollowingStops] = useState(false);
@@ -63,11 +75,22 @@ const DelayModal: React.FC<DelayModalProps> = ({
     for (const s of affectedStops) {
       const stopIndex = parcours.findIndex((p) => p.rang === s.rang);
       const fieldPrefix = `parcours.pointDeParcours.${stopIndex}.arret`;
-      if (!isOrigin)
-        setFieldValue(`${fieldPrefix}.arrivee.retardReel`, delay.arrival);
 
-      if (!isDestination)
+      if (!isOrigin) {
+        setFieldValue(`${fieldPrefix}.arrivee.retardReel`, delay.arrival);
+        setFieldValue(`${fieldPrefix}.arrivee.motifTransporteurAsync`, {
+          id: motif,
+          libelle: motif,
+        });
+      }
+
+      if (!isDestination) {
         setFieldValue(`${fieldPrefix}.depart.retardReel`, delay.departure);
+        setFieldValue(`${fieldPrefix}.depart.motifTransporteurAsync`, {
+          id: motif,
+          libelle: motif,
+        });
+      }
     }
 
     onClose();
@@ -75,6 +98,10 @@ const DelayModal: React.FC<DelayModalProps> = ({
 
   useEffect(() => {
     setApplyToFollowingStops(false);
+    setMotif(
+      stop.arret.arrivee?.motifTransporteurAsync?.libelle ??
+        stop.arret.depart?.motifTransporteurAsync?.libelle
+    );
     setDelay({
       arrival: stop.arret.arrivee?.retardReel || 0,
       departure: stop.arret.depart?.retardReel || 0,
@@ -145,6 +172,37 @@ const DelayModal: React.FC<DelayModalProps> = ({
         </div>
 
         <div>
+          <label
+            htmlFor="motif-select"
+            className="text-sm text-gray-700 font-medium"
+          >
+            Motif du retard
+          </label>
+          <div className="my-2">
+            <Select
+              allowClear
+              size="large"
+              value={motif}
+              options={motifs}
+              id="motif-select"
+              className="w-full"
+              onChange={setMotif}
+              placeholder="Sélectionner un motif"
+            />
+          </div>
+        </div>
+
+        <div>
+          <Checkbox
+            checked={applyToFollowingStops}
+            onChange={(e) => setApplyToFollowingStops(e.target.checked)}
+          >
+            Appliquer aux dessertes qui suivent{" "}
+            <span className="font-medium">{stop?.desserte?.libelle23}</span>
+          </Checkbox>
+        </div>
+
+        <div>
           <Alert
             showIcon
             type="warning"
@@ -153,14 +211,6 @@ const DelayModal: React.FC<DelayModalProps> = ({
             description={<p className="text-sm">{getAlertMessage()}</p>}
           />
         </div>
-
-        <Checkbox
-          checked={applyToFollowingStops}
-          onChange={(e) => setApplyToFollowingStops(e.target.checked)}
-        >
-          Appliquer aux dessertes qui suivent{" "}
-          <span className="font-medium">{stop?.desserte?.libelle23}</span>
-        </Checkbox>
       </div>
     </Modal>
   );
