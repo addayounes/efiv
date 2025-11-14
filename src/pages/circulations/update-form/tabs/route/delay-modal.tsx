@@ -1,6 +1,7 @@
-import type {
-  PointDeParcour,
-  ICirculationCourse,
+import {
+  type PointDeParcour,
+  PointDeParcourStatut,
+  type ICirculationCourse,
 } from "@/types/entity/circulation";
 import { Info } from "lucide-react";
 import { useFormikContext } from "formik";
@@ -42,7 +43,9 @@ const DelayModal: React.FC<DelayModalProps> = ({
   const affectedStops = useMemo(() => {
     if (!applyToFollowingStops) return [stop];
     return [...(parcours?.slice(index) ?? [])].filter((s) => {
-      const isDeleted = s.statuts.find((st) => st.statut === "supprimé");
+      const isDeleted = s.statuts.find(
+        (st) => st.statut === PointDeParcourStatut.SUPPRIME
+      );
       return !isDeleted;
     });
   }, [applyToFollowingStops, index, parcours]);

@@ -1,8 +1,11 @@
+import {
+  type PointDeParcour,
+  PointDeParcourStatut,
+} from "@/types/entity/circulation";
 import dayjs from "dayjs";
 import { cn } from "@/utils/cn";
 import { TIME_FORMAT } from "@/constants/date-format";
 import { minutesToDuration } from "@/utils/date.utils";
-import type { PointDeParcour } from "@/types/entity/circulation";
 
 interface UpdateRouteStopItemProps {
   index: number;
@@ -19,7 +22,9 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
 }) => {
   const isOrigin = index === 0;
   const isDestination = index === (allStops?.length ?? 0) - 1;
-  const isDeleted = stop.statuts?.find((s) => s.statut === "supprimé");
+  const isDeleted = stop.statuts?.find(
+    (s) => s.statut === PointDeParcourStatut.SUPPRIME
+  );
 
   return (
     <div

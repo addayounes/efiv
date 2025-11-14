@@ -68,8 +68,20 @@ export interface Desserte {
   libelle23: string;
 }
 
+export enum PointDeParcourStatut {
+  AJOUTE = "ajouté",
+  ARRET_VERS_DESTINATION = "arrêt vers destination",
+  ARRET_VERS_ORIGINE = "arrêt vers origine",
+  ARRET_VERS_PASSAGE = "arrêt vers passage",
+  DESTINATION_VERS_ARRET = "destination vers arrêt",
+  HORAIRES_MODIFIES = "horaires modifiés",
+  ORIGINE_VERS_ARRET = "origine vers arrêt",
+  PASSAGE_VERS_ARRET = "passage vers arrêt",
+  SUPPRIME = "supprimé",
+}
+
 export interface Statut {
-  statut: string;
+  statut: PointDeParcourStatut;
 }
 
 // TODO

@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import {
+  PointDeParcourStatut,
+  type ICirculationCourse,
+} from "@/types/entity/circulation";
+import { Button } from "antd";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PageHeader from "@/components/page-header";
-import type { ICirculationCourse } from "@/types/entity/circulation";
-import { Button } from "antd";
-import UpdateOperationalCirculationContent from "./content";
 import FormikForm from "@/components/formik/form";
+import UpdateOperationalCirculationContent from "./content";
 
 interface UpdateOperationlCirculationProps {}
 
@@ -49,7 +52,7 @@ const mockCirculation: ICirculationCourse = {
         rang: 1,
         statuts: [
           {
-            statut: "ajouté",
+            statut: PointDeParcourStatut.AJOUTE,
           },
         ],
         zoneEmbarquement: {},
@@ -79,7 +82,7 @@ const mockCirculation: ICirculationCourse = {
         rang: 2,
         statuts: [
           {
-            statut: "horaires modifiés",
+            statut: PointDeParcourStatut.HORAIRES_MODIFIES,
           },
         ],
         zoneEmbarquement: {},
@@ -109,7 +112,7 @@ const mockCirculation: ICirculationCourse = {
         rang: 3,
         statuts: [
           {
-            statut: "horaires modifiés",
+            statut: PointDeParcourStatut.HORAIRES_MODIFIES,
           },
         ],
         zoneEmbarquement: {},
@@ -134,10 +137,10 @@ const mockCirculation: ICirculationCourse = {
         rang: 4,
         statuts: [
           {
-            statut: "horaires modifiés",
+            statut: PointDeParcourStatut.HORAIRES_MODIFIES,
           },
           {
-            statut: "supprimé",
+            statut: PointDeParcourStatut.SUPPRIME,
           },
         ],
         zoneEmbarquement: {},

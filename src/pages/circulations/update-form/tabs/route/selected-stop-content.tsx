@@ -1,8 +1,11 @@
+import {
+  type PointDeParcour,
+  PointDeParcourStatut,
+} from "@/types/entity/circulation";
 import { Button } from "antd";
 import { useState } from "react";
 import DelayModal from "./delay-modal";
 import DeleteStopModal from "./delete-modal";
-import type { PointDeParcour } from "@/types/entity/circulation";
 
 interface RouteTabSelectedStopContentProps {
   index: number;
@@ -15,7 +18,9 @@ const RouteTabSelectedStopContent: React.FC<
   const [showDelayModal, setShowDelayModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const isDeleted = stop.statuts.find((s) => s.statut === "supprimé");
+  const isDeleted = stop.statuts.find(
+    (s) => s.statut === PointDeParcourStatut.SUPPRIME
+  );
 
   const hasDelay =
     stop?.arret?.arrivee?.retardReel !== 0 ||
