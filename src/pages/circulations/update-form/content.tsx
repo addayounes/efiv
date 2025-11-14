@@ -1,15 +1,15 @@
 import { Tabs } from "antd";
-import type { ICirculationCourse } from "@/types/entity/circulation";
+import { useFormikContext } from "formik";
 import UpdateOperationalRouteTab from "./tabs/route";
 import UpdateOperationalConjInfoTab from "./tabs/info-conj";
+import type { ICirculationCourse } from "@/types/entity/circulation";
 
-interface UpdateOperationalCirculationContentProps {
-  circulation: ICirculationCourse;
-}
+interface UpdateOperationalCirculationContentProps {}
 
 const UpdateOperationalCirculationContent: React.FC<
   UpdateOperationalCirculationContentProps
-> = ({ circulation }) => {
+> = () => {
+  const { values } = useFormikContext<ICirculationCourse>();
   return (
     <div className="p-4 pt-2">
       <Tabs>
@@ -17,11 +17,11 @@ const UpdateOperationalCirculationContent: React.FC<
           key="route"
           tab={
             <span className="font-medium">
-              Dessertes ({circulation?.parcours?.pointDeParcours?.length ?? 0})
+              Dessertes ({values?.parcours?.pointDeParcours?.length ?? 0})
             </span>
           }
         >
-          <UpdateOperationalRouteTab circulation={circulation} />
+          <UpdateOperationalRouteTab />
         </Tabs.TabPane>
         <Tabs.TabPane
           key="info-conj"
@@ -29,7 +29,7 @@ const UpdateOperationalCirculationContent: React.FC<
             <span className="font-medium">Informations conjoncturelles</span>
           }
         >
-          <UpdateOperationalConjInfoTab circulation={circulation} />
+          <UpdateOperationalConjInfoTab />
         </Tabs.TabPane>
       </Tabs>
     </div>

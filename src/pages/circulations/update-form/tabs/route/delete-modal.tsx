@@ -2,6 +2,7 @@ import { Modal } from "antd";
 import type { PointDeParcour } from "@/types/entity/circulation";
 
 interface DeleteStopModalProps {
+  index: number;
   open: boolean;
   onClose: () => void;
   stop: PointDeParcour;

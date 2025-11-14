@@ -5,6 +5,7 @@ import PageHeader from "@/components/page-header";
 import type { ICirculationCourse } from "@/types/entity/circulation";
 import { Button } from "antd";
 import UpdateOperationalCirculationContent from "./content";
+import FormikForm from "@/components/formik/form";
 
 interface UpdateOperationlCirculationProps {}
 
@@ -80,8 +81,35 @@ const mockCirculation: ICirculationCourse = {
           {
             statut: "horaires modifiés",
           },
+        ],
+        zoneEmbarquement: {},
+      },
+      {
+        arret: {
+          arrivee: {
+            horaire: "2025-11-13T01:33:00Z",
+            retardReel: 0,
+            retardVoyageur: 0,
+            suppressionDiffusable: true,
+          },
+          depart: {
+            horaire: "2025-11-13T02:33:00Z",
+            retardReel: 0,
+            retardVoyageur: 0,
+            suppressionDiffusable: true,
+          },
+          descenteInterdite: false,
+          monteeInterdite: false,
+        },
+        desserte: {
+          codeUIC: "87686006",
+          libelle12: "Paris Lyon",
+          libelle23: "Paris Gare de Lyon",
+        },
+        rang: 3,
+        statuts: [
           {
-            statut: "supprimé",
+            statut: "horaires modifiés",
           },
         ],
         zoneEmbarquement: {},
@@ -103,10 +131,13 @@ const mockCirculation: ICirculationCourse = {
           libelle12: "Paris Lyon",
           libelle23: "Paris Gare de Lyon",
         },
-        rang: 3,
+        rang: 4,
         statuts: [
           {
             statut: "horaires modifiés",
+          },
+          {
+            statut: "supprimé",
           },
         ],
         zoneEmbarquement: {},
@@ -145,6 +176,10 @@ const UpdateOperationlCirculation: React.FC<
   const [circulationData, setCirculationData] =
     useState<ICirculationCourse | null>(null);
 
+  const handleSubmitForm = async (data: ICirculationCourse) => {
+    console.log("Form submitted with data:", data);
+  };
+
   useEffect(() => {
     if (!id) return;
 
@@ -168,19 +203,27 @@ const UpdateOperationlCirculation: React.FC<
           circulationData?.numeroCommercial || "-"
         }`}
       />
-
-      <main className="px-6">
-        <div className="flex flex-col shadow border border-gray-200  rounded h-[calc(100vh-88px)] bg-white">
-          <div className="flex-1 overflow-y-auto">
-            <UpdateOperationalCirculationContent
-              circulation={circulationData!}
-            />
-          </div>
-          <div className="flex justify-end border-t border-gray-200 p-4">
-            <Button type="primary">Modifier</Button>
-          </div>
-        </div>
-      </main>
+      <FormikForm
+        withLoadingToast
+        onSubmit={handleSubmitForm}
+        initialValues={circulationData!}
+        // validationSchema={CreateCirculationSchema}
+      >
+        {() => {
+          return (
+            <main className="px-6">
+              <div className="flex flex-col shadow border border-gray-200  rounded h-[calc(100vh-88px)] bg-white">
+                <div className="flex-1 overflow-y-auto">
+                  <UpdateOperationalCirculationContent />
+                </div>
+                <div className="flex justify-end border-t border-gray-200 p-4">
+                  <Button type="primary">Modifier</Button>
+                </div>
+              </div>
+            </main>
+          );
+        }}
+      </FormikForm>
     </div>
   );
 };

@@ -5,16 +5,18 @@ import DeleteStopModal from "./delete-modal";
 import type { PointDeParcour } from "@/types/entity/circulation";
 
 interface RouteTabSelectedStopContentProps {
+  index: number;
   stop: PointDeParcour;
 }
 
 const RouteTabSelectedStopContent: React.FC<
   RouteTabSelectedStopContentProps
-> = ({ stop }) => {
+> = ({ index, stop }) => {
   const [showDelayModal, setShowDelayModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const isDeleted = stop.statuts.find((s) => s.statut === "supprimé");
+
   const hasDelay =
     stop?.arret?.arrivee?.retardReel !== 0 ||
     stop?.arret?.depart?.retardReel !== 0;
@@ -25,7 +27,11 @@ const RouteTabSelectedStopContent: React.FC<
         <h2 className="font-medium text-2xl">{stop?.desserte?.libelle23}</h2>
 
         <div className="flex items-center gap-4">
-          <Button htmlType="button" onClick={() => setShowDelayModal(true)}>
+          <Button
+            htmlType="button"
+            disabled={!!isDeleted}
+            onClick={() => setShowDelayModal(true)}
+          >
             {hasDelay ? "Modifier le retard" : "Annoncer un retard"}
           </Button>
           <Button
@@ -41,12 +47,14 @@ const RouteTabSelectedStopContent: React.FC<
       </div>
 
       <DeleteStopModal
+        index={index}
         stop={stop}
         open={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
       />
 
       <DelayModal
+        index={index}
         stop={stop}
         open={showDelayModal}
         onClose={() => setShowDelayModal(false)}

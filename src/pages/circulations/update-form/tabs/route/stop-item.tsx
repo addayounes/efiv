@@ -9,14 +9,12 @@ interface UpdateRouteStopItemProps {
   stop: PointDeParcour;
   allStops: PointDeParcour[];
   selectedStop: PointDeParcour;
-  onSelected: (stop: PointDeParcour) => void;
 }
 
 const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
   stop,
   index,
   allStops,
-  onSelected,
   selectedStop,
 }) => {
   const isOrigin = index === 0;
@@ -26,9 +24,8 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
   return (
     <div
       key={stop?.rang}
-      onClick={() => onSelected(stop)}
       className={cn(
-        "flex items-center justify-between pr-4 pl-3 py-2 border-gray-200 rounded cursor-pointer border-l-6 border-l-transparent",
+        "flex items-center justify-between pr-4 pl-3 py-2 rounded cursor-pointer border-l-6 border-l-transparent",
         selectedStop?.rang === stop?.rang
           ? "bg-primary-light border-l-primary"
           : "hover:bg-gray-100",

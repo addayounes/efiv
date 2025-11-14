@@ -1,12 +1,8 @@
+import { useFormikContext } from "formik";
 import type { ICirculationCourse } from "@/types/entity/circulation";
 
-interface UpdateOperationalConjInfoTabProps {
-  circulation: ICirculationCourse;
-}
-
-const UpdateOperationalConjInfoTab: React.FC<
-  UpdateOperationalConjInfoTabProps
-> = ({ circulation }) => {
+const UpdateOperationalConjInfoTab: React.FC = () => {
+  const { values } = useFormikContext<ICirculationCourse>();
   return <div>UpdateOperationalConjInfoTab</div>;
 };
 
