@@ -6,8 +6,7 @@ import dayjs from "dayjs";
 import { cn } from "@/utils/cn";
 import { TIME_FORMAT } from "@/constants/date-format";
 import { minutesToDuration } from "@/utils/date.utils";
-import { Radio } from "lucide-react";
-import { Tooltip } from "antd";
+import DeletedStopBadge from "@/components/deleted-stop-badge";
 
 interface UpdateRouteStopItemProps {
   index: number;
@@ -55,16 +54,7 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
         <h4 className="text-base font-medium">{stop?.desserte?.libelle12}</h4>
       </div>
       <div className="flex items-center gap-4">
-        {isDeleted && (
-          <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-xs font-medium">
-            {isDeletedDiffusable && (
-              <Tooltip title="Suppression diffusable en gare">
-                <Radio size={14} />
-              </Tooltip>
-            )}
-            Supprimé
-          </span>
-        )}
+        {isDeleted && <DeletedStopBadge isDiffusable={!!isDeletedDiffusable} />}
 
         <div className="flex flex-col items-end text-xs space-y-2 text-right font-medium">
           {stop?.arret?.arrivee?.horaire ? (

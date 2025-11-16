@@ -6,6 +6,7 @@ import { Button } from "antd";
 import { useState } from "react";
 import DelayModal from "./delay-modal";
 import DeleteStopModal from "./delete-modal";
+import DeletedStopBadge from "@/components/deleted-stop-badge";
 
 interface RouteTabSelectedStopContentProps {
   index: number;
@@ -26,10 +27,21 @@ const RouteTabSelectedStopContent: React.FC<
     stop?.arret?.arrivee?.retardReel !== 0 ||
     stop?.arret?.depart?.retardReel !== 0;
 
+  const isDeletedDiffusable =
+    (stop.arret?.arrivee?.suppressionDiffusable ||
+      stop.arret?.depart?.suppressionDiffusable) &&
+    isDeleted;
+
   return (
     <div className="p-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-medium text-2xl">{stop?.desserte?.libelle23}</h2>
+        <h2 className="flex items-center gap-4 font-medium text-2xl">
+          {stop?.desserte?.libelle23}
+
+          {isDeleted && (
+            <DeletedStopBadge isDiffusable={!!isDeletedDiffusable} />
+          )}
+        </h2>
 
         <div className="flex items-center gap-4">
           <Button
