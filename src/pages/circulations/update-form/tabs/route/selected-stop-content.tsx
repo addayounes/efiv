@@ -2,11 +2,12 @@ import {
   type PointDeParcour,
   PointDeParcourStatut,
 } from "@/types/entity/circulation";
-import { Button } from "antd";
+import { Button, Tabs } from "antd";
 import { useState } from "react";
 import DelayModal from "./delay-modal";
 import DeleteStopModal from "./delete-modal";
 import DeletedStopBadge from "@/components/deleted-stop-badge";
+import UpdateContentGeneralTab from "./content-tabs/general";
 
 interface RouteTabSelectedStopContentProps {
   index: number;
@@ -33,7 +34,7 @@ const RouteTabSelectedStopContent: React.FC<
     isDeleted;
 
   return (
-    <div className="p-4">
+    <div className="p-6">
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-4 font-medium text-2xl">
           {stop?.desserte?.libelle23}
@@ -61,6 +62,29 @@ const RouteTabSelectedStopContent: React.FC<
             Supprimer la desserte
           </Button>
         </div>
+      </div>
+
+      <div className="mt-4">
+        <Tabs size="small" type="card">
+          <Tabs.TabPane
+            key="general"
+            tab={<p className="text-sm font-medium">Général</p>}
+          >
+            <UpdateContentGeneralTab index={index} />
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            key="composition"
+            tab={<p className="text-sm font-medium">Composition</p>}
+          ></Tabs.TabPane>
+          <Tabs.TabPane
+            key="info-conj"
+            tab={<p className="text-sm font-medium">Info Conjoncturelles</p>}
+          ></Tabs.TabPane>
+          <Tabs.TabPane
+            key="couplage"
+            tab={<p className="text-sm font-medium">Couplage</p>}
+          ></Tabs.TabPane>
+        </Tabs>
       </div>
 
       <DeleteStopModal

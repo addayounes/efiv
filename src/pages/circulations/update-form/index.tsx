@@ -42,7 +42,7 @@ const mockCirculation: ICirculationCourse = {
             retardVoyageur: 0,
             suppressionDiffusable: true,
           },
-          descenteInterdite: false,
+          descenteInterdite: true,
           monteeInterdite: false,
         },
         desserte: {
@@ -128,7 +128,7 @@ const mockCirculation: ICirculationCourse = {
           },
           depart: {} as any,
           descenteInterdite: false,
-          monteeInterdite: false,
+          monteeInterdite: true,
         },
         desserte: {
           codeUIC: "87686006",
