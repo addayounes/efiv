@@ -10,16 +10,20 @@ import Select from "@/components/formik/select";
 import { Field, useFormikContext } from "formik";
 import TextArea from "@/components/formik/textarea";
 import DateTimePicker from "@/components/formik/date-time";
-import type { CreateCirculationDto } from "@/types/dto/create-circulation";
+import type { ICirculationCourse } from "@/types/entity/circulation";
 
-interface InfoConjoncturelleProps {
+interface UpdateInfoConjoncturelleProps {
   index: number;
 }
 
-const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
-  const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
+const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
+  index,
+}) => {
+  const { values, setFieldValue } = useFormikContext<ICirculationCourse>();
 
-  const infos = values.parcours?.[index]?.informationsConjoncturelles || [];
+  const infos =
+    values.parcours?.pointDeParcours?.[index]?.informationsConjoncturelles ||
+    [];
 
   const handleAddInfoConj = () => {
     const newInfo = {
@@ -28,18 +32,26 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
       texte: undefined,
     };
 
-    setFieldValue(`parcours.${index}.informationsConjoncturelles`, [
-      ...(values.parcours?.[index]?.informationsConjoncturelles || []),
-      newInfo,
-    ]);
+    setFieldValue(
+      `parcours.pointDeParcours.${index}.informationsConjoncturelles`,
+      [
+        ...(values.parcours?.pointDeParcours?.[index]
+          ?.informationsConjoncturelles || []),
+        newInfo,
+      ]
+    );
   };
 
   const handleDeleteInfoConj = (infoIndex: number) => {
-    setFieldValue(`parcours.${index}.informationsConjoncturelles`, [
-      ...(values.parcours?.[index]?.informationsConjoncturelles || []).filter(
-        (_v: any, i: number) => i !== infoIndex
-      ),
-    ]);
+    setFieldValue(
+      `parcours.pointDeParcours.${index}.informationsConjoncturelles`,
+      [
+        ...(
+          values.parcours?.pointDeParcours?.[index]
+            ?.informationsConjoncturelles || []
+        ).filter((_v: any, i: number) => i !== infoIndex),
+      ]
+    );
   };
 
   return (
@@ -74,7 +86,7 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
                     className="min-w-[170px]"
                     placeholder="Choisir un type"
                     options={INFO_CONJ_TYPE_OPTIONS}
-                    name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.typeInformation`}
+                    name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.typeInformation`}
                   />
                 );
               },
@@ -93,7 +105,7 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
                     className="min-w-[170px]"
                     placeholder="Choisir une catégorie"
                     options={INFO_CONJ_CATEGORY_OPTIONS}
-                    name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.categorie`}
+                    name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.categorie`}
                   />
                 );
               },
@@ -111,7 +123,7 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
                     as={TextArea}
                     placeholder="Texte"
                     className="min-w-[170px]"
-                    name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.texte`}
+                    name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.texte`}
                   />
                 );
               },
@@ -129,7 +141,7 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
                     as={DateTimePicker}
                     format="DD/MM/YYYY HH:mm"
                     className="min-w-[170px]"
-                    name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureDebutPublication`}
+                    name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureDebutPublication`}
                   />
                 );
               },
@@ -147,7 +159,7 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
                     as={DateTimePicker}
                     format="DD/MM/YYYY HH:mm"
                     className="min-w-[170px]"
-                    name={`parcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureFinPublication`}
+                    name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureFinPublication`}
                   />
                 );
               },
@@ -177,4 +189,4 @@ const InfoConjoncturelle: React.FC<InfoConjoncturelleProps> = ({ index }) => {
   );
 };
 
-export default InfoConjoncturelle;
+export default UpdateInfoConjoncturelle;

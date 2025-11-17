@@ -1,8 +1,8 @@
 import { Tabs } from "antd";
 import { useFormikContext } from "formik";
 import UpdateOperationalRouteTab from "./tabs/route";
-import UpdateOperationalConjInfoTab from "./tabs/info-conj";
 import type { ICirculationCourse } from "@/types/entity/circulation";
+import InfoConjConfig from "../create-form/steps/components/info-conj";
 
 interface UpdateOperationalCirculationContentProps {}
 
@@ -29,7 +29,7 @@ const UpdateOperationalCirculationContent: React.FC<
             <span className="font-medium">Informations conjoncturelles</span>
           }
         >
-          <UpdateOperationalConjInfoTab />
+          <InfoConjConfig />
         </Tabs.TabPane>
       </Tabs>
     </div>

@@ -8,6 +8,7 @@ import DelayModal from "./delay-modal";
 import DeleteStopModal from "./delete-modal";
 import DeletedStopBadge from "@/components/deleted-stop-badge";
 import UpdateContentGeneralTab from "./content-tabs/general";
+import UpdateInfoConjoncturelle from "./content-tabs/info-conj";
 
 interface RouteTabSelectedStopContentProps {
   index: number;
@@ -79,7 +80,9 @@ const RouteTabSelectedStopContent: React.FC<
           <Tabs.TabPane
             key="info-conj"
             tab={<p className="text-sm font-medium">Info Conjoncturelles</p>}
-          ></Tabs.TabPane>
+          >
+            <UpdateInfoConjoncturelle index={index} />
+          </Tabs.TabPane>
           <Tabs.TabPane
             key="couplage"
             tab={<p className="text-sm font-medium">Couplage</p>}

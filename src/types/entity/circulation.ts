@@ -1,3 +1,5 @@
+import type { InformationsConjoncturelle } from "../dto/create-circulation";
+
 export interface ICirculation {
   course: ICirculationCourse;
   notifications: INotification[];
@@ -46,6 +48,7 @@ export interface PointDeParcour {
   rang: number;
   statuts: Statut[];
   zoneEmbarquement: ZoneEmbarquement;
+  informationsConjoncturelles?: InformationsConjoncturelle[];
 }
 
 export interface Arret {
