@@ -2,15 +2,16 @@ import {
   PointDeParcourStatut,
   type ICirculation,
 } from "@/types/entity/circulation";
-import { Button, Popconfirm } from "antd";
 import toast from "react-hot-toast";
+import { Button, Popconfirm } from "antd";
+import type { FormikProps } from "formik";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
 import UpdateOperationalCirculationContent from "./content";
-import type { FormikProps } from "formik";
 import { fetchCirculationByIdService } from "@/services/circulations";
+import Loading from "@/pages/loading";
 
 interface UpdateOperationlCirculationProps {}
 
@@ -18,6 +19,7 @@ const UpdateOperationlCirculation: React.FC<
   UpdateOperationlCirculationProps
 > = ({}) => {
   const { id } = useParams();
+  const [loading, setLoading] = useState(false);
   const [circulationData, setCirculationData] = useState<ICirculation | null>(
     null
   );
@@ -49,20 +51,25 @@ const UpdateOperationlCirculation: React.FC<
 
     const getCirculationData = async () => {
       try {
-        // Fetch circulation data by id
-
+        setLoading(true);
         const data = await fetchCirculationByIdService(id);
-
-        console.log(data);
-
         setCirculationData(data);
       } catch (error) {
         toast.error("Erreur lors du chargement des données de la circulation.");
+      } finally {
+        setLoading(false);
       }
     };
 
     getCirculationData();
   }, [id]);
+
+  if (loading)
+    return (
+      <div className="h-screen flex items-center">
+        <Loading />
+      </div>
+    );
 
   return (
     <FormikForm

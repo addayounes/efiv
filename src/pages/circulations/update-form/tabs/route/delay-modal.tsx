@@ -76,7 +76,8 @@ const DelayModal: React.FC<DelayModalProps> = ({
       const stopIndex = parcours.findIndex((p) => p.rang === s.rang);
       const fieldPrefix = `parcours.pointDeParcours.${stopIndex}.arret`;
 
-      if (!isOrigin) {
+      // if it's not origin
+      if (stopIndex !== 0) {
         setFieldValue(`${fieldPrefix}.arrivee.retardReel`, delay.arrival);
         setFieldValue(`${fieldPrefix}.arrivee.motifTransporteurAsync`, {
           id: motif,
@@ -84,7 +85,8 @@ const DelayModal: React.FC<DelayModalProps> = ({
         });
       }
 
-      if (!isDestination) {
+      // if it's not destination
+      if (stopIndex !== (parcours?.length ?? 0) - 1) {
         setFieldValue(`${fieldPrefix}.depart.retardReel`, delay.departure);
         setFieldValue(`${fieldPrefix}.depart.motifTransporteurAsync`, {
           id: motif,
