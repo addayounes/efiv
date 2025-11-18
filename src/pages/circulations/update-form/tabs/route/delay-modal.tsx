@@ -1,7 +1,7 @@
 import {
   type PointDeParcour,
   PointDeParcourStatut,
-  type ICirculationCourse,
+  type ICirculation,
 } from "@/types/entity/circulation";
 import { Info } from "lucide-react";
 import { useFormikContext } from "formik";
@@ -44,7 +44,7 @@ const DelayModal: React.FC<DelayModalProps> = ({
 }) => {
   const [motif, setMotif] = useState<string>();
   const [delay, setDelay] = useState<DelayState>(defaultDelay);
-  const { values, setFieldValue } = useFormikContext<ICirculationCourse>();
+  const { values, setFieldValue } = useFormikContext<ICirculation>();
   const [applyToFollowingStops, setApplyToFollowingStops] = useState(false);
 
   const parcours = values.parcours?.pointDeParcours;

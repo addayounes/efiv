@@ -1,6 +1,6 @@
 import { Tabs, Tooltip } from "antd";
 import DraftCirculations from "./draft";
-import RefusedCirculations from "./refused";
+// import RefusedCirculations from "./refused";
 import PreOperationalCirculations from "./pre-operational";
 
 interface CirculationsTabsProps {}

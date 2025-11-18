@@ -28,10 +28,7 @@ export const useOperationalCirculationsColumns =
         ),
         onClick: () =>
           navigate(
-            __routes__.Circulations.OperationalUpdate.replace(
-              ":id",
-              record.course.id
-            )
+            __routes__.Circulations.OperationalUpdate.replace(":id", record.id)
           ),
       },
       {
@@ -52,9 +49,7 @@ export const useOperationalCirculationsColumns =
         key: "NumeroCommercial",
         render(_, record) {
           return (
-            <span className="font-medium">
-              {record?.course?.numeroCommercial}
-            </span>
+            <span className="font-medium">{record?.numeroCommercial}</span>
           );
         },
       },
@@ -64,7 +59,7 @@ export const useOperationalCirculationsColumns =
         dataIndex: "marqueCommerciale",
         key: "marqueCommerciale",
         render(_, record) {
-          return <span>{record?.course?.marqueCommerciale?.libelle} </span>;
+          return <span>{record?.marqueCommerciale?.libelle} </span>;
         },
       },
       {
@@ -73,9 +68,7 @@ export const useOperationalCirculationsColumns =
         key: "parcours",
         render(_, record) {
           return (
-            <TrainParcours
-              parcours={record?.course?.parcours?.pointDeParcours ?? []}
-            />
+            <TrainParcours parcours={record?.parcours?.pointDeParcours ?? []} />
           );
         },
       },
@@ -87,12 +80,9 @@ export const useOperationalCirculationsColumns =
           return (
             <Tag
               className="font-medium"
-              color={
-                StatusTagColorMap[record.course?.statut as CirculationStatus]
-              }
+              color={StatusTagColorMap[record?.statut as CirculationStatus]}
             >
-              {StatusLabelMap[record.course?.statut as CirculationStatus] ??
-                "N/A"}
+              {StatusLabelMap[record?.statut as CirculationStatus] ?? "N/A"}
             </Tag>
           );
         },

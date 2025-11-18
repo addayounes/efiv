@@ -1,7 +1,7 @@
 import {
   type PointDeParcour,
   PointDeParcourStatut,
-  type ICirculationCourse,
+  type ICirculation,
 } from "@/types/entity/circulation";
 import { useFormikContext } from "formik";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
 }) => {
   const [motif, setMotif] = useState<string>();
   const [isStreamable, setIsStreamable] = useState(false);
-  const { values, setFieldValue } = useFormikContext<ICirculationCourse>();
+  const { values, setFieldValue } = useFormikContext<ICirculation>();
 
   const currentStatuses =
     values?.parcours?.pointDeParcours?.[index]?.statuts || [];

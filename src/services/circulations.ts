@@ -1,8 +1,8 @@
 import { api } from "@/lib/axios";
-import type { CreateCirculationApiPayload } from "@/types/dto/create-circulation";
-import type { IFetchDraftParams } from "@/types/dto/fetch-draft-params";
+import type { IPaginatedResponse, IPaginationParams } from "@/types/pagination";
 import type { ICirculation } from "@/types/entity/circulation";
-import type { IPaginationParams } from "@/types/pagination";
+import type { IFetchDraftParams } from "@/types/dto/fetch-draft-params";
+import type { CreateCirculationApiPayload } from "@/types/dto/create-circulation";
 
 const SERVICE_BASE_URL = "/api/Course";
 
@@ -29,7 +29,7 @@ export const fetchDraftCirculationService = async (
 
 export const fetchPreOperationalCirculationService = async (
   params: IPaginationParams
-): Promise<ICirculation[]> => {
+): Promise<IPaginatedResponse<ICirculation>> => {
   const { data } = await api.get(
     `${SERVICE_BASE_URL}/getPresOperationelleCourse`,
     { params }
@@ -39,9 +39,16 @@ export const fetchPreOperationalCirculationService = async (
 
 export const fetchOperationalCirculationService = async (
   params: IPaginationParams
-): Promise<ICirculation[]> => {
+): Promise<IPaginatedResponse<ICirculation>> => {
   const { data } = await api.get(`${SERVICE_BASE_URL}/getOperationelleCourse`, {
     params,
   });
+  return data;
+};
+
+export const fetchCirculationByIdService = async (
+  id: string
+): Promise<ICirculation> => {
+  const { data } = await api.get(`${SERVICE_BASE_URL}/${id}`);
   return data;
 };

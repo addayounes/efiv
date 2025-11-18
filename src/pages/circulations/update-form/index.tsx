@@ -1,8 +1,8 @@
 import {
   PointDeParcourStatut,
-  type ICirculationCourse,
+  type ICirculation,
 } from "@/types/entity/circulation";
-import { Button, Popconfirm, Popover } from "antd";
+import { Button, Popconfirm } from "antd";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -10,183 +10,25 @@ import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
 import UpdateOperationalCirculationContent from "./content";
 import type { FormikProps } from "formik";
+import { fetchCirculationByIdService } from "@/services/circulations";
 
 interface UpdateOperationlCirculationProps {}
-
-const mockCirculation: ICirculationCourse = {
-  date: "2025-11-13T00:00:00Z",
-  destination: {
-    codeUIC: "87686006",
-    libelle12: "Paris Lyon",
-    libelle23: "Paris Gare de Lyon",
-  },
-  origine: {
-    codeUIC: "87723197",
-    libelle12: "Lyon Part D.",
-    libelle23: "Lyon Part Dieu",
-  },
-  marqueCommerciale: {
-    id: "001",
-    libelle: "Frecciarossa",
-  },
-  mode: "ferré",
-  numeroCommercial: "7769",
-  parcours: {
-    pointDeParcours: [
-      {
-        arret: {
-          arrivee: {} as any,
-          depart: {
-            horaire: "2025-11-13T17:38:00Z",
-            retardReel: 26,
-            retardVoyageur: 0,
-            suppressionDiffusable: true,
-          },
-          descenteInterdite: true,
-          monteeInterdite: false,
-        },
-        desserte: {
-          codeUIC: "87723197",
-          libelle12: "Lyon Part D.",
-          libelle23: "Lyon Part Dieu",
-        },
-        rang: 1,
-        statuts: [
-          {
-            statut: PointDeParcourStatut.AJOUTE,
-          },
-        ],
-        zoneEmbarquement: {},
-      },
-      {
-        arret: {
-          arrivee: {
-            horaire: "2025-11-13T18:09:00Z",
-            retardReel: 7,
-            retardVoyageur: 0,
-            suppressionDiffusable: true,
-          },
-          depart: {
-            horaire: "2025-11-13T18:15:00Z",
-            retardReel: 15,
-            retardVoyageur: 0,
-            suppressionDiffusable: true,
-          },
-          descenteInterdite: false,
-          monteeInterdite: false,
-        },
-        desserte: {
-          codeUIC: "87686667",
-          libelle12: "Paris Bercy",
-          libelle23: "Paris Bercy",
-        },
-        rang: 2,
-        statuts: [
-          {
-            statut: PointDeParcourStatut.HORAIRES_MODIFIES,
-          },
-        ],
-        zoneEmbarquement: {},
-      },
-      {
-        arret: {
-          arrivee: {
-            horaire: "2025-11-13T01:33:00Z",
-            retardReel: 0,
-            retardVoyageur: 0,
-            suppressionDiffusable: true,
-          },
-          depart: {
-            horaire: "2025-11-13T02:33:00Z",
-            retardReel: 0,
-            retardVoyageur: 0,
-            suppressionDiffusable: true,
-          },
-          descenteInterdite: false,
-          monteeInterdite: false,
-        },
-        desserte: {
-          codeUIC: "87686006",
-          libelle12: "Paris Lyon",
-          libelle23: "Paris Gare de Lyon",
-        },
-        rang: 3,
-        statuts: [
-          {
-            statut: PointDeParcourStatut.HORAIRES_MODIFIES,
-          },
-        ],
-        zoneEmbarquement: {},
-      },
-      {
-        arret: {
-          arrivee: {
-            horaire: "2025-11-13T19:33:00Z",
-            retardReel: 126,
-            retardVoyageur: 0,
-            suppressionDiffusable: true,
-          },
-          depart: {} as any,
-          descenteInterdite: false,
-          monteeInterdite: true,
-        },
-        desserte: {
-          codeUIC: "87686006",
-          libelle12: "Paris Lyon",
-          libelle23: "Paris Gare de Lyon",
-        },
-        rang: 4,
-        statuts: [
-          {
-            statut: PointDeParcourStatut.HORAIRES_MODIFIES,
-          },
-          {
-            statut: PointDeParcourStatut.SUPPRIME,
-          },
-        ],
-        zoneEmbarquement: {},
-      },
-    ],
-  },
-  partenaire: {
-    id: "64534",
-    nom: "IVGO",
-    dateEnvoi: "2025-11-13T16:00:25Z",
-  },
-  serviceDeCourse: [
-    {
-      id: "S11",
-    },
-    {
-      id: "S03",
-    },
-    {
-      id: "S08",
-    },
-  ],
-  sousMode: "train",
-  statut: "prévue",
-  transporteur: {
-    id: "3216",
-    libelle: "TRENITALIA FRANCE",
-  },
-  id: "Nzc2OTIwMjUxMTEzMzIxNkZlcnLDqQ==",
-};
 
 const UpdateOperationlCirculation: React.FC<
   UpdateOperationlCirculationProps
 > = ({}) => {
   const { id } = useParams();
-  const [circulationData, setCirculationData] =
-    useState<ICirculationCourse | null>(null);
+  const [circulationData, setCirculationData] = useState<ICirculation | null>(
+    null
+  );
 
-  const handleSubmitForm = async (data: ICirculationCourse) => {
+  const handleSubmitForm = async (data: ICirculation) => {
     console.log("Form submitted with data:", data);
   };
 
   const deleteCirculation = async ({
     setFieldValue,
-  }: FormikProps<ICirculationCourse>) => {
+  }: FormikProps<ICirculation>) => {
     try {
       const newParcours = (
         circulationData?.parcours?.pointDeParcours ?? []
@@ -209,7 +51,11 @@ const UpdateOperationlCirculation: React.FC<
       try {
         // Fetch circulation data by id
 
-        setCirculationData(mockCirculation);
+        const data = await fetchCirculationByIdService(id);
+
+        console.log(data);
+
+        setCirculationData(data);
       } catch (error) {
         toast.error("Erreur lors du chargement des données de la circulation.");
       }

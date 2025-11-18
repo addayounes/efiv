@@ -4,18 +4,13 @@ import {
   SubModeLabelMap,
   CirculationSubMode,
 } from "@/constants/mode-sub-mode";
-import {
-  StatusLabelMap,
-  CirculationStatus,
-  StatusTagColorMap,
-} from "@/constants/circulation-status";
 import { dayjs } from "@/lib/dayjs";
 import { Dropdown, Tag } from "antd";
 import type { ColumnType } from "antd/es/table";
 import type { ItemType } from "antd/es/menu/interface";
 import { DATE_FORMAT_NO_TIME } from "@/constants/date-format";
-import { Trash, Pencil, History, Eye, EllipsisVertical } from "lucide-react";
 import type { ICirculation } from "@/types/entity/circulation";
+import { Trash, Pencil, History, Eye, EllipsisVertical } from "lucide-react";
 
 export enum CirculationListActions {
   VIEW = "view",
@@ -74,9 +69,7 @@ export const useCirculationsListColumns = (options?: {
       dataIndex: "date",
       key: "date",
       render(_, record) {
-        return (
-          <span>{dayjs(record?.course?.date).format(DATE_FORMAT_NO_TIME)}</span>
-        );
+        return <span>{dayjs(record?.date).format(DATE_FORMAT_NO_TIME)}</span>;
       },
     },
     {
@@ -84,11 +77,7 @@ export const useCirculationsListColumns = (options?: {
       dataIndex: "NumeroCommercial",
       key: "NumeroCommercial",
       render(_, record) {
-        return (
-          <span className="font-medium">
-            {record?.course?.numeroCommercial}
-          </span>
-        );
+        return <span className="font-medium">{record?.numeroCommercial}</span>;
       },
     },
     {
@@ -96,9 +85,7 @@ export const useCirculationsListColumns = (options?: {
       dataIndex: "marque",
       key: "marque",
       render(_, record) {
-        return (
-          <span>{record?.course?.marqueCommerciale?.libelle ?? "N/A"}</span>
-        );
+        return <span>{record?.marqueCommerciale?.libelle ?? "N/A"}</span>;
       },
     },
     {
@@ -108,9 +95,8 @@ export const useCirculationsListColumns = (options?: {
       render(_, record) {
         return (
           <span>
-            {ModeLabelMap[record?.course?.mode as CirculationMode] ?? "N/A"} /{" "}
-            {SubModeLabelMap[record?.course?.sousMode as CirculationSubMode] ??
-              "N/A"}
+            {ModeLabelMap[record?.mode as CirculationMode] ?? "N/A"} /{" "}
+            {SubModeLabelMap[record?.sousMode as CirculationSubMode] ?? "N/A"}
           </span>
         );
       },
@@ -122,10 +108,10 @@ export const useCirculationsListColumns = (options?: {
       render(_, record) {
         return (
           <span>
-            {(record?.course?.parcours?.pointDeParcours?.length ?? 0) === 2
+            {(record?.parcours?.pointDeParcours?.length ?? 0) === 2
               ? "Direct"
               : `${
-                  (record?.course?.parcours?.pointDeParcours?.length ?? 0) - 2
+                  (record?.parcours?.pointDeParcours?.length ?? 0) - 2
                 } dessertes`}
           </span>
         );
@@ -136,9 +122,11 @@ export const useCirculationsListColumns = (options?: {
       dataIndex: "statut",
       key: "statut",
       render(_, record) {
-        return record?.course?.statut ? (
-          <Tag color={record.notifications.length === 0 ? "default" : "green"}>
-            {record.notifications.length === 0 ? "Non envoyé" : "envoyé"}
+        return record?.statut ? (
+          <Tag
+            color={record.publishStatus === "published" ? "default" : "green"}
+          >
+            {record.publishStatus === "published" ? "Non envoyé" : "envoyé"}
           </Tag>
         ) : (
           "N/A"
@@ -150,7 +138,7 @@ export const useCirculationsListColumns = (options?: {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
-      render(_, record) {
+      render(_) {
         return (
           <div className="flex items-center gap-4">
             <Dropdown

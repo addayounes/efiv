@@ -1,7 +1,7 @@
 import Switch from "@/components/formik/switch";
 import { Field, useFormikContext } from "formik";
 import { minutesToDuration } from "@/utils/date.utils";
-import type { ICirculationCourse } from "@/types/entity/circulation";
+import type { ICirculation } from "@/types/entity/circulation";
 
 interface UpdateContentGeneralTabProps {
   index: number;
@@ -10,7 +10,7 @@ interface UpdateContentGeneralTabProps {
 const UpdateContentGeneralTab: React.FC<UpdateContentGeneralTabProps> = ({
   index,
 }) => {
-  const { values } = useFormikContext<ICirculationCourse>();
+  const { values } = useFormikContext<ICirculation>();
   return (
     <div className="p-0 space-y-6">
       <div className="flex gap-4">

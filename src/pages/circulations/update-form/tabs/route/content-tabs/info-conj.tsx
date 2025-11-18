@@ -10,7 +10,7 @@ import Select from "@/components/formik/select";
 import { Field, useFormikContext } from "formik";
 import TextArea from "@/components/formik/textarea";
 import DateTimePicker from "@/components/formik/date-time";
-import type { ICirculationCourse } from "@/types/entity/circulation";
+import type { ICirculation } from "@/types/entity/circulation";
 
 interface UpdateInfoConjoncturelleProps {
   index: number;
@@ -19,7 +19,7 @@ interface UpdateInfoConjoncturelleProps {
 const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
   index,
 }) => {
-  const { values, setFieldValue } = useFormikContext<ICirculationCourse>();
+  const { values, setFieldValue } = useFormikContext<ICirculation>();
 
   const infos =
     values.parcours?.pointDeParcours?.[index]?.informationsConjoncturelles ||

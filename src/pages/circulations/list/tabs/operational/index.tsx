@@ -33,14 +33,14 @@ const OperationalCirculations: React.FC<
 
   const filteredCirculations = useMemo(() => {
     return circulations.filter((circulation) => {
-      const departureDate = dayjs(circulation.course.date);
+      const departureDate = dayjs(circulation.date);
       const compareDate =
         currentTab === OperationalTabs.Today ? dayjs() : dayjs().add(1, "day");
       return departureDate.isSame(compareDate, "day");
     });
   }, [circulations, currentTab]);
 
-  const pagination = usePagination(10);
+  const { setTotal, ...pagination } = usePagination();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +52,8 @@ const OperationalCirculations: React.FC<
           pageSize: pagination.pageSize,
         });
 
-        setCirculations(response);
+        setTotal(response?.totalCount || 0);
+        setCirculations(response?.items || []);
       } catch (error) {
         console.error("Error fetching circulations:", error);
         toast.error(

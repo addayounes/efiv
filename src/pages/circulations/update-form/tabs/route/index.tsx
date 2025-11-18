@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useFormikContext } from "formik";
 import UpdateRouteStopItem from "./stop-item";
 import RouteTabSelectedStopContent from "./selected-stop-content";
-import type { ICirculationCourse } from "@/types/entity/circulation";
+import type { ICirculation } from "@/types/entity/circulation";
 
 const UpdateOperationalRouteTab: React.FC = () => {
-  const { values } = useFormikContext<ICirculationCourse>();
+  const { values } = useFormikContext<ICirculation>();
   const [selectedStopIndex, setSelectedStopIndex] = useState<number>(0);
 
   const selectedStop = values?.parcours?.pointDeParcours?.[selectedStopIndex];

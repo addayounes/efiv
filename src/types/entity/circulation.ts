@@ -1,11 +1,6 @@
 import type { InformationsConjoncturelle } from "../dto/create-circulation";
 
 export interface ICirculation {
-  course: ICirculationCourse;
-  notifications: INotification[];
-}
-
-export interface ICirculationCourse {
   date: string;
   destination: Destination;
   origine: Origine;
@@ -19,6 +14,7 @@ export interface ICirculationCourse {
   statut: string;
   transporteur: IdLabel;
   id: string;
+  publishStatus: string;
 }
 
 export interface Destination {

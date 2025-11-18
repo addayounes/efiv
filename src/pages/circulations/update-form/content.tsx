@@ -1,7 +1,7 @@
 import { Tabs } from "antd";
 import { useFormikContext } from "formik";
 import UpdateOperationalRouteTab from "./tabs/route";
-import type { ICirculationCourse } from "@/types/entity/circulation";
+import type { ICirculation } from "@/types/entity/circulation";
 import InfoConjConfig from "../create-form/steps/components/info-conj";
 
 interface UpdateOperationalCirculationContentProps {}
@@ -9,7 +9,7 @@ interface UpdateOperationalCirculationContentProps {}
 const UpdateOperationalCirculationContent: React.FC<
   UpdateOperationalCirculationContentProps
 > = () => {
-  const { values } = useFormikContext<ICirculationCourse>();
+  const { values } = useFormikContext<ICirculation>();
   return (
     <div className="p-4 pt-2">
       <Tabs>

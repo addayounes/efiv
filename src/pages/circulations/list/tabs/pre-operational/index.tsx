@@ -22,7 +22,7 @@ const PreOperationalCirculations: React.FC<
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
   const [circulations, setCirculations] = useState<ICirculation[]>([]);
 
-  const pagination = usePagination(10);
+  const { setTotal, ...pagination } = usePagination();
 
   const columns = useCirculationsListColumns({
     actions: [
@@ -42,7 +42,8 @@ const PreOperationalCirculations: React.FC<
           pageSize: pagination.pageSize,
         });
 
-        setCirculations(response);
+        setTotal(response?.totalCount || 0);
+        setCirculations(response?.items || []);
       } catch (error) {
         console.error("Error fetching circulations:", error);
         toast.error(
