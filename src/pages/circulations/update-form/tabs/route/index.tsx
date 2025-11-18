@@ -1,8 +1,10 @@
+import { Button } from "antd";
 import { useState } from "react";
 import { useFormikContext } from "formik";
 import UpdateRouteStopItem from "./stop-item";
-import RouteTabSelectedStopContent from "./selected-stop-content";
 import type { ICirculation } from "@/types/entity/circulation";
+import AddLineSeparator from "@/components/add-line-seperator";
+import RouteTabSelectedStopContent from "./selected-stop-content";
 
 const UpdateOperationalRouteTab: React.FC = () => {
   const { values } = useFormikContext<ICirculation>();
@@ -13,25 +15,39 @@ const UpdateOperationalRouteTab: React.FC = () => {
   return (
     <div className="h-full -mt-4">
       <div className="flex gap-6">
-        <div className="w-1/3 max-w-[400px] h-[calc(100vh-225px)] overflow-y-auto divide-y pt-6">
-          {(values?.parcours?.pointDeParcours ?? [])?.map(
-            (point, index, arr) => {
-              return (
-                <div
-                  key={point?.rang}
-                  className="border-gray-200"
-                  onClick={() => setSelectedStopIndex(index)}
-                >
-                  <UpdateRouteStopItem
-                    stop={point}
-                    index={index}
-                    allStops={arr}
-                    selectedStop={selectedStop}
-                  />
-                </div>
-              );
-            }
-          )}
+        <div className="w-1/3 max-w-[400px] h-[calc(100vh-225px)] py-6">
+          <div className="overflow-y-auto space-y-2">
+            {(values?.parcours?.pointDeParcours ?? [])?.map(
+              (point, index, arr) => {
+                return (
+                  <div className="group">
+                    {index === 0 && (
+                      <div className="hidden group-hover:block my-2">
+                        <AddLineSeparator isOnTop />
+                      </div>
+                    )}
+
+                    <div
+                      key={point?.rang}
+                      onClick={() => setSelectedStopIndex(index)}
+                      className="border-gray-200 border rounded"
+                    >
+                      <UpdateRouteStopItem
+                        stop={point}
+                        index={index}
+                        allStops={arr}
+                        selectedStop={selectedStop}
+                      />
+                    </div>
+
+                    <div className="hidden group-hover:block my-2">
+                      <AddLineSeparator />
+                    </div>
+                  </div>
+                );
+              }
+            )}
+          </div>
         </div>
         <div className="flex-1 border-l border-gray-200">
           {selectedStop ? (
