@@ -56,7 +56,7 @@ export interface Arret {
 
 export interface ArriveeDepart {
   horaire: string;
-  suppressionDiffusable: boolean;
+  suppressionDiffusable?: boolean;
   retardReel?: number;
   retardVoyageur?: number;
   mentionVia?: boolean;

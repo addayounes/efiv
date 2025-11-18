@@ -1,85 +1,201 @@
 import {
+  type ICirculation,
   type PointDeParcour,
   PointDeParcourStatut,
-  type ICirculation,
 } from "@/types/entity/circulation";
+import { useState } from "react";
+import { type Dayjs } from "@/lib/dayjs";
+import { DatePicker, Modal } from "antd";
 import { useFormikContext } from "formik";
-import { useEffect, useState } from "react";
-import { Checkbox, Modal, Select } from "antd";
+import type { StopDto } from "@/services/ref";
+import { StationsFieldWithoutFormik } from "@/pages/circulations/create-form/steps/components/stations-field";
 
 interface AddStopModalProps {
   index: number;
   open: boolean;
   onClose: () => void;
-  stop: PointDeParcour;
 }
 
-const motifs = [
-  {
-    value: "SUPPRIME",
-    label: "La desserte ne doit plus être effectuée",
-  },
-  {
-    value: "TEMPORAIREMENT_SUPPRIME",
-    label: "La desserte est temporairement supprimée",
-  },
-];
+interface StopTimes {
+  arrivee: Dayjs | undefined;
+  depart: Dayjs | undefined;
+}
+
+const defaultTimes: StopTimes = { arrivee: undefined, depart: undefined };
 
 const AddStopModal: React.FC<AddStopModalProps> = ({
   open,
-  stop,
   index,
   onClose,
 }) => {
-  const [motif, setMotif] = useState<string>();
-  const [isStreamable, setIsStreamable] = useState(false);
-  // const { values, setFieldValue } = useFormikContext<ICirculation>();
+  const [station, setStation] = useState<StopDto>();
+  const [times, setTimes] = useState<StopTimes>(defaultTimes);
+  const { values, setFieldValue } = useFormikContext<ICirculation>();
+
+  const isOrigin = index === 0;
+  const isDestination = index === values?.parcours?.pointDeParcours?.length;
 
   const onStopAdd = () => {
+    const currentParcours = [...(values.parcours?.pointDeParcours || [])];
+
+    const stopStatus = [{ statut: PointDeParcourStatut.AJOUTE }];
+
+    if (isOrigin)
+      stopStatus.push({ statut: PointDeParcourStatut.ARRET_VERS_ORIGINE });
+
+    if (isDestination)
+      stopStatus.push({ statut: PointDeParcourStatut.ARRET_VERS_DESTINATION });
+
+    const newStop: PointDeParcour = {
+      desserte: {
+        codeUIC: station!.id,
+        libelle12: station!.libelle12,
+        libelle23: station!.libelle23,
+      },
+      arret: {
+        descenteInterdite: isOrigin,
+        monteeInterdite: isDestination,
+        depart: times.depart
+          ? { horaire: times.depart.toISOString() }
+          : ({} as any),
+        arrivee: times.arrivee
+          ? { horaire: times.arrivee.toISOString() }
+          : ({} as any),
+      },
+      rang: index + 1,
+      statuts: stopStatus,
+      zoneEmbarquement: {},
+    };
+
+    currentParcours.splice(index, 0, newStop);
+
+    const updatedParcours = currentParcours.map((stop, idx) => ({
+      ...stop,
+      rang: idx + 1,
+    }));
+
+    setFieldValue(`parcours.pointDeParcours`, updatedParcours);
+
     onClose();
   };
-
-  useEffect(() => {
-    setMotif(undefined);
-    setIsStreamable(false);
-  }, [stop]);
 
   return (
     <Modal
       open={open}
-      onCancel={onClose}
       okText="Ajouter"
       onOk={onStopAdd}
+      onCancel={onClose}
       cancelText="Annuler"
       title="Ajouter une desserte"
-      // okButtonProps={{ danger: true }}
+      okButtonProps={{
+        disabled:
+          (!isOrigin && !times.arrivee) ||
+          (!isDestination && !times.depart) ||
+          !station,
+      }}
     >
       <div className="py-4">
         <div>
           <label
-            htmlFor="motif-select"
+            htmlFor="station-select"
             className="text-sm text-gray-700 font-medium"
           >
-            Quelle est la raison de la suppression de cette desserte ?
+            Gare
           </label>
-          <div className="my-2">
-            <Select
-              allowClear
-              size="large"
-              value={motif}
-              options={motifs}
-              id="motif-select"
-              className="w-full"
-              onChange={setMotif}
-              placeholder="Sélectionner un motif"
-            />
+          <StationsFieldWithoutFormik
+            id="station-select"
+            value={station?.id}
+            placeholder="Choisir une gare"
+            className="w-full min-w-[350px]"
+            onStationChange={(value) => setStation(value)}
+          />
+        </div>
+
+        <div className="flex gap-4 mt-4">
+          <div className="basis-full">
+            <label
+              htmlFor="station-select"
+              className="text-sm text-gray-700 font-medium"
+            >
+              Arrivée
+            </label>
+            <div>
+              <DatePicker
+                showTime
+                picker="time"
+                format="HH:mm"
+                className="w-full"
+                needConfirm={false}
+                disabled={isOrigin}
+                value={times.arrivee}
+                onChange={(date) =>
+                  setTimes((prev) => ({ ...prev, arrivee: date }))
+                }
+                disabledTime={() => {
+                  return {
+                    disabledHours() {
+                      if (times.depart) {
+                        return Array.from({ length: 24 }, (_, i) => i).filter(
+                          (hour) => hour > times.depart!.hour()
+                        );
+                      }
+                      return [];
+                    },
+                    disabledMinutes(hour) {
+                      if (times.depart && hour === times.depart.hour()) {
+                        return Array.from({ length: 60 }, (_, i) => i).filter(
+                          (minute) => minute > times.depart!.minute()
+                        );
+                      }
+                      return [];
+                    },
+                  };
+                }}
+              />
+            </div>
           </div>
-          <Checkbox
-            checked={isStreamable}
-            onChange={(e) => setIsStreamable(e.target.checked)}
-          >
-            Diffuser la suppression en gare
-          </Checkbox>
+          <div className="basis-full">
+            <label
+              htmlFor="station-select"
+              className="text-sm text-gray-700 font-medium"
+            >
+              Départ
+            </label>
+            <div>
+              <DatePicker
+                showTime
+                picker="time"
+                format="HH:mm"
+                className="w-full"
+                needConfirm={false}
+                value={times.depart}
+                disabled={isDestination}
+                onChange={(date) =>
+                  setTimes((prev) => ({ ...prev, depart: date }))
+                }
+                disabledTime={() => {
+                  return {
+                    disabledHours() {
+                      if (times.arrivee) {
+                        return Array.from({ length: 24 }, (_, i) => i).filter(
+                          (hour) => hour < times.arrivee!.hour()
+                        );
+                      }
+                      return [];
+                    },
+                    disabledMinutes(hour) {
+                      if (times.arrivee && hour === times.arrivee.hour()) {
+                        return Array.from({ length: 60 }, (_, i) => i).filter(
+                          (minute) => minute < times.arrivee!.minute()
+                        );
+                      }
+                      return [];
+                    },
+                  };
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </Modal>

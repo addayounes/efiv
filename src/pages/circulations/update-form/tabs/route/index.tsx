@@ -1,6 +1,6 @@
-import { Button } from "antd";
 import { useState } from "react";
 import { useFormikContext } from "formik";
+import AddStopModal from "./add-stop-modal";
 import UpdateRouteStopItem from "./stop-item";
 import type { ICirculation } from "@/types/entity/circulation";
 import AddLineSeparator from "@/components/add-line-seperator";
@@ -8,6 +8,7 @@ import RouteTabSelectedStopContent from "./selected-stop-content";
 
 const UpdateOperationalRouteTab: React.FC = () => {
   const { values } = useFormikContext<ICirculation>();
+  const [addStopIndex, setAddStopIndex] = useState<number | null>(null);
   const [selectedStopIndex, setSelectedStopIndex] = useState<number>(0);
 
   const selectedStop = values?.parcours?.pointDeParcours?.[selectedStopIndex];
@@ -23,7 +24,10 @@ const UpdateOperationalRouteTab: React.FC = () => {
                   <div className="group">
                     {index === 0 && (
                       <div className="hidden group-hover:block my-2">
-                        <AddLineSeparator isOnTop />
+                        <AddLineSeparator
+                          isOnTop
+                          onClick={() => setAddStopIndex(0)}
+                        />
                       </div>
                     )}
 
@@ -41,7 +45,9 @@ const UpdateOperationalRouteTab: React.FC = () => {
                     </div>
 
                     <div className="hidden group-hover:block my-2">
-                      <AddLineSeparator />
+                      <AddLineSeparator
+                        onClick={() => setAddStopIndex(index + 1)}
+                      />
                     </div>
                   </div>
                 );
@@ -64,6 +70,14 @@ const UpdateOperationalRouteTab: React.FC = () => {
           )}
         </div>
       </div>
+
+      {addStopIndex !== null && (
+        <AddStopModal
+          index={addStopIndex!}
+          open={addStopIndex !== null}
+          onClose={() => setAddStopIndex(null)}
+        />
+      )}
     </div>
   );
 };
