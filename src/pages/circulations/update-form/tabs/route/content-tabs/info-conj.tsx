@@ -10,7 +10,8 @@ import Select from "@/components/formik/select";
 import { Field, useFormikContext } from "formik";
 import TextArea from "@/components/formik/textarea";
 import DateTimePicker from "@/components/formik/date-time";
-import type { ICirculation } from "@/types/entity/circulation";
+import { type ICirculation } from "@/types/entity/circulation";
+import { CirculationStatus } from "@/constants/circulation-status";
 
 interface UpdateInfoConjoncturelleProps {
   index: number;
@@ -20,6 +21,8 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
   index,
 }) => {
   const { values, setFieldValue } = useFormikContext<ICirculation>();
+
+  const isTrainDeleted = values?.statut === CirculationStatus.Supprime;
 
   const infos =
     values.parcours?.pointDeParcours?.[index]?.informationsConjoncturelles ||
@@ -60,7 +63,11 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
         <h2 className="text-lg font-medium">
           Informations conjoncturelles ({infos.length ?? 0})
         </h2>
-        <Button onClick={handleAddInfoConj} htmlType="button">
+        <Button
+          onClick={handleAddInfoConj}
+          htmlType="button"
+          disabled={isTrainDeleted}
+        >
           Ajouter
         </Button>
       </div>

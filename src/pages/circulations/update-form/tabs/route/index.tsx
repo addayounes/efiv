@@ -2,14 +2,17 @@ import { useState } from "react";
 import { useFormikContext } from "formik";
 import AddStopModal from "./add-stop-modal";
 import UpdateRouteStopItem from "./stop-item";
-import type { ICirculation } from "@/types/entity/circulation";
+import { type ICirculation } from "@/types/entity/circulation";
 import AddLineSeparator from "@/components/add-line-seperator";
 import RouteTabSelectedStopContent from "./selected-stop-content";
+import { CirculationStatus } from "@/constants/circulation-status";
 
 const UpdateOperationalRouteTab: React.FC = () => {
   const { values } = useFormikContext<ICirculation>();
   const [addStopIndex, setAddStopIndex] = useState<number | null>(null);
   const [selectedStopIndex, setSelectedStopIndex] = useState<number>(0);
+
+  const isTrainDeleted = values?.statut === CirculationStatus.Supprime;
 
   const selectedStop = values?.parcours?.pointDeParcours?.[selectedStopIndex];
 
@@ -22,7 +25,7 @@ const UpdateOperationalRouteTab: React.FC = () => {
               (point, index, arr) => {
                 return (
                   <div className="group">
-                    {index === 0 && (
+                    {index === 0 && !isTrainDeleted && (
                       <div className="hidden group-hover:block my-2">
                         <AddLineSeparator
                           isOnTop
@@ -44,11 +47,13 @@ const UpdateOperationalRouteTab: React.FC = () => {
                       />
                     </div>
 
-                    <div className="hidden group-hover:block my-2">
-                      <AddLineSeparator
-                        onClick={() => setAddStopIndex(index + 1)}
-                      />
-                    </div>
+                    {!isTrainDeleted && (
+                      <div className="hidden group-hover:block my-2">
+                        <AddLineSeparator
+                          onClick={() => setAddStopIndex(index + 1)}
+                        />
+                      </div>
+                    )}
                   </div>
                 );
               }

@@ -1,14 +1,17 @@
 import {
+  type ICirculation,
   type PointDeParcour,
   PointDeParcourStatut,
 } from "@/types/entity/circulation";
-import { Button, Tabs } from "antd";
 import { useState } from "react";
+import { Button, Tabs } from "antd";
 import DelayModal from "./delay-modal";
+import { useFormikContext } from "formik";
 import DeleteStopModal from "./delete-modal";
-import DeletedStopBadge from "@/components/deleted-stop-badge";
 import UpdateContentGeneralTab from "./content-tabs/general";
+import DeletedStopBadge from "@/components/deleted-stop-badge";
 import UpdateInfoConjoncturelle from "./content-tabs/info-conj";
+import { CirculationStatus } from "@/constants/circulation-status";
 
 interface RouteTabSelectedStopContentProps {
   index: number;
@@ -18,8 +21,12 @@ interface RouteTabSelectedStopContentProps {
 const RouteTabSelectedStopContent: React.FC<
   RouteTabSelectedStopContentProps
 > = ({ index, stop }) => {
+  const { values, setFieldValue } = useFormikContext<ICirculation>();
+
   const [showDelayModal, setShowDelayModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const isTrainDeleted = values?.statut === CirculationStatus.Supprime;
 
   const isDeleted = stop.statuts.find(
     (s) => s.statut === PointDeParcourStatut.SUPPRIME
@@ -34,6 +41,18 @@ const RouteTabSelectedStopContent: React.FC<
       stop.arret?.depart?.suppressionDiffusable) &&
     isDeleted;
 
+  const cancelDeletion = () => {
+    const updatedStatuts = stop.statuts.filter(
+      (s) => s.statut !== PointDeParcourStatut.SUPPRIME
+    );
+    setFieldValue(`parcours.pointDeParcours.${index}.statuts`, updatedStatuts);
+  };
+
+  const onClickDelete = () => {
+    if (isDeleted) return cancelDeletion();
+    setShowDeleteModal(true);
+  };
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between">
@@ -45,24 +64,25 @@ const RouteTabSelectedStopContent: React.FC<
           )}
         </h2>
 
-        <div className="flex items-center gap-4">
-          <Button
-            htmlType="button"
-            disabled={!!isDeleted}
-            onClick={() => setShowDelayModal(true)}
-          >
-            {hasDelay ? "Modifier le retard" : "Annoncer un retard"}
-          </Button>
-          <Button
-            danger
-            type="primary"
-            htmlType="button"
-            disabled={!!isDeleted}
-            onClick={() => setShowDeleteModal(true)}
-          >
-            Supprimer la desserte
-          </Button>
-        </div>
+        {!isTrainDeleted && (
+          <div className="flex items-center gap-4">
+            <Button
+              htmlType="button"
+              disabled={!!isDeleted}
+              onClick={() => setShowDelayModal(true)}
+            >
+              {hasDelay ? "Modifier le retard" : "Annoncer un retard"}
+            </Button>
+            <Button
+              type="primary"
+              htmlType="button"
+              danger={!isDeleted}
+              onClick={onClickDelete}
+            >
+              {isDeleted ? "Annuler la suppression" : "Supprimer la desserte"}
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="mt-4">

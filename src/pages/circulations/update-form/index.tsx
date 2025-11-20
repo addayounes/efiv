@@ -3,6 +3,7 @@ import {
   type ICirculation,
 } from "@/types/entity/circulation";
 import toast from "react-hot-toast";
+import Loading from "@/pages/loading";
 import { Button, Popconfirm } from "antd";
 import type { FormikProps } from "formik";
 import { useEffect, useState } from "react";
@@ -10,8 +11,8 @@ import { useParams } from "react-router-dom";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
 import UpdateOperationalCirculationContent from "./content";
+import { CirculationStatus } from "@/constants/circulation-status";
 import { fetchCirculationByIdService } from "@/services/circulations";
-import Loading from "@/pages/loading";
 
 interface UpdateOperationlCirculationProps {}
 
@@ -40,7 +41,27 @@ const UpdateOperationlCirculation: React.FC<
       }));
 
       setFieldValue("parcours.pointDeParcours", newParcours);
-      setFieldValue("statut", PointDeParcourStatut.SUPPRIME);
+      setFieldValue("statut", CirculationStatus.Supprime);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const cancelCirculationDeletion = async (
+    formik: FormikProps<ICirculation>
+  ) => {
+    try {
+      const newParcours = (formik?.values?.parcours?.pointDeParcours ?? []).map(
+        (point) => ({
+          ...point,
+          statuts: point.statuts.filter(
+            (s) => s.statut !== PointDeParcourStatut.SUPPRIME
+          ),
+        })
+      );
+
+      formik.setFieldValue("parcours.pointDeParcours", newParcours);
+      formik.setFieldValue("statut", CirculationStatus.Prevue);
     } catch (error) {
       console.log(error);
     }
@@ -86,25 +107,29 @@ const UpdateOperationlCirculation: React.FC<
                 circulationData?.numeroCommercial || "-"
               }`}
               rightComponent={
-                <Popconfirm
-                  okText="Supprimer"
-                  cancelText="Annuler"
-                  placement="bottomLeft"
-                  title="Confirmer la suppression"
-                  okButtonProps={{ danger: true }}
-                  onConfirm={() => deleteCirculation(formik)}
-                  description="Êtes-vous sûr de vouloir supprimer la circulation ?"
-                >
+                formik.values?.statut == CirculationStatus.Supprime ? (
                   <Button
-                    danger
+                    type="primary"
                     htmlType="button"
-                    disabled={
-                      formik.values?.statut == PointDeParcourStatut.SUPPRIME
-                    }
+                    onClick={() => cancelCirculationDeletion(formik)}
                   >
-                    Supprimer la circulation
+                    Annuler la suppression
                   </Button>
-                </Popconfirm>
+                ) : (
+                  <Popconfirm
+                    okText="Supprimer"
+                    cancelText="Annuler"
+                    placement="bottomLeft"
+                    title="Confirmer la suppression"
+                    okButtonProps={{ danger: true }}
+                    onConfirm={() => deleteCirculation(formik)}
+                    description="Êtes-vous sûr de vouloir supprimer la circulation ?"
+                  >
+                    <Button danger htmlType="button">
+                      Supprimer la circulation
+                    </Button>
+                  </Popconfirm>
+                )
               }
             />
 
