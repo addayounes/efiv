@@ -7,6 +7,7 @@ import { Info } from "lucide-react";
 import { useFormikContext } from "formik";
 import { Alert, Checkbox, Input, Modal, Select } from "antd";
 import { useEffect, useMemo, useState } from "react";
+import { minutesToDuration, roundToNearest } from "@/utils/date.utils";
 
 interface DelayModalProps {
   index: number;
@@ -169,6 +170,33 @@ const DelayModal: React.FC<DelayModalProps> = ({
                   }))
                 }
               />
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-4">
+          {!isOrigin && (
+            <div className="flex-1">
+              <h4 className="text-sm text-gray-700 font-medium">
+                Retard voyageur à l'arrivée
+              </h4>
+              <p className="text-base text-orange-500">
+                <span className="font-medium">
+                  +{minutesToDuration(roundToNearest(delay.arrival ?? 0, 5))}
+                </span>
+              </p>
+            </div>
+          )}
+          {!isDestination && (
+            <div className="flex-1">
+              <h4 className="text-sm text-gray-700 font-medium">
+                Retard voyageur au départ
+              </h4>
+              <p className="text-base text-orange-500">
+                <span className="font-medium">
+                  +{minutesToDuration(roundToNearest(delay.departure ?? 0, 5))}
+                </span>
+              </p>
             </div>
           )}
         </div>
