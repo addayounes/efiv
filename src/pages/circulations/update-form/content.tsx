@@ -1,4 +1,5 @@
 import { Tabs } from "antd";
+import UpdateCouplageTab from "./tabs/couplage";
 import UpdateOperationalRouteTab from "./tabs/route";
 import InfoConjConfig from "../create-form/steps/components/info-conj";
 
@@ -23,6 +24,12 @@ const UpdateOperationalCirculationContent: React.FC<
           }
         >
           <InfoConjConfig />
+        </Tabs.TabPane>
+        <Tabs.TabPane
+          key="couplage"
+          tab={<span className="font-medium">Couplage</span>}
+        >
+          <UpdateCouplageTab />
         </Tabs.TabPane>
       </Tabs>
     </div>

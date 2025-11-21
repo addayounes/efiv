@@ -103,10 +103,6 @@ const RouteTabSelectedStopContent: React.FC<
           >
             <UpdateInfoConjoncturelle index={index} />
           </Tabs.TabPane>
-          <Tabs.TabPane
-            key="couplage"
-            tab={<p className="text-sm font-medium">Couplage</p>}
-          ></Tabs.TabPane>
         </Tabs>
       </div>
 
