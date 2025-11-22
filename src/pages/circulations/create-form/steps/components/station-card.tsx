@@ -1,7 +1,6 @@
 import { dayjs } from "@/lib/dayjs";
 import { Trash2 } from "lucide-react";
 import { useFormikContext } from "formik";
-import CouplageTab from "./stops/couplage";
 import StationsField from "./stations-field";
 import StepsGeneralTab from "./stops/general";
 import InfoConjoncturelle from "./stops/info-conj";
@@ -33,7 +32,6 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
   };
 
   const handleStationChange = (option: any) => {
-    console.log(index, option);
     if (index === 0) setFieldValue("origin", option?.value);
     else if (index === values.parcours?.length - 1)
       setFieldValue("destination", option?.value);
@@ -102,13 +100,6 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                   }
                 >
                   <InfoConjoncturelle index={index} />
-                </Tabs.TabPane>
-
-                <Tabs.TabPane
-                  key="4"
-                  tab={<p className="text-sm font-medium">Couplage</p>}
-                >
-                  <CouplageTab index={index} />
                 </Tabs.TabPane>
               </Tabs>
             </div>

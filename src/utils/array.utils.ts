@@ -26,6 +26,10 @@ export function alignArraysBy<T>(
     return {
       arr1: [...arr1, ...Array(maxLen - arr1.length).fill(null)],
       arr2: [...arr2, ...Array(maxLen - arr2.length).fill(null)],
+      merged: Array.from({ length: maxLen }, (_, index) => ({
+        current: arr1[index] ?? null,
+        toCouple: arr2[index] ?? null,
+      })),
     };
   }
 
