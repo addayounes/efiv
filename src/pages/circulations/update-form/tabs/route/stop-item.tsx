@@ -7,6 +7,7 @@ import { cn } from "@/utils/cn";
 import { TIME_FORMAT } from "@/constants/date-format";
 import { minutesToDuration } from "@/utils/date.utils";
 import DeletedStopBadge from "@/components/deleted-stop-badge";
+import { Tooltip } from "antd";
 
 interface UpdateRouteStopItemProps {
   index: number;
@@ -32,6 +33,10 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
       stop.arret?.depart?.suppressionDiffusable) &&
     isDeleted;
 
+  const coupeledStop =
+    (stop.arret?.arrivee?.numeroSillon ?? "").split("-")?.[1] ||
+    (stop.arret?.depart?.numeroSillon ?? "").split("-")?.[1];
+
   return (
     <div
       key={stop?.rang}
@@ -44,17 +49,32 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
       )}
     >
       <div>
-        <p className="text-xs w-fit mb-1 text-primary">
-          {isOrigin
-            ? "Origine"
-            : isDestination
-            ? "Destination"
-            : `Passage ${index}`}
-        </p>
+        <div className="flex items-center gap-2 mb-1">
+          <p className="text-xs w-fit text-primary">
+            {isOrigin
+              ? "Origine"
+              : isDestination
+              ? "Destination"
+              : `Passage ${index}`}
+          </p>
+          {coupeledStop && (
+            <div>
+              <Tooltip title="Arrêt couplé">
+                <p className="text-xs text-center bg-primary rounded-full text-white px-1.5 py-px font-medium">
+                  {coupeledStop}
+                </p>
+              </Tooltip>
+            </div>
+          )}
+        </div>
         <h4 className="text-base font-medium">{stop?.desserte?.libelle12}</h4>
       </div>
       <div className="flex items-center gap-4">
-        {isDeleted && <DeletedStopBadge isDiffusable={!!isDeletedDiffusable} />}
+        <div className="">
+          {isDeleted && (
+            <DeletedStopBadge isDiffusable={!!isDeletedDiffusable} />
+          )}
+        </div>
 
         <div className="flex flex-col items-end text-xs space-y-2 text-right font-medium">
           {stop?.arret?.arrivee?.horaire ? (
