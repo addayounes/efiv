@@ -4,9 +4,9 @@ import { useFormikContext } from "formik";
 import { alignArraysBy } from "@/utils/array.utils";
 import { Select as AntSelect, Checkbox } from "antd";
 import { useEffect, useMemo, useState } from "react";
+import { CirculationStatus } from "@/constants/circulation-status";
 import { fetchOperationalCirculationService } from "@/services/circulations";
 import type { ICirculation, PointDeParcour } from "@/types/entity/circulation";
-import { CirculationStatus } from "@/constants/circulation-status";
 
 interface CouplageTabProps {}
 
@@ -616,6 +616,28 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
     });
   };
 
+  const handleSetFirstCommonStation = () => {
+    const existingTrainCommongStations = [
+      ...(values.parcours?.pointDeParcours || []),
+    ]
+      .filter((s) => {
+        const [originalTrainArrival, coupledTrainArrival] =
+          s.arret.arrivee?.numeroSillon?.split("-") || [];
+        const [originalTrainDeparture, coupledTrainDeparture] =
+          s.arret.depart?.numeroSillon?.split("-") || [];
+
+        return (
+          (!!coupledTrainDeparture &&
+            originalTrainDeparture === values?.numeroCommercial) ||
+          (!!coupledTrainArrival &&
+            originalTrainArrival === values?.numeroCommercial)
+        );
+      })
+      .map((s) => s.desserte?.codeUIC);
+
+    setSelectedStations(existingTrainCommongStations);
+  };
+
   const onChangeStopSelection = (codeUIC: string, checked: boolean) => {
     if (checked) setSelectedStations((prev) => [...prev, codeUIC]);
     else setSelectedStations((prev) => prev.filter((x) => x !== codeUIC));
@@ -634,6 +656,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
         pageSize: 100,
       });
       setTrains(data?.items || []);
+      handleSetFirstCommonStation();
       setLoading(false);
     };
 
@@ -749,7 +772,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
         </div>
 
         <div className="flex justify-center flex-1 border-r border-gray-300 pt-4 px-4">
-          <div className="mt-6 space-y-16">
+          <div className="mt-10 space-y-16">
             {stopsLineData?.map((stopPair, index) => {
               const isStopLinked = selectedStations.includes(
                 stopPair.toCouple?.desserte?.codeUIC || ""

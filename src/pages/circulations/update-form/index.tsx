@@ -138,8 +138,9 @@ const UpdateOperationlCirculation: React.FC<
                 <div className="flex-1 overflow-y-auto">
                   <UpdateOperationalCirculationContent />
                 </div>
-                <div className="flex justify-end border-t border-gray-200 p-4">
-                  <Button type="primary">Modifier</Button>
+                <div className="flex justify-end gap-4 border-t border-gray-200 p-4">
+                  <Button>Enregistrer</Button>
+                  <Button type="primary">Enregistrer et publier</Button>
                 </div>
               </div>
             </main>
