@@ -15,6 +15,7 @@ export interface ICirculation {
   transporteur: IdLabel;
   id: string;
   publishStatus: string;
+  chainageCourseSuivante?: ChainageCourseSuivante;
 }
 
 export interface Destination {
@@ -117,4 +118,11 @@ export interface CourseMinimal {
   numeroCommercial: string;
   mode: string;
   transporteur: IdLabel;
+}
+
+export interface ChainageCourseSuivante {
+  date: string;
+  mode: string;
+  idTransporteur: string;
+  numeroCommercial: string;
 }

@@ -6,6 +6,7 @@ import { Select as AntSelect, Checkbox } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { fetchOperationalCirculationService } from "@/services/circulations";
 import type { ICirculation, PointDeParcour } from "@/types/entity/circulation";
+import { CirculationStatus } from "@/constants/circulation-status";
 
 interface CouplageTabProps {}
 
@@ -536,10 +537,12 @@ interface CouplageTabProps {}
 const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   const [loading, setLoading] = useState(false);
   const [trains, setTrains] = useState<ICirculation[]>([]);
-  const { values } = useFormikContext<ICirculation>();
   const [trainSearchKeyword, setTrainSearchKeyword] = useState("");
+  const { values, setFieldValue } = useFormikContext<ICirculation>();
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const [selectedTrain, setSelectedTrain] = useState<ICirculation | null>(null);
+
+  const isTrainDeleted = values?.statut === CirculationStatus.Supprime;
 
   const trainsOptions = trains.map((train) => ({
     label: `N° ${train.numeroCommercial} - ${train.origine?.libelle12} ➝ ${train.destination?.libelle12}`,
@@ -555,13 +558,72 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
     return { currentTrain: arr1, trainToCouple: arr2, stopsLineData: merged };
   }, [values?.parcours?.pointDeParcours, selectedTrain]);
 
-  const onChangeStopSelection = (codeUIC: string, checked: boolean) => {
-    if (checked) {
-      setSelectedStations((prev) => [...prev, codeUIC]);
-    } else {
-      setSelectedStations((prev) => prev.filter((x) => x !== codeUIC));
-    }
+  const handleApplyChanges = () => {
+    if (!selectedStations?.length) return;
+
+    const currentParcours = [...(values.parcours?.pointDeParcours || [])];
+
+    const commonStationsInOrder = currentParcours
+      .filter((s) =>
+        (selectedTrain?.parcours?.pointDeParcours ?? [])
+          .map((sts) => sts.desserte?.codeUIC)
+          .includes(s.desserte?.codeUIC)
+      )
+      .map((s) => s.desserte?.codeUIC);
+
+    const newParcours = currentParcours.map((s, index) => {
+      const isOrigin = index === 0;
+      const isDestination = index === currentParcours.length - 1;
+      const commonStation = selectedStations.find(
+        (ss) => ss === s?.desserte?.codeUIC
+      );
+      if (!!commonStation) {
+        const isFirstCommon =
+          commonStationsInOrder.indexOf(s?.desserte?.codeUIC) === 0;
+        const isLastCommon =
+          commonStationsInOrder.indexOf(s?.desserte?.codeUIC) ===
+          commonStationsInOrder.length - 1;
+        return {
+          ...s,
+          arret: {
+            ...s.arret,
+            arrivee:
+              isOrigin || isFirstCommon
+                ? s.arret?.arrivee
+                : {
+                    ...s.arret.arrivee,
+                    numeroSillon: `${values.numeroCommercial}-${selectedTrain?.numeroCommercial}`,
+                  },
+            depart:
+              isDestination || isLastCommon
+                ? s.arret?.depart
+                : {
+                    ...s.arret.depart,
+                    numeroSillon: `${values.numeroCommercial}-${selectedTrain?.numeroCommercial}`,
+                  },
+          },
+        };
+      }
+      return s;
+    });
+
+    setFieldValue("parcours.pointDeParcours", newParcours);
+    setFieldValue("chainageCourseSuivante", {
+      date: selectedTrain?.date,
+      mode: selectedTrain?.mode,
+      idTransporteur: selectedTrain?.transporteur?.id,
+      numeroCommercial: selectedTrain?.numeroCommercial,
+    });
   };
+
+  const onChangeStopSelection = (codeUIC: string, checked: boolean) => {
+    if (checked) setSelectedStations((prev) => [...prev, codeUIC]);
+    else setSelectedStations((prev) => prev.filter((x) => x !== codeUIC));
+  };
+
+  useEffect(() => {
+    handleApplyChanges();
+  }, [selectedStations]);
 
   useEffect(() => {
     // TODO: replace with a proper search API call
@@ -604,6 +666,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
             {currentTrain.map((stop, index) => (
               <StopPointItem
                 key={index}
+                isTrainDeleted={isTrainDeleted}
                 stop={stop as any}
                 isCommon={
                   !!trainToCouple.find((s) =>
@@ -636,6 +699,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
                 filterOption={false}
                 options={trainsOptions}
                 value={selectedTrain?.id}
+                disabled={isTrainDeleted}
                 className="min-w-96 w-full"
                 placeholder="Rechercher une course"
                 //   autoClearSearchValue
@@ -665,6 +729,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
               <StopPointToCoupleItem
                 key={index}
                 stop={stop as any}
+                isTrainDeleted={isTrainDeleted}
                 isCommon={
                   !!currentTrain.find((s) =>
                     s?.desserte
@@ -794,7 +859,8 @@ const StopPointItem: React.FC<{
   stop: PointDeParcour | null;
   checked: boolean;
   isCommon: boolean;
-}> = ({ stop, checked, isCommon }) => {
+  isTrainDeleted: boolean;
+}> = ({ stop, checked, isCommon, isTrainDeleted }) => {
   if (!stop || !isCommon)
     return (
       <div
@@ -822,9 +888,10 @@ const StopPointItem: React.FC<{
 const StopPointToCoupleItem: React.FC<{
   checked: boolean;
   isCommon: boolean;
+  isTrainDeleted: boolean;
   stop: PointDeParcour | null;
   onChange: (checked: boolean) => void;
-}> = ({ stop, checked, isCommon, onChange }) => {
+}> = ({ stop, checked, isCommon, isTrainDeleted, onChange }) => {
   if (!stop || !isCommon)
     return (
       <div
@@ -847,6 +914,7 @@ const StopPointToCoupleItem: React.FC<{
     >
       <Checkbox
         checked={checked}
+        disabled={isTrainDeleted}
         id={stop.desserte.codeUIC}
         onChange={(e) => onChange(e.target.checked)}
       />
