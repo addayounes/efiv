@@ -1,6 +1,7 @@
 import { cn } from "@/utils/cn";
 import { Loader } from "lucide-react";
 import { useFormikContext } from "formik";
+import { alignArraysBy } from "@/utils/array.utils";
 import { Select as AntSelect, Checkbox } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { fetchOperationalCirculationService } from "@/services/circulations";
@@ -8,481 +9,529 @@ import type { ICirculation, PointDeParcour } from "@/types/entity/circulation";
 
 interface CouplageTabProps {}
 
-const currentTrainMock = [
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87271007",
-      codeGare: "02561",
-      libelle12: "Paris Nord",
-      libelle23: "Paris Gare du Nord",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T13:45:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T16:25:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T16:47:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseDepart",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {},
-      descenteInterdite: true,
-      depart: {
-        horaire: "2025-11-21T16:45:00+00:00",
-        horaireVoyageur: "2025-11-21T16:45:00+00:00",
-        horaireEstime: "2025-11-21T16:45:00+00:00",
-        referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
-        idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-    },
-    statuts: [],
-    rang: 0,
-    statutLive: "diffusee",
-  },
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87342014",
-      codeGare: "02189",
-      libelle12: "Arras",
-      libelle23: "Arras",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T14:41:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T17:21:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T17:43:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseDepart",
-        },
-        {
-          date: "2025-11-21T17:42:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseArrivee",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {
-        horaire: "2025-11-21T17:37:00+00:00",
-        horaireVoyageur: "2025-11-21T17:37:00+00:00",
-        horaireEstime: "2025-11-21T17:37:00+00:00",
-        referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
-        idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-      depart: {
-        horaire: "2025-11-21T17:41:00+00:00",
-        horaireVoyageur: "2025-11-21T17:41:00+00:00",
-        horaireEstime: "2025-11-21T17:41:00+00:00",
-        referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-    },
-    statuts: [],
-    rang: 1,
-    statutLive: "diffusee",
-  },
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87345009",
-      codeGare: "02143",
-      libelle12: "Douai",
-      libelle23: "Douai",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T15:15:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T17:55:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T18:17:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseDepart",
-        },
-        {
-          date: "2025-11-21T18:00:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseArrivee",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {
-        horaire: "2025-11-21T17:55:00+00:00",
-        horaireVoyageur: "2025-11-21T17:55:00+00:00",
-        horaireEstime: "2025-11-21T17:55:00+00:00",
-        referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-      depart: {
-        horaire: "2025-11-21T18:15:00+00:00",
-        horaireVoyageur: "2025-11-21T18:15:00+00:00",
-        horaireEstime: "2025-11-21T18:15:00+00:00",
-        referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-    },
-    statuts: [],
-    rang: 2,
-    statutLive: "diffusee",
-  },
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87343004",
-      codeGare: "02153",
-      libelle12: "Valenciennes",
-      libelle23: "Valenciennes",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T15:44:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T18:24:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T18:49:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseArrivee",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {
-        horaire: "2025-11-21T18:44:00+00:00",
-        horaireVoyageur: "2025-11-21T18:44:00+00:00",
-        horaireEstime: "2025-11-21T18:44:00+00:00",
-        referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-      monteeInterdite: true,
-      depart: {},
-    },
-    statuts: [],
-    rang: 3,
-    statutLive: "diffusee",
-  },
-];
-const trainToCoupleMock = [
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "27342901",
-      codeGare: "02153",
-      libelle12: "Bordeaux St-Jean",
-      libelle23: "Bordeaux St-Jean",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T15:44:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T18:24:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T18:49:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseArrivee",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {
-        horaire: "2025-11-21T18:44:00+00:00",
-        horaireVoyageur: "2025-11-21T18:44:00+00:00",
-        horaireEstime: "2025-11-21T18:44:00+00:00",
-        referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-      monteeInterdite: true,
-      depart: {},
-    },
-    statuts: [],
-    rang: 3,
-    statutLive: "diffusee",
-  },
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87271007",
-      codeGare: "02561",
-      libelle12: "Paris Nord",
-      libelle23: "Paris Gare du Nord",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T13:45:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T16:25:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T16:47:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseDepart",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {},
-      descenteInterdite: true,
-      depart: {
-        horaire: "2025-11-21T16:45:00+00:00",
-        horaireVoyageur: "2025-11-21T16:45:00+00:00",
-        horaireEstime: "2025-11-21T16:45:00+00:00",
-        referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
-        idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-    },
-    statuts: [],
-    rang: 0,
-    statutLive: "diffusee",
-  },
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87342014",
-      codeGare: "02189",
-      libelle12: "Arras",
-      libelle23: "Arras",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T14:41:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T17:21:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T17:43:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseDepart",
-        },
-        {
-          date: "2025-11-21T17:42:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseArrivee",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {
-        horaire: "2025-11-21T17:37:00+00:00",
-        horaireVoyageur: "2025-11-21T17:37:00+00:00",
-        horaireEstime: "2025-11-21T17:37:00+00:00",
-        referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
-        idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-      depart: {
-        horaire: "2025-11-21T17:41:00+00:00",
-        horaireVoyageur: "2025-11-21T17:41:00+00:00",
-        horaireEstime: "2025-11-21T17:41:00+00:00",
-        referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-    },
-    statuts: [],
-    rang: 1,
-    statutLive: "diffusee",
-  },
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87332009",
-      codeGare: "02143",
-      libelle12: "Aix-Noulette",
-      libelle23: "Aix-Noulette",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T15:15:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T17:55:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T18:17:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseDepart",
-        },
-        {
-          date: "2025-11-21T18:00:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseArrivee",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {
-        horaire: "2025-11-21T17:55:00+00:00",
-        horaireVoyageur: "2025-11-21T17:55:00+00:00",
-        horaireEstime: "2025-11-21T17:55:00+00:00",
-        referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-      depart: {
-        horaire: "2025-11-21T18:15:00+00:00",
-        horaireVoyageur: "2025-11-21T18:15:00+00:00",
-        horaireEstime: "2025-11-21T18:15:00+00:00",
-        referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-    },
-    statuts: [],
-    rang: 2,
-    statutLive: "diffusee",
-  },
-  {
-    zoneEmbarquement: {
-      statutVoie: "diffusable",
-    },
-    desserte: {
-      codeUIC: "87342901",
-      codeGare: "02153",
-      libelle12: "Béthune",
-      libelle23: "Béthune",
-    },
-    chronogramme: {
-      affichages: [
-        {
-          date: "2025-11-21T15:44:00+00:00",
-          source: "temporisation",
-          evenement: "affichageCourse",
-        },
-        {
-          date: "2025-11-21T18:24:00+00:00",
-          source: "temporisation",
-          evenement: "affichageVoie",
-        },
-        {
-          date: "2025-11-21T18:49:00+00:00",
-          source: "temporisation",
-          evenement: "desaffichageCourseArrivee",
-        },
-      ],
-      sonorisations: [],
-      manuelForce: false,
-    },
-    arret: {
-      arrivee: {
-        horaire: "2025-11-21T18:44:00+00:00",
-        horaireVoyageur: "2025-11-21T18:44:00+00:00",
-        horaireEstime: "2025-11-21T18:44:00+00:00",
-        referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
-        numeroSillon: "7181-7180",
-        suppressionDiffusable: true,
-      },
-      monteeInterdite: true,
-      depart: {},
-    },
-    statuts: [],
-    rang: 3,
-    statutLive: "diffusee",
-  },
-];
+// const currentTrainMock = [
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87271007",
+//       codeGare: "02561",
+//       libelle12: "Paris Nord",
+//       libelle23: "Paris Gare du Nord",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T13:45:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T16:25:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T16:47:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseDepart",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {},
+//       descenteInterdite: true,
+//       depart: {
+//         horaire: "2025-11-21T16:45:00+00:00",
+//         horaireVoyageur: "2025-11-21T16:45:00+00:00",
+//         horaireEstime: "2025-11-21T16:45:00+00:00",
+//         referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
+//         idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//     },
+//     statuts: [],
+//     rang: 0,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87342014",
+//       codeGare: "02189",
+//       libelle12: "Arras",
+//       libelle23: "Arras",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T14:41:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T17:21:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T17:43:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseDepart",
+//         },
+//         {
+//           date: "2025-11-21T17:42:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseArrivee",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {
+//         horaire: "2025-11-21T17:37:00+00:00",
+//         horaireVoyageur: "2025-11-21T17:37:00+00:00",
+//         horaireEstime: "2025-11-21T17:37:00+00:00",
+//         referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
+//         idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//       depart: {
+//         horaire: "2025-11-21T17:41:00+00:00",
+//         horaireVoyageur: "2025-11-21T17:41:00+00:00",
+//         horaireEstime: "2025-11-21T17:41:00+00:00",
+//         referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//     },
+//     statuts: [],
+//     rang: 1,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87345009",
+//       codeGare: "02143",
+//       libelle12: "Douai",
+//       libelle23: "Douai",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T15:15:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T17:55:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T18:17:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseDepart",
+//         },
+//         {
+//           date: "2025-11-21T18:00:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseArrivee",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {
+//         horaire: "2025-11-21T17:55:00+00:00",
+//         horaireVoyageur: "2025-11-21T17:55:00+00:00",
+//         horaireEstime: "2025-11-21T17:55:00+00:00",
+//         referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//       depart: {
+//         horaire: "2025-11-21T18:15:00+00:00",
+//         horaireVoyageur: "2025-11-21T18:15:00+00:00",
+//         horaireEstime: "2025-11-21T18:15:00+00:00",
+//         referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//     },
+//     statuts: [],
+//     rang: 2,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87343004",
+//       codeGare: "02153",
+//       libelle12: "Valenciennes",
+//       libelle23: "Valenciennes",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T15:44:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T18:24:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T18:49:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseArrivee",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {
+//         horaire: "2025-11-21T18:44:00+00:00",
+//         horaireVoyageur: "2025-11-21T18:44:00+00:00",
+//         horaireEstime: "2025-11-21T18:44:00+00:00",
+//         referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//       monteeInterdite: true,
+//       depart: {},
+//     },
+//     statuts: [],
+//     rang: 3,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "67251907",
+//       codeGare: "02561",
+//       libelle12: "Montreuil-Bellay",
+//       libelle23: "Montreuil-Bellay",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T13:45:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T16:25:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T16:47:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseDepart",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {},
+//       descenteInterdite: true,
+//       depart: {
+//         horaire: "2025-11-21T16:45:00+00:00",
+//         horaireVoyageur: "2025-11-21T16:45:00+00:00",
+//         horaireEstime: "2025-11-21T16:45:00+00:00",
+//         referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
+//         idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//     },
+//     statuts: [],
+//     rang: 0,
+//     statutLive: "diffusee",
+//   },
+// ];
+// const trainToCoupleMock = [
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "27342901",
+//       codeGare: "02153",
+//       libelle12: "Bordeaux St-Jean",
+//       libelle23: "Bordeaux St-Jean",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T15:44:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T18:24:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T18:49:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseArrivee",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {
+//         horaire: "2025-11-21T18:44:00+00:00",
+//         horaireVoyageur: "2025-11-21T18:44:00+00:00",
+//         horaireEstime: "2025-11-21T18:44:00+00:00",
+//         referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//       monteeInterdite: true,
+//       depart: {},
+//     },
+//     statuts: [],
+//     rang: 3,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87271007",
+//       codeGare: "02561",
+//       libelle12: "Paris Nord",
+//       libelle23: "Paris Gare du Nord",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T13:45:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T16:25:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T16:47:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseDepart",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {},
+//       descenteInterdite: true,
+//       depart: {
+//         horaire: "2025-11-21T16:45:00+00:00",
+//         horaireVoyageur: "2025-11-21T16:45:00+00:00",
+//         horaireEstime: "2025-11-21T16:45:00+00:00",
+//         referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
+//         idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//     },
+//     statuts: [],
+//     rang: 0,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87342014",
+//       codeGare: "02189",
+//       libelle12: "Arras",
+//       libelle23: "Arras",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T14:41:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T17:21:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T17:43:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseDepart",
+//         },
+//         {
+//           date: "2025-11-21T17:42:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseArrivee",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {
+//         horaire: "2025-11-21T17:37:00+00:00",
+//         horaireVoyageur: "2025-11-21T17:37:00+00:00",
+//         horaireEstime: "2025-11-21T17:37:00+00:00",
+//         referenceIdComposition: "44ad966557550cb5af97540c11f58e65f415985b",
+//         idCourseMenee: "NzU4MTIwMjUxMTIxMTE4N2ZlcnLDqQ",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//       depart: {
+//         horaire: "2025-11-21T17:41:00+00:00",
+//         horaireVoyageur: "2025-11-21T17:41:00+00:00",
+//         horaireEstime: "2025-11-21T17:41:00+00:00",
+//         referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//     },
+//     statuts: [],
+//     rang: 1,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87345009",
+//       codeGare: "02143",
+//       libelle12: "Douai",
+//       libelle23: "Douai",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T15:15:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T17:55:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T18:17:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseDepart",
+//         },
+//         {
+//           date: "2025-11-21T18:00:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseArrivee",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {
+//         horaire: "2025-11-21T17:55:00+00:00",
+//         horaireVoyageur: "2025-11-21T17:55:00+00:00",
+//         horaireEstime: "2025-11-21T17:55:00+00:00",
+//         referenceIdComposition: "ed2d5221a1eafe3b4cb5b12b871548d2a5737569",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//       depart: {
+//         horaire: "2025-11-21T18:15:00+00:00",
+//         horaireVoyageur: "2025-11-21T18:15:00+00:00",
+//         horaireEstime: "2025-11-21T18:15:00+00:00",
+//         referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//     },
+//     statuts: [],
+//     rang: 2,
+//     statutLive: "diffusee",
+//   },
+//   {
+//     zoneEmbarquement: {
+//       statutVoie: "diffusable",
+//     },
+//     desserte: {
+//       codeUIC: "87342901",
+//       codeGare: "02153",
+//       libelle12: "Béthune",
+//       libelle23: "Béthune",
+//     },
+//     chronogramme: {
+//       affichages: [
+//         {
+//           date: "2025-11-21T15:44:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageCourse",
+//         },
+//         {
+//           date: "2025-11-21T18:24:00+00:00",
+//           source: "temporisation",
+//           evenement: "affichageVoie",
+//         },
+//         {
+//           date: "2025-11-21T18:49:00+00:00",
+//           source: "temporisation",
+//           evenement: "desaffichageCourseArrivee",
+//         },
+//       ],
+//       sonorisations: [],
+//       manuelForce: false,
+//     },
+//     arret: {
+//       arrivee: {
+//         horaire: "2025-11-21T18:44:00+00:00",
+//         horaireVoyageur: "2025-11-21T18:44:00+00:00",
+//         horaireEstime: "2025-11-21T18:44:00+00:00",
+//         referenceIdComposition: "6e8148d1094a15ddd2d792d1480418161b35e1dc",
+//         numeroSillon: "7181-7180",
+//         suppressionDiffusable: true,
+//       },
+//       monteeInterdite: true,
+//       depart: {},
+//     },
+//     statuts: [],
+//     rang: 3,
+//     statutLive: "diffusee",
+//   },
+// ];
 
 const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   const [loading, setLoading] = useState(false);
@@ -498,51 +547,12 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   }));
 
   const { currentTrain, trainToCouple, stopsLineData } = useMemo(() => {
-    const currentTrain = currentTrainMock;
-    const trainToCouple = trainToCoupleMock;
-    //   const currentTrain = values.parcours.pointDeParcours ?? [];
-    //   const trainToCouple = selectedTrain?.parcours?.pointDeParcours ?? [];
-
-    const selector = (x: any) => x.desserte.codeUIC;
-    // const selector = (x: PointDeParcour) => x.desserte.codeUIC;
-
-    const arr1 = currentTrain;
-    const arr2 = trainToCouple;
-
-    const long = arr1.length >= arr2.length ? arr1 : arr2;
-    const short = arr1.length < arr2.length ? arr1 : arr2;
-
-    const mapShort = new Map(short.map((item) => [selector(item), item]));
-    const mapLong = new Map(long.map((item) => [selector(item), item]));
-
-    // const alignedShort: (PointDeParcour | null)[] = [];
-    const alignedShort: (any | null)[] = [];
-    let shortIndex = 0;
-
-    for (let i = 0; i < long.length; i++) {
-      const longVal = selector(long[i]);
-
-      if (mapShort.has(longVal)) {
-        alignedShort.push(mapShort.get(longVal)!);
-        shortIndex++;
-      } else {
-        if (short[shortIndex] && !mapLong.has(selector(short[shortIndex]))) {
-          alignedShort.push(short[shortIndex]);
-          shortIndex++;
-        } else {
-          alignedShort.push(null);
-        }
-      }
-    }
-
-    const stopsLineData = long.map((item, index) => ({
-      current: arr1.length < arr2.length ? alignedShort[index] : item,
-      toCouple: arr1.length < arr2.length ? item : alignedShort[index],
-    }));
-
-    return arr1.length < arr2.length
-      ? { currentTrain: alignedShort, trainToCouple: long, stopsLineData }
-      : { currentTrain: long, trainToCouple: alignedShort, stopsLineData };
+    const { arr1, arr2, merged } = alignArraysBy(
+      values?.parcours?.pointDeParcours || [],
+      selectedTrain?.parcours?.pointDeParcours || [],
+      (d) => d?.desserte?.codeUIC
+    );
+    return { currentTrain: arr1, trainToCouple: arr2, stopsLineData: merged };
   }, [values?.parcours?.pointDeParcours, selectedTrain]);
 
   const onChangeStopSelection = (codeUIC: string, checked: boolean) => {
@@ -675,7 +685,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
 
         <div className="flex justify-center flex-1 border-r border-gray-300 pt-4 px-4">
           <div className="mt-6 space-y-16">
-            {stopsLineData.map((stopPair, index) => {
+            {stopsLineData?.map((stopPair, index) => {
               const isStopLinked = selectedStations.includes(
                 stopPair.toCouple?.desserte?.codeUIC || ""
               );
@@ -683,9 +693,9 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
                 stopPair.current?.desserte?.codeUIC ===
                 stopPair.toCouple?.desserte?.codeUIC;
 
-              const isLastItem = index === stopsLineData.length - 1;
-
               const nextItem = stopsLineData[index + 1];
+
+              const isLastItem = index === stopsLineData.length - 1;
 
               const isToCoupleStartOfMerge =
                 selectedStations.includes(
@@ -713,6 +723,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
                       </p>
                       <div className="w-4 h-4 rounded-full bg-primary z-10" />
                       {!isLastItem &&
+                        !!nextItem.toCouple &&
                         (!isToCoupleStartOfMerge ? (
                           <div className="origin-top rotate-[-19deg] absolute w-1 h-18 bg-[#ACB8CA] top-[calc(100%-1px)] left-1/2" />
                         ) : (
@@ -720,6 +731,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
                         ))}
 
                       {!isLastItem &&
+                        !!nextItem.current &&
                         (!isCurrentStartOfMerge ? (
                           <div className="origin-top rotate-[19deg] absolute w-1 h-18 bg-[#ACB8CA] top-[calc(100%-1px)] left-[calc(50%-4px)]" />
                         ) : (
@@ -740,6 +752,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
                         <div className="w-4 h-4 rounded-full bg-[#ACB8CA]" />
 
                         {!isLastItem &&
+                          !!nextItem?.current &&
                           (isCurrentStartOfMerge ? (
                             <div className="origin-top rotate-[-19deg] absolute w-1 h-18 bg-[#ACB8CA] top-[calc(100%-1px)] left-1/2" />
                           ) : (
@@ -758,6 +771,7 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
                           {stopPair.toCouple?.desserte?.libelle12}
                         </p>
                         {!isLastItem &&
+                          !!nextItem?.toCouple &&
                           (isToCoupleStartOfMerge ? (
                             <div className="origin-top rotate-[19deg] absolute w-1 h-18 bg-[#ACB8CA] top-[calc(100%-1px)] left-[calc(50%-4px)]" />
                           ) : (
