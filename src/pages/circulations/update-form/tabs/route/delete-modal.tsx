@@ -16,11 +16,11 @@ interface DeleteStopModalProps {
 
 const motifs = [
   {
-    value: "SUPPRIME",
+    value: "La desserte ne doit plus être effectuée",
     label: "La desserte ne doit plus être effectuée",
   },
   {
-    value: "TEMPORAIREMENT_SUPPRIME",
+    value: "La desserte est temporairement supprimée",
     label: "La desserte est temporairement supprimée",
   },
 ];

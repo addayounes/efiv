@@ -87,6 +87,23 @@ export enum PointDeParcourStatut {
 
 export interface Statut {
   statut: PointDeParcourStatut;
+  modificationDeParcours?: ModificationDeParcours;
+  motifTransporteur?: MotifTransporteur;
+  motifVoyageur?: MotifVoyageur;
+}
+
+export interface ModificationDeParcours {
+  type: string;
+}
+
+export interface MotifTransporteur {
+  code: string;
+  libelle: string;
+}
+
+export interface MotifVoyageur {
+  code: string;
+  libelle: string;
 }
 
 // TODO

@@ -28,11 +28,11 @@ const defaultDelay: DelayState = {
 
 const motifs = [
   {
-    value: "TRAIN_EN_RETARD",
+    value: "Le train est en retard",
     label: "Le train est en retard",
   },
   {
-    value: "AUTRE_MOTIF",
+    value: "Autre motif",
     label: "Autre motif",
   },
 ];
