@@ -1,4 +1,5 @@
 import Login from "@/pages/auth/login";
+import ConfigPage from "@/pages/config";
 import Dashboard from "@/pages/dashboard";
 import { __routes__ } from "@/constants/routes";
 import CirculationsList from "@/pages/circulations/list";
@@ -36,6 +37,11 @@ export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Circulations.Create,
     element: <CreateCirculationForm />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Config.Main,
+    element: <ConfigPage />,
     withLayout: true,
   },
 ];

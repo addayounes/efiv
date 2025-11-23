@@ -1,8 +1,9 @@
 import { Tooltip } from "antd";
 import { cn } from "@/utils/cn";
-import { Activity, House, TrainFront } from "lucide-react";
 import { __routes__ } from "@/constants/routes";
 import { Link, useLocation } from "react-router-dom";
+import { configSidebarElements } from "@/pages/config/sidebar";
+import { Activity, House, Settings, TrainFront } from "lucide-react";
 
 const SidebarElements = [
   {
@@ -19,6 +20,14 @@ const SidebarElements = [
     label: "Circulations",
     icon: <TrainFront color="white" />,
     route: __routes__.Circulations.Main,
+  },
+  {
+    label: "Configuration",
+    icon: <Settings color="white" />,
+    route: __routes__.Config.Main.replace(
+      ":section",
+      configSidebarElements[0].name
+    ), // Default to first config section
   },
 ];
 

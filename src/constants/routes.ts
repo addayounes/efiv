@@ -8,6 +8,21 @@ export const __routes__ = {
     Create: "/circulations/create/:step",
     Update: "/circulations/:id/update/:step",
   },
+  Config: {
+    Main: "/config/:section",
+    Composition: {
+      Trains: {
+        Main: "/config/composition/trains",
+        Create: "/config/composition/trains/create",
+        Update: "/config/composition/trains/:id/update",
+      },
+      Vehicles: {
+        Main: "/config/composition/vehicles",
+        Create: "/config/composition/vehicles/create",
+        Update: "/config/composition/vehicles/:id/update",
+      },
+    },
+  },
   Auth: {
     Login: "/auth/login",
   },
