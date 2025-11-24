@@ -44,6 +44,11 @@ export const privateRoutes: RouteType[] = [
     element: <ConfigPage />,
     withLayout: true,
   },
+  {
+    path: __routes__.Config.SubSections.Main,
+    element: <ConfigPage />,
+    withLayout: true,
+  },
 ];
 
 export const publicRoutes: RouteType[] = [

@@ -10,17 +10,10 @@ export const __routes__ = {
   },
   Config: {
     Main: "/config/:section",
-    Composition: {
-      Trains: {
-        Main: "/config/composition/trains",
-        Create: "/config/composition/trains/create",
-        Update: "/config/composition/trains/:id/update",
-      },
-      Vehicles: {
-        Main: "/config/composition/vehicles",
-        Create: "/config/composition/vehicles/create",
-        Update: "/config/composition/vehicles/:id/update",
-      },
+    SubSections: {
+      Main: "/config/:section/:subsection",
+      Create: "/config/:section/:subsection/create",
+      Update: "/config/:section/:subsection/:id/update",
     },
   },
   Auth: {
