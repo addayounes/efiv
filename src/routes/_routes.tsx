@@ -3,13 +3,14 @@ import ConfigPage from "@/pages/config";
 import Dashboard from "@/pages/dashboard";
 import { __routes__ } from "@/constants/routes";
 import CirculationsList from "@/pages/circulations/list";
+import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
 import CreateCirculationForm from "@/pages/circulations/create-form";
+import { CompositionTabs } from "@/pages/config/sections/composition";
 import UpdateOperationlCirculation from "@/pages/circulations/update-form";
 import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
-import CompositionVehicleForm from "@/pages/config/sections/composition/vehicles/form";
-import { CompositionTabs } from "@/pages/config/sections/composition";
-import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
 import CompositionTrainForm from "@/pages/config/sections/composition/trains/form";
+import CompositionVehicleForm from "@/pages/config/sections/composition/vehicles/form";
+import CompositionCompositionForm from "@/pages/config/sections/composition/composition/form";
 
 export interface RouteType {
   path: string;
@@ -67,6 +68,14 @@ export const privateRoutes: RouteType[] = [
       ConfigSidebarElementsNames.Composition
     ).replace(":subsection", CompositionTabs.Trains),
     element: <CompositionTrainForm />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Config.SubSections.Create.replace(
+      ":section",
+      ConfigSidebarElementsNames.Composition
+    ).replace(":subsection", CompositionTabs.Composition),
+    element: <CompositionCompositionForm />,
     withLayout: true,
   },
 ];
