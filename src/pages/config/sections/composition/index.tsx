@@ -24,7 +24,7 @@ const CompositionConfigSection: React.FC<
   const { subsection } = useParams();
 
   const onClickAdd = () => {
-    // Handle the add button click
+    navigate("create");
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const CompositionConfigSection: React.FC<
           </Tabs.TabPane>
           <Tabs.TabPane
             key={CompositionTabs.Vehicules}
-            tab={<span className="font-medium">Vehicules</span>}
+            tab={<span className="font-medium">Voitures</span>}
           >
             <CompositionVehicles />
           </Tabs.TabPane>

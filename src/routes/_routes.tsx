@@ -6,6 +6,9 @@ import CirculationsList from "@/pages/circulations/list";
 import CreateCirculationForm from "@/pages/circulations/create-form";
 import UpdateOperationlCirculation from "@/pages/circulations/update-form";
 import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
+import CompositionVehicleForm from "@/pages/config/sections/composition/vehicles/form";
+import { CompositionTabs } from "@/pages/config/sections/composition";
+import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
 
 export interface RouteType {
   path: string;
@@ -47,6 +50,14 @@ export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Config.SubSections.Main,
     element: <ConfigPage />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Config.SubSections.Create.replace(
+      ":section",
+      ConfigSidebarElementsNames.Composition
+    ).replace(":subsection", CompositionTabs.Vehicules),
+    element: <CompositionVehicleForm />,
     withLayout: true,
   },
 ];
