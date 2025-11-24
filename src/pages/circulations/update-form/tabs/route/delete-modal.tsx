@@ -33,14 +33,10 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
 }) => {
   const [motif, setMotif] = useState<string>();
   const [isStreamable, setIsStreamable] = useState(false);
-  const { values, setFieldValue } = useFormikContext<ICirculation>();
-
-  const currentStatuses =
-    values?.parcours?.pointDeParcours?.[index]?.statuts || [];
+  const { setFieldValue } = useFormikContext<ICirculation>();
 
   const onStopDelete = () => {
     setFieldValue(`parcours.pointDeParcours.${index}.statuts`, [
-      ...currentStatuses,
       {
         statut: PointDeParcourStatut.SUPPRIME,
         motifTransporteur: {

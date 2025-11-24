@@ -37,7 +37,7 @@ const UpdateOperationlCirculation: React.FC<
         circulationData?.parcours?.pointDeParcours ?? []
       ).map((point) => ({
         ...point,
-        statuts: [...point.statuts, { statut: PointDeParcourStatut.SUPPRIME }],
+        statuts: [{ statut: PointDeParcourStatut.SUPPRIME }],
       }));
 
       setFieldValue("parcours.pointDeParcours", newParcours);
