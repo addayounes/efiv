@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { Button, Tabs } from "antd";
 import { Plus } from "lucide-react";
-import CompositionTrains from "./trains";
-import CompositionVehicles from "./vehicles";
+import CompositionTrains from "./trains/list";
 import { __routes__ } from "@/constants/routes";
+import CompositionVehicles from "./vehicles/list";
 import PageHeader from "@/components/page-header";
+import CompositionComposition from "./composition/list";
 import { useNavigate, useParams } from "react-router-dom";
 import { ConfigSidebarElementsNames } from "../../sidebar";
 
@@ -13,6 +14,7 @@ interface CompositionConfigSectionProps {}
 export enum CompositionTabs {
   Trains = "trains",
   Vehicules = "vehicules",
+  Composition = "composition",
 }
 
 const CompositionConfigSection: React.FC<
@@ -33,7 +35,7 @@ const CompositionConfigSection: React.FC<
       navigate(
         __routes__.Config.SubSections.Main.replace(
           ":subsection",
-          CompositionTabs.Trains
+          CompositionTabs.Composition
         ).replace(":section", ConfigSidebarElementsNames.Composition)
       );
     }
@@ -64,14 +66,20 @@ const CompositionConfigSection: React.FC<
           }
         >
           <Tabs.TabPane
-            tab={<span className="font-medium">Matériels roulants</span>}
+            key={CompositionTabs.Composition}
+            tab={<span className="font-medium">Composition</span>}
+          >
+            <CompositionComposition />
+          </Tabs.TabPane>
+          <Tabs.TabPane
             key={CompositionTabs.Trains}
+            tab={<span className="font-medium">Matériels roulants</span>}
           >
             <CompositionTrains />
           </Tabs.TabPane>
           <Tabs.TabPane
-            tab={<span className="font-medium">Vehicules</span>}
             key={CompositionTabs.Vehicules}
+            tab={<span className="font-medium">Vehicules</span>}
           >
             <CompositionVehicles />
           </Tabs.TabPane>
