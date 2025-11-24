@@ -9,6 +9,7 @@ import OperationalCirculations from "@/pages/circulations/list/tabs/operational"
 import CompositionVehicleForm from "@/pages/config/sections/composition/vehicles/form";
 import { CompositionTabs } from "@/pages/config/sections/composition";
 import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
+import CompositionTrainForm from "@/pages/config/sections/composition/trains/form";
 
 export interface RouteType {
   path: string;
@@ -58,6 +59,14 @@ export const privateRoutes: RouteType[] = [
       ConfigSidebarElementsNames.Composition
     ).replace(":subsection", CompositionTabs.Vehicules),
     element: <CompositionVehicleForm />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Config.SubSections.Create.replace(
+      ":section",
+      ConfigSidebarElementsNames.Composition
+    ).replace(":subsection", CompositionTabs.Trains),
+    element: <CompositionTrainForm />,
     withLayout: true,
   },
 ];
