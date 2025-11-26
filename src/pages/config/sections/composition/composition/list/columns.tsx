@@ -1,6 +1,6 @@
 import type { ColumnType } from "antd/es/table";
 
-export const useCompositionCompositionColumns = (): ColumnType<any>[] => {
+export const useCompositionColumns = (): ColumnType<any>[] => {
   return [
     {
       key: "libelle",

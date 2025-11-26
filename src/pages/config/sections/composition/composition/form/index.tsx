@@ -1,13 +1,13 @@
 import { Button } from "antd";
+import CreateCompositionContent from "./content";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
+import type { Composition } from "@/types/dto/create-circulation";
 
-interface CompositionCompositionFormProps {}
+interface CompositionFormProps {}
 
-const CompositionCompositionForm: React.FC<
-  CompositionCompositionFormProps
-> = ({}) => {
-  const handleSubmitForm = async (values: any) => {};
+const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
+  const handleSubmitForm = async (values: Composition) => {};
 
   return (
     <div className="bg-primary-bg">
@@ -16,15 +16,34 @@ const CompositionCompositionForm: React.FC<
       <FormikForm
         withLoadingToast
         onSubmit={handleSubmitForm}
-        initialValues={{}}
+        initialValues={{
+          materielRoulant: [
+            {
+              elementMaterielRoulantAsync: new Array(10)
+                .fill(null)
+                .map((_, index) => ({
+                  porte: [{ position: index + 1 }],
+                  libelle: (index + 1).toString(),
+                  longueur: 2001,
+                })),
+
+              serie: "",
+              sousSerie: "",
+              sousSerie2: "",
+              ouvertAuxVoyageurs: false,
+            },
+          ],
+        }}
       >
         {() => {
           return (
             <main className="px-6">
-              <div className="flex flex-col shadow border border-gray-200  rounded h-[calc(100vh-88px)] bg-white">
-                <div className="flex-1 overflow-y-auto"></div>
+              <div className="flex flex-col h-[calc(100vh-64px)]">
+                <div className="flex-1 overflow-y-auto">
+                  <CreateCompositionContent />
+                </div>
 
-                <div className="flex justify-end gap-4 border-t border-gray-200 p-4">
+                <div className="flex justify-end p-4 pb-8">
                   <Button htmlType="submit" type="primary">
                     Enregistrer
                   </Button>
@@ -38,4 +57,4 @@ const CompositionCompositionForm: React.FC<
   );
 };
 
-export default CompositionCompositionForm;
+export default CompositionForm;

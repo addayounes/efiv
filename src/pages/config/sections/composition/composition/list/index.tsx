@@ -1,10 +1,10 @@
 import Table from "@/components/table";
-import { useCompositionCompositionColumns } from "./columns";
+import { useCompositionColumns } from "./columns";
 
 interface CompositionVehiclesProps {}
 
-const CompositionComposition: React.FC<CompositionVehiclesProps> = ({}) => {
-  const columns = useCompositionCompositionColumns();
+const Composition: React.FC<CompositionVehiclesProps> = ({}) => {
+  const columns = useCompositionColumns();
   return (
     <div>
       <Table bordered data={[]} head={columns} />
@@ -12,4 +12,4 @@ const CompositionComposition: React.FC<CompositionVehiclesProps> = ({}) => {
   );
 };
 
-export default CompositionComposition;
+export default Composition;

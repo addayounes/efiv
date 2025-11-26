@@ -125,23 +125,26 @@ export interface Composition {
 
 export interface MaterielRoulant {
   elementMaterielRoulantAsync: ElementMaterielRoulantAsync[];
-  ouvertAuxVoyageurs: boolean;
-  rang: number;
   serie: string;
   sousSerie: string;
   sousSerie2: string;
 }
 
+export enum ElementMaterielRoulantType {
+  Vehicle = "voiture",
+  Head = "tête",
+  Tail = "queue",
+}
+
 export interface ElementMaterielRoulantAsync {
-  libelle: string;
+  type: ElementMaterielRoulantType;
+  libelle?: string;
   longueur: number;
   porte: Porte[];
-  rang: number;
 }
 
 export interface Porte {
   position: number;
-  rang: number;
 }
 
 export interface CourseMenante {

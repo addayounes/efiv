@@ -11,9 +11,9 @@ export const __routes__ = {
   Config: {
     Main: "/config/:section",
     SubSections: {
-      Main: "/config/:section/:subsection",
-      Create: "/config/:section/:subsection/create",
-      Update: "/config/:section/:subsection/:id/update",
+      Main: "/config/:section",
+      Create: "/config/:section/create",
+      Update: "/config/:section/:id/update",
     },
   },
   Auth: {
