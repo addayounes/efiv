@@ -4,14 +4,19 @@ import {
 } from "@/types/dto/create-circulation";
 import { Button } from "antd";
 import { cn } from "@/utils/cn";
+import type { SelectedState } from ".";
 import { useFormikContext } from "formik";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 
-interface CreateCompositionPreviewProps {}
+interface CreateCompositionPreviewProps {
+  selected: SelectedState;
+  setSelected: React.Dispatch<React.SetStateAction<SelectedState>>;
+}
 
-const CreateCompositionPreview: React.FC<
-  CreateCompositionPreviewProps
-> = ({}) => {
+const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
+  selected,
+  setSelected,
+}) => {
   const { values, setFieldValue } = useFormikContext<Composition>();
 
   const onClickAddMaterielRoulant = () => {
@@ -28,6 +33,8 @@ const CreateCompositionPreview: React.FC<
       ...values.materielRoulant,
       newMaterielRoulant,
     ]);
+
+    setSelected({ car: 0, train: values.materielRoulant.length });
   };
 
   const handleDeleteMaterielRoulant = (index: number) => {
@@ -35,6 +42,8 @@ const CreateCompositionPreview: React.FC<
       (_, i) => i !== index
     );
     setFieldValue("materielRoulant", updatedMaterielRoulant);
+
+    if (selected.train === index) setSelected({ car: -1, train: -1 });
   };
 
   const handleAddElementToMaterielRoulant = (mrIndex: number) => {
@@ -50,7 +59,15 @@ const CreateCompositionPreview: React.FC<
       }
     );
     setFieldValue("materielRoulant", updatedMaterielRoulant);
+
+    setSelected({
+      train: mrIndex,
+      car:
+        updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync.length - 2,
+    });
   };
+
+  console.log(selected);
 
   return (
     <div className="border border-gray-200 rounded p-6 bg-white w-[calc(100vw-104px)]">
@@ -65,28 +82,41 @@ const CreateCompositionPreview: React.FC<
         {values.materielRoulant?.map((mr, index) => (
           <div
             key={index}
-            className="flex flex-col gap-4 items-center p-6 hover:bg-primary/5 rounded cursor-pointer group"
+            className="flex flex-col gap-4 items-center group"
+            onClick={() => setSelected({ train: index, car: -1 })}
           >
-            <div className="flex items-center gap-1">
+            <div
+              className={cn(
+                "flex items-center gap-1 border p-6 rounded cursor-pointer",
+                selected.train === index
+                  ? "bg-primary/5 border-primary"
+                  : "hover:bg-primary/5 border-transparent"
+              )}
+            >
               {mr.elementMaterielRoulantAsync.map((el, elIndex) => {
                 const isHead = elIndex === 0;
                 const isTail =
                   elIndex === mr.elementMaterielRoulantAsync.length - 1;
                 const lastVehicle =
                   elIndex === mr.elementMaterielRoulantAsync.length - 2;
-
                 return (
-                  <div className="flex items-center gap-1">
+                  <div key={elIndex} className="flex items-center gap-1">
                     <button
-                      key={elIndex}
                       type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelected({ train: index, car: elIndex });
+                      }}
                       className={cn(
-                        "flex items-center justify-center ring-2 ring-transparent w-26 h-10 cursor-pointer",
+                        "flex items-center justify-center ring-2 ring-offset-1 w-16 h-7 cursor-pointer",
                         isHead
                           ? "bg-primary hover:brightness-80 text-white relative rounded-tl-[44px] rounded-bl-2xl"
                           : isTail
                           ? "bg-primary hover:brightness-80 text-white relative rounded-tr-[44px] rounded-br-2xl"
-                          : "bg-primary/15 hover:bg-primary/30"
+                          : "bg-primary/15 hover:bg-primary/30",
+                        selected.train === index && selected.car === elIndex
+                          ? "ring-primary"
+                          : "ring-transparent"
                       )}
                     >
                       <p className="font-medium">{el.libelle}</p>
@@ -96,12 +126,15 @@ const CreateCompositionPreview: React.FC<
                       <button
                         type="button"
                         key="add-more"
-                        onClick={() => handleAddElementToMaterielRoulant(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddElementToMaterielRoulant(index);
+                        }}
                         className={cn(
-                          "flex items-center justify-center ring-2 ring-transparent w-22 h-10 cursor-pointer border text-primary border-primary hover:bg-primary/5"
+                          "flex items-center justify-center ring-2 ring-transparent w-7 h-7 cursor-pointer border text-primary border-primary hover:bg-primary/5"
                         )}
                       >
-                        <Plus />
+                        <Plus size={16} />
                       </button>
                     )}
                   </div>

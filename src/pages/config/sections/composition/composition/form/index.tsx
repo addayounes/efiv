@@ -1,4 +1,5 @@
 import { Button } from "antd";
+import { useState } from "react";
 import CreateCompositionContent from "./content";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
@@ -6,7 +7,17 @@ import type { Composition } from "@/types/dto/create-circulation";
 
 interface CompositionFormProps {}
 
+export interface SelectedState {
+  train: number;
+  car: number;
+}
+
 const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
+  const [selected, setSelected] = useState<SelectedState>({
+    train: -1,
+    car: -1,
+  });
+
   const handleSubmitForm = async (values: Composition) => {};
 
   return (
@@ -40,7 +51,10 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
             <main className="px-6">
               <div className="flex flex-col h-[calc(100vh-64px)]">
                 <div className="flex-1 overflow-y-auto">
-                  <CreateCompositionContent />
+                  <CreateCompositionContent
+                    selected={selected}
+                    setSelected={setSelected}
+                  />
                 </div>
 
                 <div className="flex justify-end p-4 pb-8">
