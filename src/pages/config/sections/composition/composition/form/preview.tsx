@@ -1,5 +1,5 @@
 import {
-  type Composition,
+  type CreateComposition,
   ElementMaterielRoulantType,
 } from "@/types/dto/create-circulation";
 import { cn } from "@/utils/cn";
@@ -16,7 +16,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
   selected,
   setSelected,
 }) => {
-  const { values, setFieldValue } = useFormikContext<Composition>();
+  const { values, setFieldValue } = useFormikContext<CreateComposition>();
 
   const handleDeleteMaterielRoulant = (index: number) => {
     const updatedMaterielRoulant = [...values.materielRoulant].filter(
@@ -30,8 +30,8 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
 
   const handleAddElementToMaterielRoulant = (mrIndex: number) => {
     const updatedMaterielRoulant = [...values.materielRoulant];
-    updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync.splice(
-      updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync.length - 1,
+    updatedMaterielRoulant[mrIndex].elementMaterielRoulant.splice(
+      updatedMaterielRoulant[mrIndex].elementMaterielRoulant.length - 1,
       0,
       {
         porte: [],
@@ -45,8 +45,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
 
     setSelected({
       train: mrIndex,
-      car:
-        updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync.length - 2,
+      car: updatedMaterielRoulant[mrIndex].elementMaterielRoulant.length - 2,
     });
   };
 
@@ -55,8 +54,8 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
     elIndex: number
   ) => {
     const updatedMaterielRoulant = [...values.materielRoulant];
-    updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync =
-      updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync.filter(
+    updatedMaterielRoulant[mrIndex].elementMaterielRoulant =
+      updatedMaterielRoulant[mrIndex].elementMaterielRoulant.filter(
         (_, i) => i !== elIndex
       );
 
@@ -66,121 +65,127 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
   };
 
   return (
-    <div className="border border-gray-200 rounded p-6 bg-white w-[calc(100vw-104px)]">
-      <div className="flex items-center justify-center gap-2 py-10 w-full overflow-x-auto">
-        <ArrowLeft className="-translate-y-4 text-primary" />
-        {values.materielRoulant?.map((mr, index) => (
-          <div
-            key={index}
-            className="flex flex-col gap-4 items-center group/train"
-            onClick={() => setSelected({ train: index, car: -1 })}
-          >
+    <div className="border border-gray-200 rounded p-6 bg-white h-full">
+      {values.materielRoulant.length ? (
+        <div className="flex items-center justify-center gap-2 py-5 w-full overflow-x-auto">
+          <ArrowLeft className="-translate-y-4 text-primary" />
+          {values.materielRoulant?.map((mr, index) => (
             <div
-              className={cn(
-                "flex items-center gap-1 border p-6 rounded cursor-pointer group/innertrain",
-                selected.train === index
-                  ? "bg-primary/5 border-primary"
-                  : "hover:bg-primary/5 border-transparent"
-              )}
+              key={index}
+              className="flex flex-col gap-4 items-center group/train"
+              onClick={() => setSelected({ train: index, car: -1 })}
             >
-              {mr.elementMaterielRoulantAsync.map((el, elIndex) => {
-                const isHead = elIndex === 0;
-                const isTail =
-                  elIndex === mr.elementMaterielRoulantAsync.length - 1;
-                const lastVehicle =
-                  elIndex === mr.elementMaterielRoulantAsync.length - 2;
-                return (
-                  <div
-                    key={elIndex}
-                    className="relative flex items-center gap-1 group/car pt-4"
-                  >
-                    {!isHead && !isTail && (
-                      <Trash2
-                        size={16}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteElementFromMaterielRoulant(
-                            index,
-                            elIndex
-                          );
-                        }}
-                        className={cn(
-                          "absolute -top-1 hidden group-hover/car:block text-red-500",
-                          lastVehicle ? "left-7" : "left-1/2 -translate-x-1/2"
-                        )}
-                      />
-                    )}
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelected({ train: index, car: elIndex });
-                      }}
-                      className={cn(
-                        "flex items-center justify-center border-3 w-18 h-10 cursor-pointer",
-                        isHead
-                          ? "bg-primary text-white relative rounded-tl-[44px] rounded-bl-2xl"
-                          : isTail
-                          ? "bg-primary text-white relative rounded-tr-[44px] rounded-br-2xl"
-                          : "bg-primary/15 hover:bg-primary/30",
-                        selected.train === index && selected.car === elIndex
-                          ? "border-primary"
-                          : "border-transparent"
-                      )}
+              <div
+                className={cn(
+                  "flex items-center gap-1 border p-6 rounded cursor-pointer group/innertrain",
+                  selected.train === index
+                    ? "bg-primary/5 border-primary"
+                    : "hover:bg-primary/5 border-transparent"
+                )}
+              >
+                {mr.elementMaterielRoulant.map((el, elIndex) => {
+                  const isHead = elIndex === 0;
+                  const isTail =
+                    elIndex === mr.elementMaterielRoulant.length - 1;
+                  const lastVehicle =
+                    elIndex === mr.elementMaterielRoulant.length - 2;
+                  return (
+                    <div
+                      key={elIndex}
+                      className="relative flex items-center gap-1 group/car pt-4"
                     >
-                      <p className="font-medium">{el.libelle}</p>
-
-                      {(isHead || isTail) && (
-                        <span
+                      {!isHead && !isTail && (
+                        <Trash2
+                          size={16}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteElementFromMaterielRoulant(
+                              index,
+                              elIndex
+                            );
+                          }}
                           className={cn(
-                            "absolute w-2 h-5 rounded-full z-50",
-                            isHead
-                              ? "rotate-[40deg] left-0.5 top-0"
-                              : isTail
-                              ? "rotate-[-40deg] right-0.5 top-0"
-                              : "",
-                            selected.train === index
-                              ? "bg-[#F2F5F7]"
-                              : "bg-white group-hover/innertrain:bg-[#F2F5F7]"
+                            "absolute -top-1 hidden group-hover/car:block text-red-500",
+                            lastVehicle ? "left-7" : "left-1/2 -translate-x-1/2"
                           )}
                         />
                       )}
-                    </button>
 
-                    {lastVehicle && (
                       <button
                         type="button"
-                        key="add-more"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleAddElementToMaterielRoulant(index);
+                          setSelected({ train: index, car: elIndex });
                         }}
                         className={cn(
-                          "flex items-center justify-center border-3 w-10 h-10 cursor-pointer text-primary border-primary hover:bg-primary/5"
+                          "flex items-center justify-center border-3 w-18 h-10 cursor-pointer",
+                          isHead
+                            ? "bg-primary text-white relative rounded-tl-[44px] rounded-bl-2xl"
+                            : isTail
+                            ? "bg-primary text-white relative rounded-tr-[44px] rounded-br-2xl"
+                            : "bg-primary/15 hover:bg-primary/30",
+                          selected.train === index && selected.car === elIndex
+                            ? "border-primary"
+                            : "border-transparent"
                         )}
                       >
-                        <Plus size={16} />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                        <p className="font-medium">{el.libelle}</p>
 
-            <div>
-              <Trash2
-                size={20}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteMaterielRoulant(index);
-                }}
-                className="text-red-500 cursor-pointer opacity-0 group-hover/train:opacity-100"
-              />
+                        {(isHead || isTail) && (
+                          <span
+                            className={cn(
+                              "absolute w-2 h-5 rounded-full z-50",
+                              isHead
+                                ? "rotate-[40deg] left-0.5 top-0"
+                                : isTail
+                                ? "rotate-[-40deg] right-0.5 top-0"
+                                : "",
+                              selected.train === index
+                                ? "bg-[#F2F5F7]"
+                                : "bg-white group-hover/innertrain:bg-[#F2F5F7]"
+                            )}
+                          />
+                        )}
+                      </button>
+
+                      {lastVehicle && (
+                        <button
+                          type="button"
+                          key="add-more"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddElementToMaterielRoulant(index);
+                          }}
+                          className={cn(
+                            "flex items-center justify-center border-3 w-10 h-10 cursor-pointer text-primary border-primary hover:bg-primary/5"
+                          )}
+                        >
+                          <Plus size={16} />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div>
+                <Trash2
+                  size={20}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteMaterielRoulant(index);
+                  }}
+                  className="text-red-500 cursor-pointer opacity-0 group-hover/train:opacity-100"
+                />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-500">Aucun matériel roulant ajouté</p>
+        </div>
+      )}
     </div>
   );
 };

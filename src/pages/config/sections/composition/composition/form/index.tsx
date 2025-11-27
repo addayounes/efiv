@@ -1,5 +1,5 @@
 import {
-  type Composition,
+  type CreateComposition,
   ElementMaterielRoulantType,
 } from "@/types/dto/create-circulation";
 import { Button } from "antd";
@@ -8,6 +8,12 @@ import { type FormikContextType } from "formik";
 import CreateCompositionContent from "./content";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
+import { createCompositionService } from "@/services/composition";
+import { useNavigate } from "react-router-dom";
+import { __routes__ } from "@/constants/routes";
+import { toast } from "react-hot-toast";
+import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
+import { mapCreateCompositionToDto } from "@/mappers/create-composition";
 
 interface CompositionFormProps {}
 
@@ -17,6 +23,8 @@ export interface SelectedState {
 }
 
 const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
+  const navigate = useNavigate();
+
   const [selected, setSelected] = useState<SelectedState>({
     train: -1,
     car: -1,
@@ -25,9 +33,9 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
   const onClickAddMaterielRoulant = ({
     values,
     setFieldValue,
-  }: FormikContextType<Composition>) => {
-    const newMaterielRoulant: Composition["materielRoulant"][0] = {
-      elementMaterielRoulantAsync: [
+  }: FormikContextType<CreateComposition>) => {
+    const newMaterielRoulant: CreateComposition["materielRoulant"][0] = {
+      elementMaterielRoulant: [
         { longueur: 0, porte: [], type: ElementMaterielRoulantType.Head },
         { longueur: 0, porte: [], type: ElementMaterielRoulantType.Tail },
       ],
@@ -43,29 +51,31 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
     setSelected({ car: 0, train: values.materielRoulant.length });
   };
 
-  const handleSubmitForm = async (values: Composition) => {};
+  const handleSubmitForm = async (values: CreateComposition) => {
+    const responseData = await createCompositionService(
+      mapCreateCompositionToDto(values)
+    );
+
+    if (!responseData) throw new Error("No data returned from service");
+
+    navigate(
+      __routes__.Config.SubSections.Main.replace(
+        ":section",
+        ConfigSidebarElementsNames.Composition
+      )
+    );
+
+    toast.success("Composition créée avec succès");
+  };
 
   return (
     <FormikForm
       withLoadingToast
       onSubmit={handleSubmitForm}
       initialValues={{
-        materielRoulant: [
-          {
-            elementMaterielRoulantAsync: new Array(10)
-              .fill(null)
-              .map((_, index) => ({
-                porte: [{ position: index + 1 }],
-                libelle: (index + 1).toString(),
-                longueur: 2001,
-              })),
-
-            serie: "",
-            sousSerie: "",
-            sousSerie2: "",
-            ouvertAuxVoyageurs: false,
-          },
-        ],
+        name: "",
+        code: "",
+        materielRoulant: [] as CreateComposition["materielRoulant"],
       }}
     >
       {(formik) => {

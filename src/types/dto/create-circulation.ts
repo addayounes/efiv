@@ -119,12 +119,18 @@ export interface ArriveeDepart {
   mentionVia?: boolean;
 }
 
+export interface CreateComposition {
+  name: string;
+  code: string;
+  materielRoulant: MaterielRoulant[];
+}
+
 export interface Composition {
   materielRoulant: MaterielRoulant[];
 }
 
 export interface MaterielRoulant {
-  elementMaterielRoulantAsync: ElementMaterielRoulantAsync[];
+  elementMaterielRoulant: ElementMaterielRoulantAsync[];
   serie: string;
   sousSerie: string;
   sousSerie2: string;

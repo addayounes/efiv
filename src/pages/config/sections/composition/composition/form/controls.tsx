@@ -5,16 +5,14 @@ import VehicleControl from "./vehicle-control";
 
 interface CreateCompositionControlsProps {
   selected: SelectedState;
-  setSelected: React.Dispatch<React.SetStateAction<SelectedState>>;
 }
 
 const CreateCompositionControls: React.FC<CreateCompositionControlsProps> = ({
   selected,
-  setSelected,
 }) => {
   return (
     <div className="flex gap-4">
-      <div className="flex-1 border border-gray-200 rounded p-4 bg-white">
+      <div className="flex-1 border border-gray-200 rounded p-4 bg-white h-fit">
         <h2 className="font-medium text-lg">Matériel Roulant</h2>
 
         <div className="mt-4">
@@ -27,13 +25,13 @@ const CreateCompositionControls: React.FC<CreateCompositionControlsProps> = ({
           )}
         </div>
       </div>
-      <div className="flex-1 border border-gray-200 rounded p-4 bg-white">
+      <div className="flex-1 border border-gray-200 rounded p-4 bg-white h-fit">
         <h2 className="font-medium text-lg">Voiture</h2>
 
         <div className="mt-4">
           {selected.car === -1 ? (
             <div className="flex items-center justify-center py-12">
-              <p className="text-gray-500">Sélectionnez un matériel roulant</p>
+              <p className="text-gray-500">Sélectionnez une voiture</p>
             </div>
           ) : (
             <VehicleControl selected={selected} />
