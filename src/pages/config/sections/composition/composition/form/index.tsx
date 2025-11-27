@@ -1,9 +1,13 @@
+import {
+  type Composition,
+  ElementMaterielRoulantType,
+} from "@/types/dto/create-circulation";
 import { Button } from "antd";
 import { useState } from "react";
+import { type FormikContextType } from "formik";
 import CreateCompositionContent from "./content";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
-import type { Composition } from "@/types/dto/create-circulation";
 
 interface CompositionFormProps {}
 
@@ -18,36 +22,67 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
     car: -1,
   });
 
+  const onClickAddMaterielRoulant = ({
+    values,
+    setFieldValue,
+  }: FormikContextType<Composition>) => {
+    const newMaterielRoulant: Composition["materielRoulant"][0] = {
+      elementMaterielRoulantAsync: [
+        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Head },
+        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Tail },
+      ],
+      serie: "",
+      sousSerie: "",
+      sousSerie2: "",
+    };
+    setFieldValue("materielRoulant", [
+      ...values.materielRoulant,
+      newMaterielRoulant,
+    ]);
+
+    setSelected({ car: 0, train: values.materielRoulant.length });
+  };
+
   const handleSubmitForm = async (values: Composition) => {};
 
   return (
-    <div className="bg-primary-bg">
-      <PageHeader title="Créer une composition" />
+    <FormikForm
+      withLoadingToast
+      onSubmit={handleSubmitForm}
+      initialValues={{
+        materielRoulant: [
+          {
+            elementMaterielRoulantAsync: new Array(10)
+              .fill(null)
+              .map((_, index) => ({
+                porte: [{ position: index + 1 }],
+                libelle: (index + 1).toString(),
+                longueur: 2001,
+              })),
 
-      <FormikForm
-        withLoadingToast
-        onSubmit={handleSubmitForm}
-        initialValues={{
-          materielRoulant: [
-            {
-              elementMaterielRoulantAsync: new Array(10)
-                .fill(null)
-                .map((_, index) => ({
-                  porte: [{ position: index + 1 }],
-                  libelle: (index + 1).toString(),
-                  longueur: 2001,
-                })),
+            serie: "",
+            sousSerie: "",
+            sousSerie2: "",
+            ouvertAuxVoyageurs: false,
+          },
+        ],
+      }}
+    >
+      {(formik) => {
+        return (
+          <div className="bg-primary-bg">
+            <PageHeader
+              title="Créer une composition"
+              rightComponent={
+                <Button
+                  htmlType="button"
+                  onClick={() => onClickAddMaterielRoulant(formik)}
+                >
+                  Ajouter un matériel roulant
+                </Button>
+              }
+            />
 
-              serie: "",
-              sousSerie: "",
-              sousSerie2: "",
-              ouvertAuxVoyageurs: false,
-            },
-          ],
-        }}
-      >
-        {() => {
-          return (
             <main className="px-6">
               <div className="flex flex-col h-[calc(100vh-64px)]">
                 <div className="flex-1 overflow-y-auto">
@@ -64,10 +99,10 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
                 </div>
               </div>
             </main>
-          );
-        }}
-      </FormikForm>
-    </div>
+          </div>
+        );
+      }}
+    </FormikForm>
   );
 };
 

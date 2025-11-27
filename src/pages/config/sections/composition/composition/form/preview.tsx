@@ -2,7 +2,6 @@ import {
   type Composition,
   ElementMaterielRoulantType,
 } from "@/types/dto/create-circulation";
-import { Button } from "antd";
 import { cn } from "@/utils/cn";
 import type { SelectedState } from ".";
 import { useFormikContext } from "formik";
@@ -19,28 +18,11 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
 }) => {
   const { values, setFieldValue } = useFormikContext<Composition>();
 
-  const onClickAddMaterielRoulant = () => {
-    const newMaterielRoulant: Composition["materielRoulant"][0] = {
-      elementMaterielRoulantAsync: [
-        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Head },
-        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Tail },
-      ],
-      serie: "",
-      sousSerie: "",
-      sousSerie2: "",
-    };
-    setFieldValue("materielRoulant", [
-      ...values.materielRoulant,
-      newMaterielRoulant,
-    ]);
-
-    setSelected({ car: 0, train: values.materielRoulant.length });
-  };
-
   const handleDeleteMaterielRoulant = (index: number) => {
-    const updatedMaterielRoulant = values.materielRoulant.filter(
+    const updatedMaterielRoulant = [...values.materielRoulant].filter(
       (_, i) => i !== index
     );
+
     setFieldValue("materielRoulant", updatedMaterielRoulant);
 
     if (selected.train === index) setSelected({ car: -1, train: -1 });
@@ -58,6 +40,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
         type: ElementMaterielRoulantType.Vehicle,
       }
     );
+
     setFieldValue("materielRoulant", updatedMaterielRoulant);
 
     setSelected({
@@ -67,27 +50,34 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
     });
   };
 
-  console.log(selected);
+  const handleDeleteElementFromMaterielRoulant = (
+    mrIndex: number,
+    elIndex: number
+  ) => {
+    const updatedMaterielRoulant = [...values.materielRoulant];
+    updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync =
+      updatedMaterielRoulant[mrIndex].elementMaterielRoulantAsync.filter(
+        (_, i) => i !== elIndex
+      );
+
+    setFieldValue("materielRoulant", updatedMaterielRoulant);
+
+    setSelected({ train: mrIndex, car: -1 });
+  };
 
   return (
     <div className="border border-gray-200 rounded p-6 bg-white w-[calc(100vw-104px)]">
-      <div className="flex justify-end">
-        <Button htmlType="button" onClick={onClickAddMaterielRoulant}>
-          Ajouter un matériel roulant
-        </Button>
-      </div>
-
-      <div className="flex items-center justify-center gap-6 py-10 w-full overflow-x-auto">
+      <div className="flex items-center justify-center gap-2 py-10 w-full overflow-x-auto">
         <ArrowLeft className="-translate-y-4 text-primary" />
         {values.materielRoulant?.map((mr, index) => (
           <div
             key={index}
-            className="flex flex-col gap-4 items-center group"
+            className="flex flex-col gap-4 items-center group/train"
             onClick={() => setSelected({ train: index, car: -1 })}
           >
             <div
               className={cn(
-                "flex items-center gap-1 border p-6 rounded cursor-pointer",
+                "flex items-center gap-1 border p-6 rounded cursor-pointer group/innertrain",
                 selected.train === index
                   ? "bg-primary/5 border-primary"
                   : "hover:bg-primary/5 border-transparent"
@@ -100,7 +90,27 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                 const lastVehicle =
                   elIndex === mr.elementMaterielRoulantAsync.length - 2;
                 return (
-                  <div key={elIndex} className="flex items-center gap-1">
+                  <div
+                    key={elIndex}
+                    className="relative flex items-center gap-1 group/car pt-4"
+                  >
+                    {!isHead && !isTail && (
+                      <Trash2
+                        size={16}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteElementFromMaterielRoulant(
+                            index,
+                            elIndex
+                          );
+                        }}
+                        className={cn(
+                          "absolute -top-1 hidden group-hover/car:block text-red-500",
+                          lastVehicle ? "left-7" : "left-1/2 -translate-x-1/2"
+                        )}
+                      />
+                    )}
+
                     <button
                       type="button"
                       onClick={(e) => {
@@ -108,18 +118,34 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                         setSelected({ train: index, car: elIndex });
                       }}
                       className={cn(
-                        "flex items-center justify-center ring-2 ring-offset-1 w-16 h-7 cursor-pointer",
+                        "flex items-center justify-center border-3 w-18 h-10 cursor-pointer",
                         isHead
-                          ? "bg-primary hover:brightness-80 text-white relative rounded-tl-[44px] rounded-bl-2xl"
+                          ? "bg-primary text-white relative rounded-tl-[44px] rounded-bl-2xl"
                           : isTail
-                          ? "bg-primary hover:brightness-80 text-white relative rounded-tr-[44px] rounded-br-2xl"
+                          ? "bg-primary text-white relative rounded-tr-[44px] rounded-br-2xl"
                           : "bg-primary/15 hover:bg-primary/30",
                         selected.train === index && selected.car === elIndex
-                          ? "ring-primary"
-                          : "ring-transparent"
+                          ? "border-primary"
+                          : "border-transparent"
                       )}
                     >
                       <p className="font-medium">{el.libelle}</p>
+
+                      {(isHead || isTail) && (
+                        <span
+                          className={cn(
+                            "absolute w-2 h-5 rounded-full z-50",
+                            isHead
+                              ? "rotate-[40deg] left-0.5 top-0"
+                              : isTail
+                              ? "rotate-[-40deg] right-0.5 top-0"
+                              : "",
+                            selected.train === index
+                              ? "bg-[#F2F5F7]"
+                              : "bg-white group-hover/innertrain:bg-[#F2F5F7]"
+                          )}
+                        />
+                      )}
                     </button>
 
                     {lastVehicle && (
@@ -131,7 +157,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                           handleAddElementToMaterielRoulant(index);
                         }}
                         className={cn(
-                          "flex items-center justify-center ring-2 ring-transparent w-7 h-7 cursor-pointer border text-primary border-primary hover:bg-primary/5"
+                          "flex items-center justify-center border-3 w-10 h-10 cursor-pointer text-primary border-primary hover:bg-primary/5"
                         )}
                       >
                         <Plus size={16} />
@@ -145,8 +171,11 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
             <div>
               <Trash2
                 size={20}
-                onClick={() => handleDeleteMaterielRoulant(index)}
-                className="text-red-500 cursor-pointer opacity-0 group-hover:opacity-100"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteMaterielRoulant(index);
+                }}
+                className="text-red-500 cursor-pointer opacity-0 group-hover/train:opacity-100"
               />
             </div>
           </div>
