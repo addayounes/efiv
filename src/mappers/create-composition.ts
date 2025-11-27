@@ -4,7 +4,7 @@ export const mapCreateCompositionToDto = (
   data: CreateComposition
 ): CreateComposition =>
   ({
-    id: data.code,
+    id: "",
     name: data.name,
     materielRoulant: data.materielRoulant.map((mr, i1) => ({
       ...mr,

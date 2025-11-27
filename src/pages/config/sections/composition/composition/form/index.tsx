@@ -4,14 +4,14 @@ import {
 } from "@/types/dto/create-circulation";
 import { Button } from "antd";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { type FormikContextType } from "formik";
+import { __routes__ } from "@/constants/routes";
 import CreateCompositionContent from "./content";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
 import { createCompositionService } from "@/services/composition";
-import { useNavigate } from "react-router-dom";
-import { __routes__ } from "@/constants/routes";
-import { toast } from "react-hot-toast";
 import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
 import { mapCreateCompositionToDto } from "@/mappers/create-composition";
 
@@ -74,7 +74,6 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
       onSubmit={handleSubmitForm}
       initialValues={{
         name: "",
-        code: "",
         materielRoulant: [] as CreateComposition["materielRoulant"],
       }}
     >

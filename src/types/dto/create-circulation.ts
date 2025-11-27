@@ -121,7 +121,6 @@ export interface ArriveeDepart {
 
 export interface CreateComposition {
   name: string;
-  code: string;
   materielRoulant: MaterielRoulant[];
 }
 

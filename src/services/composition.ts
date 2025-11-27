@@ -11,7 +11,9 @@ export const createCompositionService = async (body: CreateComposition) => {
   return data;
 };
 
-export const getAllCompositionsService = async () => {
+export const getAllCompositionsService = async (): Promise<
+  CreateComposition[]
+> => {
   const { data } = await api.get(`${SERVICE_BASE_URL}/getAllCompositions`);
   return data;
 };

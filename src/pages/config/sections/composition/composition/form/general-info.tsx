@@ -12,18 +12,10 @@ const CreateCompositionGeneralInfo: React.FC<
 
       <div>
         <Field
-          name="code"
-          label="Code"
-          as={TextField}
-          placeholder="Ex: COMPO001"
-        />
-      </div>
-      <div>
-        <Field
-          label="Nom"
           name="name"
           as={TextField}
-          placeholder="Nom de la composition"
+          label="Libellé"
+          placeholder="Libellé de la composition"
         />
       </div>
     </div>
