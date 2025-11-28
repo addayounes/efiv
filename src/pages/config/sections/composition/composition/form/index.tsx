@@ -1,18 +1,14 @@
-import {
-  type CreateComposition,
-  ElementMaterielRoulantType,
-} from "@/types/dto/create-circulation";
 import { Button } from "antd";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { type FormikContextType } from "formik";
 import { __routes__ } from "@/constants/routes";
 import CreateCompositionContent from "./content";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
 import { createCompositionService } from "@/services/composition";
 import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
+import { type CreateComposition } from "@/types/dto/create-circulation";
 import { mapCreateCompositionToDto } from "@/mappers/create-composition";
 
 interface CompositionFormProps {}
@@ -29,27 +25,6 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
     train: -1,
     car: -1,
   });
-
-  const onClickAddMaterielRoulant = ({
-    values,
-    setFieldValue,
-  }: FormikContextType<CreateComposition>) => {
-    const newMaterielRoulant: CreateComposition["materielRoulant"][0] = {
-      elementMaterielRoulant: [
-        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Head },
-        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Tail },
-      ],
-      serie: "",
-      sousSerie: "",
-      sousSerie2: "",
-    };
-    setFieldValue("materielRoulant", [
-      ...values.materielRoulant,
-      newMaterielRoulant,
-    ]);
-
-    setSelected({ car: 0, train: values.materielRoulant.length });
-  };
 
   const handleSubmitForm = async (values: CreateComposition) => {
     const responseData = await createCompositionService(
@@ -77,37 +52,25 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
         materielRoulant: [] as CreateComposition["materielRoulant"],
       }}
     >
-      {(formik) => {
+      {() => {
         return (
-          <div className="bg-primary-bg">
-            <PageHeader
-              title="Créer une composition"
-              rightComponent={
-                <Button
-                  htmlType="button"
-                  onClick={() => onClickAddMaterielRoulant(formik)}
-                >
-                  Ajouter un matériel roulant
-                </Button>
-              }
-            />
-
-            <main className="px-6">
-              <div className="flex flex-col h-[calc(100vh-64px)]">
-                <div className="flex-1 overflow-y-auto">
-                  <CreateCompositionContent
-                    selected={selected}
-                    setSelected={setSelected}
-                  />
-                </div>
-
-                <div className="flex justify-end p-4 pb-8">
+          <div className="bg-primary-bg h-screen overflow-y-auto pb-10">
+            <div className="max-w-7xl mx-auto">
+              <PageHeader
+                title="Créer une composition"
+                rightComponent={
                   <Button htmlType="submit" type="primary">
                     Enregistrer
                   </Button>
-                </div>
-              </div>
-            </main>
+                }
+              />
+              <main className="px-6 mt-6">
+                <CreateCompositionContent
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </main>
+            </div>
           </div>
         );
       }}

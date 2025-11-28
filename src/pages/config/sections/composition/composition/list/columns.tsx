@@ -1,6 +1,6 @@
+import { Trash2 } from "lucide-react";
 import type { ColumnType } from "antd/es/table";
 import type { CreateComposition } from "@/types/dto/create-circulation";
-import { Trash2 } from "lucide-react";
 
 export const useCompositionColumns = (): ColumnType<CreateComposition>[] => {
   return [

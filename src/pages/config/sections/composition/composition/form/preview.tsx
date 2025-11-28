@@ -2,6 +2,7 @@ import {
   type CreateComposition,
   ElementMaterielRoulantType,
 } from "@/types/dto/create-circulation";
+import { Button } from "antd";
 import { cn } from "@/utils/cn";
 import type { SelectedState } from ".";
 import { useFormikContext } from "formik";
@@ -64,8 +65,32 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
     setSelected({ train: mrIndex, car: -1 });
   };
 
+  const onClickAddMaterielRoulant = () => {
+    const newMaterielRoulant: CreateComposition["materielRoulant"][0] = {
+      elementMaterielRoulant: [
+        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Head },
+        { longueur: 0, porte: [], type: ElementMaterielRoulantType.Tail },
+      ],
+      serie: "",
+      sousSerie: "",
+      sousSerie2: "",
+    };
+    setFieldValue("materielRoulant", [
+      ...values.materielRoulant,
+      newMaterielRoulant,
+    ]);
+
+    setSelected({ car: 0, train: values.materielRoulant.length });
+  };
+
   return (
-    <div className="border border-gray-200 rounded p-6 bg-white h-full">
+    <div className="border border-gray-200 rounded p-4 bg-white h-full">
+      <div className="flex items-center justify-between">
+        <h2 className="font-medium text-lg">Aperçu de la composition</h2>
+        <Button htmlType="button" onClick={onClickAddMaterielRoulant}>
+          Ajouter un matériel roulant
+        </Button>
+      </div>
       {values.materielRoulant.length ? (
         <div className="flex items-center justify-center gap-2 py-5 w-full overflow-x-auto">
           <ArrowLeft className="-translate-y-4 text-primary" />
@@ -182,7 +207,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
           ))}
         </div>
       ) : (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-full py-12">
           <p className="text-gray-500">Aucun matériel roulant ajouté</p>
         </div>
       )}
