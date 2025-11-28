@@ -10,6 +10,7 @@ import { createCompositionService } from "@/services/composition";
 import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
 import { type CreateComposition } from "@/types/dto/create-circulation";
 import { mapCreateCompositionToDto } from "@/mappers/create-composition";
+import { compositionSchema } from "@/validation/create-composition";
 
 interface CompositionFormProps {}
 
@@ -47,6 +48,7 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
     <FormikForm
       withLoadingToast
       onSubmit={handleSubmitForm}
+      validationSchema={compositionSchema}
       initialValues={{
         name: "",
         materielRoulant: [] as CreateComposition["materielRoulant"],

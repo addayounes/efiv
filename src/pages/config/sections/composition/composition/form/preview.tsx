@@ -2,8 +2,8 @@ import {
   type CreateComposition,
   ElementMaterielRoulantType,
 } from "@/types/dto/create-circulation";
-import { Button } from "antd";
 import { cn } from "@/utils/cn";
+import { Alert, Button } from "antd";
 import type { SelectedState } from ".";
 import { useFormikContext } from "formik";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
@@ -17,7 +17,10 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
   selected,
   setSelected,
 }) => {
-  const { values, setFieldValue } = useFormikContext<CreateComposition>();
+  const { values, errors, setFieldValue } =
+    useFormikContext<CreateComposition>();
+
+  const mrError = (errors.materielRoulant?.[0] as any)?.elementMaterielRoulant;
 
   const handleDeleteMaterielRoulant = (index: number) => {
     const updatedMaterielRoulant = [...values.materielRoulant].filter(
@@ -211,6 +214,8 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
           <p className="text-gray-500">Aucun matériel roulant ajouté</p>
         </div>
       )}
+
+      {typeof mrError === "string" && <Alert type="error" message={mrError} />}
     </div>
   );
 };
