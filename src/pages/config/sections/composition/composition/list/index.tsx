@@ -8,12 +8,20 @@ interface CompositionVehiclesProps {}
 
 const Composition: React.FC<CompositionVehiclesProps> = ({}) => {
   const columns = useCompositionColumns();
+  const [loading, setLoading] = useState(false);
   const [compositions, setCompositions] = useState<CreateComposition[]>([]);
 
   useEffect(() => {
     const fetchCompositions = async () => {
-      const data = await getAllCompositionsService();
-      setCompositions(data ?? []);
+      try {
+        setLoading(true);
+        const data = await getAllCompositionsService();
+        setCompositions(data ?? []);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchCompositions();
@@ -21,7 +29,12 @@ const Composition: React.FC<CompositionVehiclesProps> = ({}) => {
 
   return (
     <div>
-      <Table bordered data={compositions ?? []} head={columns} />
+      <Table
+        bordered
+        head={columns}
+        loading={loading}
+        data={compositions ?? []}
+      />
     </div>
   );
 };

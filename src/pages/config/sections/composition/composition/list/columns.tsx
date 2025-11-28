@@ -1,6 +1,7 @@
 import { Trash2 } from "lucide-react";
 import type { ColumnType } from "antd/es/table";
 import type { CreateComposition } from "@/types/dto/create-circulation";
+import CompositionPreview from "@/components/composition-preview";
 
 export const useCompositionColumns = (): ColumnType<CreateComposition>[] => {
   return [
@@ -17,7 +18,7 @@ export const useCompositionColumns = (): ColumnType<CreateComposition>[] => {
       dataIndex: "preview",
       title: "Aperçu",
       render(_, record) {
-        return <span>-</span>;
+        return <CompositionPreview composition={record} />;
       },
     },
     {
