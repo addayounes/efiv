@@ -1,9 +1,9 @@
 import { Button } from "antd";
 import { Plus } from "lucide-react";
+import Composition from "./composition/list";
 import { useNavigate } from "react-router-dom";
 import { __routes__ } from "@/constants/routes";
 import PageHeader from "@/components/page-header";
-import Composition from "./composition/list";
 
 interface CompositionConfigSectionProps {}
 
