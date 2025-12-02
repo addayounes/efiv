@@ -33,10 +33,15 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
 }) => {
   const [motif, setMotif] = useState<string>();
   const [isStreamable, setIsStreamable] = useState(false);
-  const { setFieldValue } = useFormikContext<ICirculation>();
+  const { values, setFieldValue } = useFormikContext<ICirculation>();
 
-  const onStopDelete = () => {
-    setFieldValue(`parcours.pointDeParcours.${index}.statuts`, [
+  console.log(values);
+
+  const isOrigin = index === 0;
+  const isDestination = index === values?.parcours?.pointDeParcours?.length - 1;
+
+  const onStopDelete = async () => {
+    await setFieldValue(`parcours.pointDeParcours.${index}.statuts`, [
       {
         statut: PointDeParcourStatut.SUPPRIME,
         motifTransporteur: {
@@ -45,16 +50,66 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
         },
       },
     ]);
-    setFieldValue(
+    await setFieldValue(
       `parcours.pointDeParcours.${index}.arret.arrivee.suppressionDiffusable`,
       isStreamable
     );
-    setFieldValue(
+    await setFieldValue(
       `parcours.pointDeParcours.${index}.arret.depart.suppressionDiffusable`,
       isStreamable
     );
 
+    handlePostDelete();
+
     onClose();
+  };
+
+  const handlePostDelete = () => {
+    const currentParcours = [...(values.parcours?.pointDeParcours || [])];
+
+    if (isOrigin) {
+      const nextStop = currentParcours[index + 1];
+      if (nextStop) {
+        const updatedStatuts = (nextStop.statuts ?? []).filter(
+          (s) => s.statut !== PointDeParcourStatut.ARRET_VERS_ORIGINE
+        );
+        updatedStatuts.push({
+          statut: PointDeParcourStatut.ARRET_VERS_ORIGINE,
+        });
+        setFieldValue(
+          `parcours.pointDeParcours.${index + 1}.statuts`,
+          updatedStatuts
+        );
+        setFieldValue(`origine`, {
+          codeUIC: nextStop?.desserte?.codeUIC,
+          libelle12: nextStop?.desserte?.libelle12,
+          libelle23: nextStop?.desserte?.libelle23,
+        });
+        setFieldValue(`origineInitiale`, stop?.desserte?.codeUIC);
+      }
+    }
+
+    if (isDestination) {
+      const prevStop = currentParcours[index - 1];
+      if (prevStop) {
+        const updatedStatuts = (prevStop.statuts ?? []).filter(
+          (s) => s.statut !== PointDeParcourStatut.ARRET_VERS_DESTINATION
+        );
+        updatedStatuts.push({
+          statut: PointDeParcourStatut.ARRET_VERS_DESTINATION,
+        });
+        setFieldValue(
+          `parcours.pointDeParcours.${index - 1}.statuts`,
+          updatedStatuts
+        );
+        setFieldValue(`destination`, {
+          codeUIC: prevStop?.desserte?.codeUIC,
+          libelle12: prevStop?.desserte?.libelle12,
+          libelle23: prevStop?.desserte?.libelle23,
+        });
+        setFieldValue(`destinationInitiale`, stop?.desserte?.codeUIC);
+      }
+    }
   };
 
   useEffect(() => {

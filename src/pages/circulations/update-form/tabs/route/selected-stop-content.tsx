@@ -32,10 +32,6 @@ const RouteTabSelectedStopContent: React.FC<
     (s) => s.statut === PointDeParcourStatut.SUPPRIME
   );
 
-  const hasDelay =
-    stop?.arret?.arrivee?.retardReel !== 0 ||
-    stop?.arret?.depart?.retardReel !== 0;
-
   const isDeletedDiffusable =
     (stop.arret?.arrivee?.suppressionDiffusable ||
       stop.arret?.depart?.suppressionDiffusable) &&
@@ -71,7 +67,7 @@ const RouteTabSelectedStopContent: React.FC<
               disabled={!!isDeleted}
               onClick={() => setShowDelayModal(true)}
             >
-              {hasDelay ? "Modifier le retard" : "Annoncer un retard"}
+              Annoncer un retard
             </Button>
             <Button
               type="primary"

@@ -16,7 +16,7 @@ interface CouplageTabProps {}
 const CreateCouplageTab: React.FC<CouplageTabProps> = () => {
   const [loading, setLoading] = useState(false);
   const [trains, setTrains] = useState<any[]>([]);
-  const [trainSearchKeyword, setTrainSearchKeyword] = useState("");
+  // const [trainSearchKeyword, setTrainSearchKeyword] = useState("");
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
   const [selectedTrain, setSelectedTrain] = useState<ICirculation | null>(null);

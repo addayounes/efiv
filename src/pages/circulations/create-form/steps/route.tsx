@@ -1,19 +1,12 @@
-import type {
-  CreateCirculationDto,
-  CreateComposition,
-} from "@/types/dto/create-circulation";
 import { Button, Tabs } from "antd";
 import { defaultStop } from "../form";
+import { useFormikContext } from "formik";
 import StopsLine from "@/components/stops";
-import { useEffect, useState } from "react";
-import Select from "@/components/formik/select";
-import { Field, useFormikContext } from "formik";
 import StationCard from "./components/station-card";
 import InfoConjConfig from "./components/info-conj";
 import FormGroupTitle from "@/components/group-title";
 import CreateCouplageTab from "./components/couplage";
-import CompositionPreview from "@/components/composition-preview";
-import { getAllCompositionsService } from "@/services/composition";
+import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface RouteStepProps {}
 
@@ -42,12 +35,6 @@ const RouteStep: React.FC<RouteStepProps> = ({}) => {
           <div className="w-[99%]">
             <InfoConjConfig />
           </div>
-        </Tabs.TabPane>
-        <Tabs.TabPane
-          key="composition-outer"
-          tab={<p className="font-medium">Composition</p>}
-        >
-          <CompositionConfig />
         </Tabs.TabPane>
         <Tabs.TabPane
           key="couplage"
@@ -89,58 +76,6 @@ const RoutesConfig: React.FC<RouteStepProps> = ({}) => {
               <StationCard key={index} index={index} />
             ))
           : null}
-      </div>
-    </div>
-  );
-};
-
-interface DbComposition extends CreateComposition {
-  id: string;
-}
-
-const CompositionConfig: React.FC<RouteStepProps> = ({}) => {
-  const [loading, setLoading] = useState(false);
-  const [compositions, setCompositions] = useState<DbComposition[]>([]);
-
-  const compositionsOptions = compositions.map((composition) => ({
-    label: (
-      <div className="flex items-center justify-between gap-4">
-        <p>{composition.name}</p>
-        <CompositionPreview composition={composition} />
-      </div>
-    ),
-    value: composition.id,
-  }));
-
-  useEffect(() => {
-    const fetchCompositions = async () => {
-      try {
-        setLoading(true);
-        const data = await getAllCompositionsService();
-        setCompositions((data ?? []) as DbComposition[]);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCompositions();
-  }, []);
-
-  return (
-    <div>
-      <FormGroupTitle>Composition</FormGroupTitle>
-      <div className="mt-4">
-        <Field
-          as={Select}
-          loading={loading}
-          className="w-full"
-          name="composition"
-          label="Composition"
-          options={compositionsOptions}
-          placeholder="Selectionner une composition"
-        />
       </div>
     </div>
   );

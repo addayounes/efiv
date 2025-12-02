@@ -27,7 +27,7 @@ export const useCompositionColumns = (): ColumnType<CreateComposition>[] => {
       key: "actions",
       title: "Actions",
       dataIndex: "actions",
-      render(_, record) {
+      render(_) {
         return (
           <div className="flex justify-end px-4">
             <Trash2 className="text-red-500 cursor-pointer" size={16} />

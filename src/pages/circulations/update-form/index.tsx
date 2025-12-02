@@ -1,18 +1,24 @@
 import {
   PointDeParcourStatut,
   type ICirculation,
+  type PointDeParcour,
 } from "@/types/entity/circulation";
+import {
+  createCirculationService,
+  fetchCirculationByIdService,
+} from "@/services/circulations";
+import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import Loading from "@/pages/loading";
 import { Button, Popconfirm } from "antd";
 import type { FormikProps } from "formik";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { __routes__ } from "@/constants/routes";
 import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
+import { useNavigate, useParams } from "react-router-dom";
 import UpdateOperationalCirculationContent from "./content";
 import { CirculationStatus } from "@/constants/circulation-status";
-import { fetchCirculationByIdService } from "@/services/circulations";
 
 interface UpdateOperationlCirculationProps {}
 
@@ -20,13 +26,21 @@ const UpdateOperationlCirculation: React.FC<
   UpdateOperationlCirculationProps
 > = ({}) => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [circulationData, setCirculationData] = useState<ICirculation | null>(
     null
   );
 
   const handleSubmitForm = async (data: ICirculation) => {
-    console.log("Form submitted with data:", data);
+    const result = await createCirculationService(data as any);
+
+    if (!result)
+      throw new Error("Erreur lors de la mise à jour de la circulation.");
+
+    toast.success("Circulation mise à jour avec succès.");
+
+    navigate(__routes__.Circulations.Operational);
   };
 
   const deleteCirculation = async ({
@@ -74,7 +88,25 @@ const UpdateOperationlCirculation: React.FC<
       try {
         setLoading(true);
         const data = await fetchCirculationByIdService(id);
-        setCirculationData(data);
+        setCirculationData({
+          ...data,
+          parcours: {
+            pointDeParcours: data.parcours.pointDeParcours.map((p) => ({
+              ...p,
+              informationsConjoncturelles: (
+                p.informationsConjoncturelles ?? []
+              ).map((ic) => ({
+                ...ic,
+                dateHeureDebutPublication: ic.dateHeureDebutPublication
+                  ? dayjs(ic.dateHeureDebutPublication)
+                  : ic.dateHeureDebutPublication,
+                dateHeureFinPublication: ic.dateHeureFinPublication
+                  ? dayjs(ic.dateHeureFinPublication)
+                  : ic.dateHeureFinPublication,
+              })),
+            })) as PointDeParcour[],
+          },
+        });
       } catch (error) {
         toast.error("Erreur lors du chargement des données de la circulation.");
       } finally {
@@ -139,8 +171,10 @@ const UpdateOperationlCirculation: React.FC<
                   <UpdateOperationalCirculationContent />
                 </div>
                 <div className="flex justify-end gap-4 border-t border-gray-200 p-4">
-                  <Button>Enregistrer</Button>
-                  <Button type="primary">Enregistrer et publier</Button>
+                  <Button htmlType="submit">Enregistrer</Button>
+                  <Button htmlType="submit" type="primary">
+                    Enregistrer et publier
+                  </Button>
                 </div>
               </div>
             </main>

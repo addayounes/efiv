@@ -32,19 +32,14 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
   const [times, setTimes] = useState<StopTimes>(defaultTimes);
   const { values, setFieldValue } = useFormikContext<ICirculation>();
 
+  const originUic = values?.origine?.codeUIC;
+  const destinationUic = values?.destination?.codeUIC;
+
   const isOrigin = index === 0;
   const isDestination = index === values?.parcours?.pointDeParcours?.length;
 
   const onStopAdd = () => {
     const currentParcours = [...(values.parcours?.pointDeParcours || [])];
-
-    const stopStatus = [{ statut: PointDeParcourStatut.AJOUTE }];
-
-    if (isOrigin)
-      stopStatus.push({ statut: PointDeParcourStatut.ARRET_VERS_ORIGINE });
-
-    if (isDestination)
-      stopStatus.push({ statut: PointDeParcourStatut.ARRET_VERS_DESTINATION });
 
     const newStop: PointDeParcour = {
       desserte: {
@@ -63,16 +58,56 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
           : ({} as any),
       },
       rang: index + 1,
-      statuts: stopStatus,
       zoneEmbarquement: {},
+      statuts: [{ statut: PointDeParcourStatut.AJOUTE }],
     };
 
     currentParcours.splice(index, 0, newStop);
 
-    const updatedParcours = currentParcours.map((stop, idx) => ({
-      ...stop,
-      rang: idx + 1,
-    }));
+    const updatedParcours = currentParcours.map((stop, idx) => {
+      const isStopDeleted = stop.statuts?.some(
+        (s) => s.statut === PointDeParcourStatut.SUPPRIME
+      );
+
+      if (isOrigin && stop?.desserte?.codeUIC === originUic && !isStopDeleted) {
+        return {
+          ...stop,
+          rang: idx + 1,
+          statuts: [
+            ...(stop.statuts ?? []).filter((s) =>
+              [
+                PointDeParcourStatut.AJOUTE,
+                PointDeParcourStatut.HORAIRES_MODIFIES,
+              ].includes(s.statut)
+            ),
+            { statut: PointDeParcourStatut.ORIGINE_VERS_ARRET },
+          ],
+        };
+      } else if (
+        isDestination &&
+        stop?.desserte?.codeUIC === destinationUic &&
+        !isStopDeleted
+      ) {
+        return {
+          ...stop,
+          rang: idx + 1,
+          statuts: [
+            ...(stop.statuts ?? []).filter((s) =>
+              [
+                PointDeParcourStatut.AJOUTE,
+                PointDeParcourStatut.HORAIRES_MODIFIES,
+              ].includes(s.statut)
+            ),
+            { statut: PointDeParcourStatut.DESTINATION_VERS_ARRET },
+          ],
+        };
+      }
+
+      return {
+        ...stop,
+        rang: idx + 1,
+      };
+    });
 
     setFieldValue(`parcours.pointDeParcours`, updatedParcours);
 

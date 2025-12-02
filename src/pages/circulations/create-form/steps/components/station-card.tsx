@@ -4,6 +4,7 @@ import { useFormikContext } from "formik";
 import StationsField from "./stations-field";
 import StepsGeneralTab from "./stops/general";
 import InfoConjoncturelle from "./stops/info-conj";
+import CompositionConfigContent from "./stops/composition";
 import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
@@ -91,7 +92,9 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
                 <Tabs.TabPane
                   key="2"
                   tab={<p className="text-sm font-medium">Composition</p>}
-                ></Tabs.TabPane>
+                >
+                  <CompositionConfigContent index={index} />
+                </Tabs.TabPane>
 
                 <Tabs.TabPane
                   key="3"

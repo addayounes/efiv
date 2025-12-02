@@ -5,8 +5,8 @@ import {
 } from "@/types/entity/circulation";
 import { Info } from "lucide-react";
 import { useFormikContext } from "formik";
-import { Alert, Checkbox, Input, Modal, Select } from "antd";
 import { useEffect, useMemo, useState } from "react";
+import { Alert, Checkbox, Input, Modal, Select } from "antd";
 import { minutesToDuration, roundToNearest } from "@/utils/date.utils";
 
 interface DelayModalProps {
@@ -80,8 +80,12 @@ const DelayModal: React.FC<DelayModalProps> = ({
       // if it's not origin
       if (stopIndex !== 0) {
         setFieldValue(`${fieldPrefix}.arrivee.retardReel`, delay.arrival);
+        setFieldValue(
+          `${fieldPrefix}.arrivee.retardVoyageur`,
+          roundToNearest(delay.arrival ?? 0, 5)
+        );
         setFieldValue(`${fieldPrefix}.arrivee.motifTransporteurAsync`, {
-          id: motif,
+          code: motif,
           libelle: motif,
         });
       }
@@ -89,8 +93,12 @@ const DelayModal: React.FC<DelayModalProps> = ({
       // if it's not destination
       if (stopIndex !== (parcours?.length ?? 0) - 1) {
         setFieldValue(`${fieldPrefix}.depart.retardReel`, delay.departure);
+        setFieldValue(
+          `${fieldPrefix}.depart.retardVoyageur`,
+          roundToNearest(delay.departure ?? 0, 5)
+        );
         setFieldValue(`${fieldPrefix}.depart.motifTransporteurAsync`, {
-          id: motif,
+          code: motif,
           libelle: motif,
         });
       }

@@ -2,6 +2,8 @@ import type { InformationsConjoncturelle } from "../dto/create-circulation";
 
 export interface ICirculation {
   date: string;
+  destinationInitiale?: string;
+  origineInitiale?: string;
   destination: Destination;
   origine: Origine;
   marqueCommerciale: IdLabel;

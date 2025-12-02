@@ -537,7 +537,7 @@ interface CouplageTabProps {}
 const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   const [loading, setLoading] = useState(false);
   const [trains, setTrains] = useState<ICirculation[]>([]);
-  const [trainSearchKeyword, setTrainSearchKeyword] = useState("");
+  // const [trainSearchKeyword, setTrainSearchKeyword] = useState("");
   const { values, setFieldValue } = useFormikContext<ICirculation>();
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const [selectedTrain, setSelectedTrain] = useState<ICirculation | null>(null);
@@ -883,7 +883,7 @@ const StopPointItem: React.FC<{
   checked: boolean;
   isCommon: boolean;
   isTrainDeleted: boolean;
-}> = ({ stop, checked, isCommon, isTrainDeleted }) => {
+}> = ({ stop, checked, isCommon }) => {
   if (!stop || !isCommon)
     return (
       <div

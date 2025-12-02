@@ -70,7 +70,6 @@ export const useCirculationMapper = () => {
         })
       ),
       videVoyageur: data.videVoyageur,
-      // chainageCourseSuivante: data.chainageCourseSuivante,
       parcours: {
         pointDeParcours: (data.parcours ?? []).map((point, index) => {
           const arrivalDateTime = new Date(data.date!);
@@ -92,9 +91,6 @@ export const useCirculationMapper = () => {
             );
           }
 
-          // const isDepartureDirect = index === data.parcours.length - 1;
-          // const isArrivalDirect = index === data.parcours.length - 1;
-
           return {
             arret: {
               descenteInterdite: point.descenteInterdite,
@@ -104,9 +100,6 @@ export const useCirculationMapper = () => {
                     horaire: arrivalDateTime.toISOString(),
                     numeroSillon:
                       point.arrivee?.numeroSillon ?? data.numeroCommercial,
-
-                    // mentionDirecte: true,
-                    // mentionVia: true,
                   }
                 : undefined,
               depart: point.depart?.horaire
@@ -114,8 +107,6 @@ export const useCirculationMapper = () => {
                     horaire: departureDateTime.toISOString(),
                     numeroSillon:
                       point.depart?.numeroSillon ?? data.numeroCommercial,
-                    // mentionDirecte: isDepartureDirect,
-                    // mentionVia: !isDepartureDirect,
                   }
                 : undefined,
             },
