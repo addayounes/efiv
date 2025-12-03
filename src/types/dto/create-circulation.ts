@@ -20,7 +20,7 @@ export interface CreateCirculationDto extends CreateCirculationAddOnsDto {
   videVoyageur?: boolean;
   serviceDeCourse?: string[];
 
-  compositionId: string;
+  compositionId?: string;
 
   parcours: ParcoursDto[];
   informationsConjoncturelles: InformationsConjoncturelleDto[];
