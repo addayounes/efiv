@@ -1,3 +1,5 @@
+import type { LabeledValue } from "antd/es/select";
+
 interface ISelectOption {
   label: string;
   value: string;
@@ -19,9 +21,6 @@ export interface CreateCirculationDto extends CreateCirculationAddOnsDto {
   libelleCourseSpeciale?: string;
   videVoyageur?: boolean;
   serviceDeCourse?: string[];
-
-  compositionId?: string;
-
   parcours: ParcoursDto[];
   informationsConjoncturelles: InformationsConjoncturelleDto[];
 }
@@ -31,6 +30,7 @@ export interface ParcoursDto {
   voieTransporteur?: string;
   monteeInterdite?: boolean;
   descenteInterdite?: boolean;
+  composition?: LabeledValue & { title: DbComposition };
   inversionComposition?: boolean;
   arrivee?: ArrivalOrDepartureDto;
   depart?: ArrivalOrDepartureDto;
@@ -124,6 +124,10 @@ export interface ArriveeDepart {
 export interface CreateComposition {
   name: string;
   materielRoulant: MaterielRoulant[];
+}
+
+export interface DbComposition extends CreateComposition {
+  _id: string;
 }
 
 export interface Composition {

@@ -1,5 +1,5 @@
 import type {
-  CreateComposition,
+  DbComposition,
   CreateCirculationDto,
 } from "@/types/dto/create-circulation";
 import { Button } from "antd";
@@ -14,26 +14,32 @@ interface CompositionConfigContentProps {
   index: number;
 }
 
-interface DbComposition extends CreateComposition {
-  _id: string;
-}
-
 const CompositionConfigContent: React.FC<CompositionConfigContentProps> = ({
   index,
 }) => {
   const [loading, setLoading] = useState(false);
   const [compositions, setCompositions] = useState<DbComposition[]>([]);
+  const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
 
-  const { values } = useFormikContext<CreateCirculationDto>();
+  const currentStop = values.parcours[index];
 
   const compositionsOptions = compositions.map((composition) => ({
     label: composition.name,
     value: composition._id,
+    title: composition,
   }));
 
   const selectedComposition = compositions.find(
-    (comp) => comp._id === values?.compositionId
+    (comp) => comp._id === currentStop?.composition?.value
   );
+
+  const handleApplyToFollowingStops = () => {
+    const updatedParcours = [...values.parcours].map((stop, i) => {
+      if (i <= index) return stop;
+      return { ...stop, composition: currentStop?.composition };
+    });
+    setFieldValue("parcours", updatedParcours);
+  };
 
   useEffect(() => {
     const fetchCompositions = async () => {
@@ -57,22 +63,24 @@ const CompositionConfigContent: React.FC<CompositionConfigContentProps> = ({
         <Field
           allowClear
           as={Select}
+          labelInValue
           size="medium"
           loading={loading}
           label="Composition"
-          name="compositionId"
           className="min-w-[360px]"
           options={compositionsOptions}
+          name={`parcours.${index}.composition`}
           placeholder="Selectionner une composition"
         />
 
         <Button
-          disabled={index == values.parcours.length - 1}
-          type="dashed"
           size="small"
+          type="dashed"
           htmlType="button"
+          onClick={handleApplyToFollowingStops}
+          disabled={index == values.parcours.length - 1}
         >
-          Appliquer la composition sur les arrêts suivants
+          Appliquer sur les arrêts suivants
         </Button>
       </div>
 

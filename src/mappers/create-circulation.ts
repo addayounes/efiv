@@ -1,11 +1,34 @@
 import type {
+  ParcoursDto,
   CreateCirculationDto,
   CreateCirculationApiPayload,
 } from "@/types/dto/create-circulation";
+import { dayjs } from "@/lib/dayjs";
 import { CirculationStatus } from "@/constants/circulation-status";
-import dayjs from "dayjs";
 
 export const useCirculationMapper = () => {
+  const mapStopComposition = (
+    currentStop: ParcoursDto,
+    previousStop: ParcoursDto | null
+  ) => {
+    const departureComposition = {
+      materielRoulant: currentStop?.composition?.title?.materielRoulant!,
+    };
+
+    const arrivalComposition = previousStop
+      ? currentStop?.composition?.value === previousStop?.composition?.value
+        ? departureComposition
+        : {
+            materielRoulant: previousStop?.composition?.title?.materielRoulant!,
+          }
+      : departureComposition;
+
+    return {
+      departureComposition,
+      arrivalComposition,
+    };
+  };
+
   const mapCreateCirculationToDto = async (
     data: CreateCirculationDto
   ): Promise<CreateCirculationApiPayload> => {
@@ -91,6 +114,11 @@ export const useCirculationMapper = () => {
             );
           }
 
+          const previousPoint = index > 0 ? data.parcours[index - 1] : null;
+
+          const { departureComposition, arrivalComposition } =
+            mapStopComposition(point, previousPoint);
+
           return {
             arret: {
               descenteInterdite: point.descenteInterdite,
@@ -100,6 +128,7 @@ export const useCirculationMapper = () => {
                     horaire: arrivalDateTime.toISOString(),
                     numeroSillon:
                       point.arrivee?.numeroSillon ?? data.numeroCommercial,
+                    composition: arrivalComposition,
                   }
                 : undefined,
               depart: point.depart?.horaire
@@ -107,6 +136,7 @@ export const useCirculationMapper = () => {
                     horaire: departureDateTime.toISOString(),
                     numeroSillon:
                       point.depart?.numeroSillon ?? data.numeroCommercial,
+                    composition: departureComposition,
                   }
                 : undefined,
             },

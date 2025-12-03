@@ -12,8 +12,8 @@ const StationsField: React.FC<any> = ({ ...props }) => {
 
   return (
     <Field
-      labelInValue
       showSearch
+      labelInValue
       loading={loading}
       filterOption={false}
       autoClearSearchValue
