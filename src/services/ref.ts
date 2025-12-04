@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 import type { IMotifRetard } from "@/types/entity/motif-retard";
-import type { IPaginatedResponse } from "@/types/pagination";
+import type { IPaginatedResponse, IPaginationParams } from "@/types/pagination";
 
 export interface StopDto {
   id: string;
@@ -31,9 +31,11 @@ export const mapStations = (stations: StopDto[]) => {
   }));
 };
 
-export const getMotifsDeRetardService = async (): Promise<
-  IPaginatedResponse<IMotifRetard>
-> => {
-  const { data } = await api.get(`${SERVICE_BASE_URL}/externalCause`);
+export const getMotifsDeRetardService = async (
+  params: IPaginationParams
+): Promise<IPaginatedResponse<IMotifRetard>> => {
+  const { data } = await api.get(`${SERVICE_BASE_URL}/externalCause`, {
+    params,
+  });
   return data;
 };
