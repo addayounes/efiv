@@ -114,11 +114,11 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
 
       const oldIndex = updatedMaterielRoulant[
         activeTrainIndex
-      ].elementMaterielRoulant.findIndex((c, idx) => idx === activeCarIndex);
+      ].elementMaterielRoulant.findIndex((_c, idx) => idx === activeCarIndex);
 
       const newIndex = updatedMaterielRoulant[
         overTrainIndex
-      ].elementMaterielRoulant.findIndex((c, idx) => idx === overCarIndex);
+      ].elementMaterielRoulant.findIndex((_c, idx) => idx === overCarIndex);
 
       if (
         newIndex === 0 ||
