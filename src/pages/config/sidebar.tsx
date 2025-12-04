@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export enum ConfigSidebarElementsNames {
   Composition = "composition",
+  MotifRetard = "motif-retard",
   Templates = "templates-communication",
 }
 
@@ -15,6 +16,10 @@ export const configSidebarElements = [
   {
     label: "Templates de communication",
     name: ConfigSidebarElementsNames.Templates,
+  },
+  {
+    label: "Motifs de retard",
+    name: ConfigSidebarElementsNames.MotifRetard,
   },
 ];
 

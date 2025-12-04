@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { __routes__ } from "@/constants/routes";
 import { ConfigSidebarElementsNames } from "./sidebar";
+import MotifRetardConfigSection from "./sections/motif";
 import { useNavigate, useParams } from "react-router-dom";
 import CompositionConfigSection from "./sections/composition";
 
@@ -11,6 +12,7 @@ const ConfigSectionRenderer: React.FC = () => {
   const sectionMap: Record<string, React.ReactNode> = {
     [ConfigSidebarElementsNames.Composition]: <CompositionConfigSection />,
     [ConfigSidebarElementsNames.Templates]: <div></div>,
+    [ConfigSidebarElementsNames.MotifRetard]: <MotifRetardConfigSection />,
   };
 
   useEffect(() => {
