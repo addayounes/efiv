@@ -18,13 +18,13 @@ export const compositionSchema = Yup.object({
               libelle: Yup.string().nullable(),
               longueur: Yup.number()
                 .nullable()
-                .min(1, "La position doit être au moins 1"),
+                .min(0, "La position doit être au moins 0"),
               porte: Yup.array()
                 .of(
                   Yup.object({
                     position: Yup.number()
                       .required("La position est requise")
-                      .min(1, "La position doit être au moins 1"),
+                      .min(0, "La position doit être au moins 0"),
                   })
                 )
                 .nullable(),
@@ -67,5 +67,6 @@ export const compositionSchema = Yup.object({
           ),
       })
     )
+    .min(1, "Au moins un matériel roulant est requis")
     .required(),
 });
