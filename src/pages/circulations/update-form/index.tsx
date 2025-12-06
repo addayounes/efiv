@@ -1,13 +1,11 @@
 import {
   PointDeParcourStatut,
   type ICirculation,
-  type PointDeParcour,
 } from "@/types/entity/circulation";
 import {
   createCirculationService,
   fetchCirculationByIdService,
 } from "@/services/circulations";
-import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import Loading from "@/pages/loading";
 import { Button, Popconfirm } from "antd";
@@ -88,25 +86,7 @@ const UpdateOperationlCirculation: React.FC<
       try {
         setLoading(true);
         const data = await fetchCirculationByIdService(id);
-        setCirculationData({
-          ...data,
-          parcours: {
-            pointDeParcours: data.parcours.pointDeParcours.map((p) => ({
-              ...p,
-              informationsConjoncturelles: (
-                p.informationsConjoncturelles ?? []
-              ).map((ic) => ({
-                ...ic,
-                dateHeureDebutPublication: ic.dateHeureDebutPublication
-                  ? dayjs(ic.dateHeureDebutPublication)
-                  : ic.dateHeureDebutPublication,
-                dateHeureFinPublication: ic.dateHeureFinPublication
-                  ? dayjs(ic.dateHeureFinPublication)
-                  : ic.dateHeureFinPublication,
-              })),
-            })) as PointDeParcour[],
-          },
-        });
+        setCirculationData(data);
       } catch (error) {
         toast.error("Erreur lors du chargement des données de la circulation.");
       } finally {

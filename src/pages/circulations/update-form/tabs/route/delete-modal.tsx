@@ -35,8 +35,6 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
   const [isStreamable, setIsStreamable] = useState(false);
   const { values, setFieldValue } = useFormikContext<ICirculation>();
 
-  console.log(values);
-
   const isOrigin = index === 0;
   const isDestination = index === values?.parcours?.pointDeParcours?.length - 1;
 

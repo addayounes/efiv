@@ -1,5 +1,6 @@
 import { useField } from "formik";
 import { DatePicker } from "antd";
+import { dayjs } from "@/lib/dayjs";
 import FieldError from "./field-error";
 import type { DatePickerProps } from "antd";
 import type { FieldInputProps } from "formik";
@@ -16,6 +17,14 @@ const DateTimePicker: React.FC<DateTimePickerProps & DatePickerProps> = (
 
   const id = `formik-datetime-${props.name}`;
 
+  const value = field.value
+    ? typeof field.value === "string"
+      ? dayjs(field.value)
+      : field.value instanceof dayjs.Dayjs
+      ? field.value
+      : null
+    : null;
+
   return (
     <div>
       {props.label && (
@@ -29,6 +38,7 @@ const DateTimePicker: React.FC<DateTimePickerProps & DatePickerProps> = (
           size="large"
           {...field}
           {...props}
+          value={value}
           needConfirm={false}
           status={error ? "error" : ""}
           onChange={(value) => helpers.setValue(value)}

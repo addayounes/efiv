@@ -16,8 +16,8 @@ const MotifRetardList: React.FC<MotifRetardListProps> = ({}) => {
   const [loading, setLoading] = useState(false);
   const [motifs, setMotifs] = useState<IMotifRetard[]>([]);
 
-  const { search, setSearch, debouncedSearch } = useDebouncedSearch();
   const { setTotal, ...pagination } = usePagination();
+  const { search, setSearch, debouncedSearch } = useDebouncedSearch();
 
   useEffect(() => {
     const fetchMotifs = async () => {
@@ -38,7 +38,7 @@ const MotifRetardList: React.FC<MotifRetardListProps> = ({}) => {
     };
 
     fetchMotifs();
-  }, [debouncedSearch]);
+  }, [debouncedSearch, pagination.current, pagination.pageSize]);
 
   return (
     <div className="space-y-6">

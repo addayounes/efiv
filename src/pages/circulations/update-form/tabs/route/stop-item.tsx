@@ -33,9 +33,13 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
       stop.arret?.depart?.suppressionDiffusable) &&
     isDeleted;
 
+  console.log(stop.arret?.arrivee?.numeroSillon);
+
   const coupeledStop =
     (stop.arret?.arrivee?.numeroSillon ?? "").split("-")?.[1] ||
     (stop.arret?.depart?.numeroSillon ?? "").split("-")?.[1];
+
+  console.log(stop);
 
   return (
     <div

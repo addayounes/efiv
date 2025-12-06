@@ -34,8 +34,11 @@ export const mapStations = (stations: StopDto[]) => {
 export const getMotifsDeRetardService = async (
   params: IPaginationParams
 ): Promise<IPaginatedResponse<IMotifRetard>> => {
-  const { data } = await api.get(`${SERVICE_BASE_URL}/externalCause`, {
-    params,
-  });
+  const { data } = await api.get(
+    `${SERVICE_BASE_URL}/externalCausePagination`,
+    {
+      params,
+    }
+  );
   return data;
 };
