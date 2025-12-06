@@ -12,6 +12,7 @@ import UpdateContentGeneralTab from "./content-tabs/general";
 import DeletedStopBadge from "@/components/deleted-stop-badge";
 import UpdateInfoConjoncturelle from "./content-tabs/info-conj";
 import { CirculationStatus } from "@/constants/circulation-status";
+import UpdateContentCompositionTab from "./content-tabs/composition";
 
 interface RouteTabSelectedStopContentProps {
   index: number;
@@ -92,7 +93,9 @@ const RouteTabSelectedStopContent: React.FC<
           <Tabs.TabPane
             key="composition"
             tab={<p className="text-sm font-medium">Composition</p>}
-          ></Tabs.TabPane>
+          >
+            <UpdateContentCompositionTab index={index} />
+          </Tabs.TabPane>
           <Tabs.TabPane
             key="info-conj"
             tab={<p className="text-sm font-medium">Info Conjoncturelles</p>}

@@ -17,13 +17,7 @@ const DateTimePicker: React.FC<DateTimePickerProps & DatePickerProps> = (
 
   const id = `formik-datetime-${props.name}`;
 
-  const value = field.value
-    ? typeof field.value === "string"
-      ? dayjs(field.value)
-      : field.value instanceof dayjs.Dayjs
-      ? field.value
-      : null
-    : null;
+  const value = field.value ? dayjs(field.value) : null;
 
   return (
     <div>

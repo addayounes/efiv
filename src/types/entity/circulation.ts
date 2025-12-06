@@ -1,4 +1,7 @@
-import type { InformationsConjoncturelle } from "../dto/create-circulation";
+import type {
+  Composition,
+  InformationsConjoncturelle,
+} from "../dto/create-circulation";
 
 export interface ICirculation {
   date: string;
@@ -18,6 +21,12 @@ export interface ICirculation {
   id: string;
   publishStatus: string;
   chainageCourseSuivante?: ChainageCourseSuivante;
+  compositions?: CompositionsList[];
+}
+
+export interface CompositionsList {
+  generatedId: string;
+  composition: Composition;
 }
 
 export interface Destination {
@@ -67,6 +76,9 @@ export interface ArriveeDepart {
   numeroSillon?: string;
   motifVoyageur?: IdLabel;
   motifTransporteurAsync?: IdLabel;
+  // TODO: remove this and only keep reference
+  composition?: Composition;
+  referenceIdComposition?: string;
 }
 
 export interface Desserte {

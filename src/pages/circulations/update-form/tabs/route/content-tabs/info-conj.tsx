@@ -76,14 +76,13 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
               title: "Type",
               dataIndex: "type",
               key: "type",
-              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
                     allowClear
                     as={Select}
                     size="medium"
-                    className="min-w-[170px]"
+                    className="min-w-[100px]"
                     placeholder="Choisir un type"
                     options={INFO_CONJ_TYPE_OPTIONS}
                     name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.typeInformation`}
@@ -95,14 +94,13 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
               title: "Catégorie",
               dataIndex: "categorie",
               key: "categorie",
-              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
                     allowClear
                     as={Select}
                     size="medium"
-                    className="min-w-[170px]"
+                    className="min-w-[100px]"
                     placeholder="Choisir une catégorie"
                     options={INFO_CONJ_CATEGORY_OPTIONS}
                     name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.categorie`}
@@ -114,7 +112,6 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
               title: "Contenu",
               dataIndex: "texte",
               key: "texte",
-              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
@@ -122,7 +119,7 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
                     size="medium"
                     as={TextArea}
                     placeholder="Texte"
-                    className="min-w-[170px]"
+                    className="min-w-[100px]"
                     name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.texte`}
                   />
                 );
@@ -132,7 +129,6 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
               title: "Date de début de publication",
               dataIndex: "dateHeureDebutPublication",
               key: "dateHeureDebutPublication",
-              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
@@ -140,7 +136,7 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
                     size="medium"
                     as={DateTimePicker}
                     format="DD/MM/YYYY HH:mm"
-                    className="min-w-[170px]"
+                    className="min-w-[100px]"
                     name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureDebutPublication`}
                   />
                 );
@@ -150,7 +146,6 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
               title: "Date de fin de publication",
               dataIndex: "dateHeureFinPublication",
               key: "dateHeureFinPublication",
-              width: 200,
               render(_v, _r, infoIndex) {
                 return (
                   <Field
@@ -158,7 +153,7 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
                     size="medium"
                     as={DateTimePicker}
                     format="DD/MM/YYYY HH:mm"
-                    className="min-w-[170px]"
+                    className="min-w-[100px]"
                     name={`parcours.pointDeParcours.${index}.informationsConjoncturelles.${infoIndex}.dateHeureFinPublication`}
                   />
                 );

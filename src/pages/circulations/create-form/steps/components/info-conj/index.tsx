@@ -11,12 +11,12 @@ import type {
   InformationsConjoncturelleDto,
 } from "@/types/dto/create-circulation";
 import { Button } from "antd";
-import { Trash2 } from "lucide-react";
-import { Field, useFormikContext } from "formik";
-import type { ColumnsType } from "antd/es/table";
 import { dayjs } from "@/lib/dayjs";
+import { Trash2 } from "lucide-react";
 import Table from "@/components/table";
 import Select from "@/components/formik/select";
+import { Field, useFormikContext } from "formik";
+import type { ColumnsType } from "antd/es/table";
 import TextArea from "@/components/formik/textarea";
 import FormGroupTitle from "@/components/group-title";
 import { DATE_FORMAT } from "@/constants/date-format";
@@ -74,7 +74,6 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                 title: "Type",
                 dataIndex: "typeInformation",
                 key: "typeInformation",
-                width: 200,
                 render(_v, _r, infoIndex) {
                   if (viewMode)
                     return (
@@ -85,8 +84,7 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                     <Field
                       allowClear
                       as={Select}
-                      // size="medium"
-                      className="min-w-[170px]"
+                      className="min-w-[100px]"
                       placeholder="Choisir un type"
                       options={INFO_CONJ_TYPE_OPTIONS}
                       name={`informationsConjoncturelles.${infoIndex}.typeInformation`}
@@ -98,7 +96,6 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                 title: "Catégorie",
                 dataIndex: "categorie",
                 key: "categorie",
-                width: 200,
                 render(_v, _r, infoIndex) {
                   if (viewMode)
                     return (
@@ -111,8 +108,7 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                     <Field
                       allowClear
                       as={Select}
-                      // size="medium"
-                      className="min-w-[170px]"
+                      className="min-w-[100px]"
                       placeholder="Choisir une catégorie"
                       options={INFO_CONJ_CATEGORY_OPTIONS}
                       name={`informationsConjoncturelles.${infoIndex}.categorie`}
@@ -125,17 +121,15 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                 dataIndex: "texte",
                 key: "texte",
                 ellipsis: viewMode,
-                width: 200,
                 render(_v, _r, infoIndex) {
                   if (viewMode) return _v || "N/A";
 
                   return (
                     <Field
                       rows={1}
-                      // size="medium"
                       as={TextArea}
                       placeholder="Texte"
-                      className="min-w-[170px]"
+                      className="min-w-[100px]"
                       name={`informationsConjoncturelles.${infoIndex}.texte`}
                     />
                   );
@@ -145,17 +139,15 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                 title: "Date de début de publication",
                 dataIndex: "dateHeureDebutPublication",
                 key: "dateHeureDebutPublication",
-                width: 200,
                 render(_v, _r, infoIndex) {
                   if (viewMode) return dayjs(_v).format(DATE_FORMAT) || "N/A";
 
                   return (
                     <Field
                       showTime
-                      // size="medium"
                       as={DateTimePicker}
                       format="DD/MM/YYYY HH:mm"
-                      className="min-w-[170px]"
+                      className="min-w-[100px]"
                       name={`informationsConjoncturelles.${infoIndex}.dateHeureDebutPublication`}
                     />
                   );
@@ -165,17 +157,15 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                 title: "Date de fin de publication",
                 dataIndex: "dateHeureFinPublication",
                 key: "dateHeureFinPublication",
-                width: 200,
                 render(_v, _r, infoIndex) {
                   if (viewMode) return dayjs(_v).format(DATE_FORMAT) || "N/A";
 
                   return (
                     <Field
                       showTime
-                      // size="medium"
                       as={DateTimePicker}
                       format="DD/MM/YYYY HH:mm"
-                      className="min-w-[170px]"
+                      className="min-w-[100px]"
                       name={`informationsConjoncturelles.${infoIndex}.dateHeureFinPublication`}
                     />
                   );
