@@ -3,8 +3,9 @@ import {
   PointDeParcourStatut,
   type ICirculation,
 } from "@/types/entity/circulation";
-import { Info } from "lucide-react";
 import { useFormikContext } from "formik";
+import { Info, Loader } from "lucide-react";
+import { useMotifs } from "@/hooks/use-motifs";
 import { useEffect, useMemo, useState } from "react";
 import { Alert, Checkbox, Input, Modal, Select } from "antd";
 import { minutesToDuration, roundToNearest } from "@/utils/date.utils";
@@ -26,17 +27,6 @@ const defaultDelay: DelayState = {
   departure: 0,
 };
 
-const motifs = [
-  {
-    value: "Le train est en retard",
-    label: "Le train est en retard",
-  },
-  {
-    value: "Autre motif",
-    label: "Autre motif",
-  },
-];
-
 const DelayModal: React.FC<DelayModalProps> = ({
   open,
   stop,
@@ -44,9 +34,27 @@ const DelayModal: React.FC<DelayModalProps> = ({
   onClose,
 }) => {
   const [motif, setMotif] = useState<string>();
+  const [searchValue, setSearchValue] = useState("");
   const [delay, setDelay] = useState<DelayState>(defaultDelay);
   const { values, setFieldValue } = useFormikContext<ICirculation>();
   const [applyToFollowingStops, setApplyToFollowingStops] = useState(false);
+
+  const { motifs, loading } = useMotifs(searchValue);
+
+  const motifsOptions = useMemo(
+    () =>
+      motifs.map((m) => ({
+        value: m.id,
+        label: m.interne,
+        title: m.externe,
+      })),
+    [motifs]
+  );
+
+  const selectedMotif = useMemo(
+    () => motifs.find((m) => m.id === Number(motif)),
+    [motif, motifs]
+  );
 
   const parcours = values.parcours?.pointDeParcours;
 
@@ -84,10 +92,16 @@ const DelayModal: React.FC<DelayModalProps> = ({
           `${fieldPrefix}.arrivee.retardVoyageur`,
           roundToNearest(delay.arrival ?? 0, 5)
         );
-        setFieldValue(`${fieldPrefix}.arrivee.motifTransporteurAsync`, {
-          code: motif,
-          libelle: motif,
-        });
+        if (selectedMotif) {
+          setFieldValue(`${fieldPrefix}.arrivee.motifTransporteurAsync`, {
+            code: selectedMotif?.id,
+            libelle: selectedMotif?.interne,
+          });
+          setFieldValue(`${fieldPrefix}.arrivee.motifVoyageur`, {
+            code: selectedMotif?.id,
+            libelle: selectedMotif?.externe,
+          });
+        }
       }
 
       // if it's not destination
@@ -97,10 +111,16 @@ const DelayModal: React.FC<DelayModalProps> = ({
           `${fieldPrefix}.depart.retardVoyageur`,
           roundToNearest(delay.departure ?? 0, 5)
         );
-        setFieldValue(`${fieldPrefix}.depart.motifTransporteurAsync`, {
-          code: motif,
-          libelle: motif,
-        });
+        if (selectedMotif) {
+          setFieldValue(`${fieldPrefix}.depart.motifTransporteurAsync`, {
+            code: selectedMotif?.id,
+            libelle: selectedMotif?.interne,
+          });
+          setFieldValue(`${fieldPrefix}.depart.motifVoyageur`, {
+            code: selectedMotif?.id,
+            libelle: selectedMotif?.externe,
+          });
+        }
       }
     }
 
@@ -110,8 +130,8 @@ const DelayModal: React.FC<DelayModalProps> = ({
   useEffect(() => {
     setApplyToFollowingStops(false);
     setMotif(
-      stop.arret.arrivee?.motifTransporteurAsync?.libelle ??
-        stop.arret.depart?.motifTransporteurAsync?.libelle
+      stop.arret.arrivee?.motifTransporteurAsync?.id ??
+        stop.arret.depart?.motifTransporteurAsync?.id
     );
     setDelay({
       arrival: stop.arret.arrivee?.retardReel || 0,
@@ -209,26 +229,53 @@ const DelayModal: React.FC<DelayModalProps> = ({
           )}
         </div>
 
+        <hr className="text-gray-200" />
+
         <div>
           <label
             htmlFor="motif-select"
             className="text-sm text-gray-700 font-medium"
           >
-            Motif du retard
+            Motif interne
           </label>
           <div className="my-2">
             <Select
               allowClear
+              showSearch
               size="large"
               value={motif}
-              options={motifs}
+              loading={loading}
               id="motif-select"
               className="w-full"
               onChange={setMotif}
+              filterOption={false}
+              autoClearSearchValue
+              options={motifsOptions}
+              searchValue={searchValue}
               placeholder="Sélectionner un motif"
+              onSearch={(value) => setSearchValue(value)}
+              notFoundContent={
+                loading ? <Loader className="animate-spin" /> : "Aucun résultat"
+              }
             />
           </div>
         </div>
+
+        {selectedMotif?.externe && (
+          <div>
+            <label
+              htmlFor="motif-select"
+              className="text-sm text-gray-700 font-medium"
+            >
+              Motif voyageur
+            </label>
+            <div className="my-2">
+              <p className="text-gray-500">{selectedMotif?.externe}</p>
+            </div>
+          </div>
+        )}
+
+        <hr className="text-gray-200" />
 
         <div>
           <Checkbox

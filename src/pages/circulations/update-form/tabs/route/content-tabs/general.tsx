@@ -22,9 +22,13 @@ const UpdateContentGeneralTab: React.FC<UpdateContentGeneralTabProps> = ({
 
   const isTrainDeleted = values?.statut === CirculationStatus.Supprime;
 
-  const motifRetard =
+  const motifRetardInterne =
     currentStop?.arret?.arrivee?.motifTransporteurAsync?.libelle ??
     currentStop?.arret?.depart?.motifTransporteurAsync?.libelle;
+
+  const motifRetardVoyageur =
+    currentStop?.arret?.arrivee?.motifVoyageur?.libelle ??
+    currentStop?.arret?.depart?.motifVoyageur?.libelle;
 
   const suppressionDiffusable =
     currentStop?.arret?.arrivee?.suppressionDiffusable ??
@@ -139,15 +143,28 @@ const UpdateContentGeneralTab: React.FC<UpdateContentGeneralTabProps> = ({
             </div>
           )}
 
-          {motifRetard && (
+          {motifRetardInterne && (
             <div>
               <h4 className="text-sm text-gray-700 font-medium mb-1">
-                Motif de retard
+                Motif de retard interne
               </h4>
               <Alert
                 type="warning"
                 style={{ padding: "8px 16px" }}
-                description={motifRetard}
+                description={motifRetardInterne}
+              />
+            </div>
+          )}
+
+          {motifRetardVoyageur && (
+            <div>
+              <h4 className="text-sm text-gray-700 font-medium mb-1">
+                Motif de retard voyageur
+              </h4>
+              <Alert
+                type="warning"
+                style={{ padding: "8px 16px" }}
+                description={motifRetardVoyageur}
               />
             </div>
           )}
