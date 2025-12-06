@@ -139,6 +139,7 @@ export interface MaterielRoulant {
   serie: string;
   sousSerie: string;
   sousSerie2: string;
+  ouvertAuxVoyageurs?: boolean;
 }
 
 export enum ElementMaterielRoulantType {

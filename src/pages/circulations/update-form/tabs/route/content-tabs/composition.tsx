@@ -1,8 +1,11 @@
 import { Button } from "antd";
-import { useFormikContext } from "formik";
+import { cn } from "@/utils/cn";
+import Switch from "@/components/formik/switch";
+import { Field, useFormikContext } from "formik";
 import { ArrowLeft, Trash2 } from "lucide-react";
 import type { ICirculation } from "@/types/entity/circulation";
 import { CompositionCar } from "@/components/composition-preview";
+import NoPassengersIcon from "@/components/icons/no-passenger-icon";
 
 interface UpdateContentCompositionTabProps {
   index: number;
@@ -116,56 +119,84 @@ const UpdateContentCompositionTab: React.FC<
               <div>
                 <ArrowLeft size={30} className="text-primary -translate-y-2" />
               </div>
-              {stopComposition.materielRoulant.map((mr, mrIndex) => (
-                <div
-                  key={mrIndex}
-                  className="flex flex-col gap-4 items-center group/train"
-                >
-                  <div className="flex items-center gap-1">
-                    {mr.elementMaterielRoulant.map((el, elIndex) => {
-                      const isHead = elIndex === 0;
-                      const isTail =
-                        elIndex === mr.elementMaterielRoulant.length - 1;
-                      return (
-                        <div className="group/car relative pt-4">
-                          {!isHead && !isTail && (
-                            <Trash2
-                              size={16}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteElementFromMaterielRoulant(
-                                  mrIndex,
-                                  elIndex
-                                );
-                              }}
-                              className="absolute -top-1 hidden group-hover/car:block text-red-500 left-1/2 -translate-x-1/2 cursor-pointer"
+              {stopComposition.materielRoulant.map((mr, mrIndex) => {
+                const isOpenToPassengers =
+                  typeof mr.ouvertAuxVoyageurs === "boolean" &&
+                  mr.ouvertAuxVoyageurs;
+                return (
+                  <div
+                    key={mrIndex}
+                    className="flex flex-col gap-4 items-center relative"
+                  >
+                    <div
+                      className={cn("flex items-center gap-1", {
+                        "grayscale-100 opacity-70": !isOpenToPassengers,
+                      })}
+                    >
+                      {mr.elementMaterielRoulant.map((el, elIndex) => {
+                        const isHead = elIndex === 0;
+                        const isTail =
+                          elIndex === mr.elementMaterielRoulant.length - 1;
+                        return (
+                          <div className="group/car relative pt-4">
+                            {isOpenToPassengers && !isHead && !isTail && (
+                              <Trash2
+                                size={16}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteElementFromMaterielRoulant(
+                                    mrIndex,
+                                    elIndex
+                                  );
+                                }}
+                                className="absolute -top-1 hidden group-hover/car:block text-red-500 left-1/2 -translate-x-1/2 cursor-pointer"
+                              />
+                            )}
+
+                            <CompositionCar
+                              data={el}
+                              size="large"
+                              key={elIndex}
+                              isTail={isTail}
+                              isHead={isHead}
                             />
-                          )}
+                          </div>
+                        );
+                      })}
+                    </div>
 
-                          <CompositionCar
-                            data={el}
-                            size="large"
-                            key={elIndex}
-                            isTail={isTail}
-                            isHead={isHead}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+                    {!isOpenToPassengers && (
+                      <div className="absolute top-1.5 left-1/2 -translate-x-1/2">
+                        <NoPassengersIcon />
+                      </div>
+                    )}
 
-                  <div>
-                    <Trash2
-                      size={20}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteMaterielRoulant(index);
-                      }}
-                      className="text-red-500 cursor-pointer opacity-0 group-hover/train:opacity-100"
-                    />
+                    <div className="flex items-center gap-4">
+                      <Button
+                        danger
+                        size="small"
+                        disabled={!isOpenToPassengers}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteMaterielRoulant(index);
+                        }}
+                      >
+                        <Trash2 size={14} className="-mr-1" />
+                        Supprimer
+                      </Button>
+
+                      <div>
+                        <Field
+                          inline
+                          as={Switch}
+                          label="Ouvert aux voyageurs"
+                          name={`parcours.pointDeParcours.${index}.arret.${compositionPlace}.composition.materielRoulant.${mrIndex}.ouvertAuxVoyageurs`}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : null
         ) : (

@@ -5,6 +5,7 @@ import type { FieldInputProps } from "formik";
 
 interface SwitchProps extends FieldInputProps<any> {
   label?: string;
+  inline?: boolean;
 }
 
 const Switch: React.FC<SwitchProps> = (props) => {
@@ -14,7 +15,10 @@ const Switch: React.FC<SwitchProps> = (props) => {
   const id = `formik-switch-${props.name}`;
 
   return (
-    <div className="flex flex-col items-start gap-2">
+    <div
+      className={`flex gap-2 
+      ${props.inline ? "flex-row items-center" : "flex-col items-start"}`}
+    >
       {props.label && (
         <label className="text-sm text-gray-700 font-medium" htmlFor={id}>
           {props.label}
