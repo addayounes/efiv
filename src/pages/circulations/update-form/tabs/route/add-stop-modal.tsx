@@ -35,12 +35,48 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
   const originUic = values?.origine?.codeUIC;
   const destinationUic = values?.destination?.codeUIC;
 
-  const isOrigin = index === 0;
-  const isDestination = index === values?.parcours?.pointDeParcours?.length;
+  const isInsertBeforeOrigin = index === 0;
+  const isInsertAfterDestination =
+    index === values?.parcours?.pointDeParcours?.length;
+
+  // helper: find first non-deleted stop going forward
+  function findNextNonDeleted(
+    stops: PointDeParcour[],
+    start: number,
+    forbidUIC?: string
+  ) {
+    for (let i = start; i < stops.length; i++) {
+      const s = stops[i];
+      const isDeleted = s.statuts?.some(
+        (st) => st.statut === PointDeParcourStatut.SUPPRIME
+      );
+
+      if (!isDeleted && s.desserte?.codeUIC !== forbidUIC) return i;
+    }
+    return null;
+  }
+
+  // helper: find first non-deleted stop going backward
+  function findPrevNonDeleted(
+    stops: PointDeParcour[],
+    start: number,
+    forbidUIC?: string
+  ) {
+    for (let i = start; i >= 0; i--) {
+      const s = stops[i];
+      const isDeleted = s.statuts?.some(
+        (st) => st.statut === PointDeParcourStatut.SUPPRIME
+      );
+
+      if (!isDeleted && s.desserte?.codeUIC !== forbidUIC) return i;
+    }
+    return null;
+  }
 
   const onStopAdd = () => {
-    const currentParcours = [...(values.parcours?.pointDeParcours || [])];
+    const current = [...(values.parcours?.pointDeParcours || [])];
 
+    // build new stop
     const newStop: PointDeParcour = {
       desserte: {
         codeUIC: station!.id,
@@ -48,8 +84,8 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
         libelle23: station!.libelle23,
       },
       arret: {
-        descenteInterdite: isOrigin,
-        monteeInterdite: isDestination,
+        descenteInterdite: isInsertBeforeOrigin,
+        monteeInterdite: isInsertAfterDestination,
         depart: times.depart
           ? { horaire: times.depart.toISOString() }
           : ({} as any),
@@ -62,55 +98,41 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
       statuts: [{ statut: PointDeParcourStatut.AJOUTE }],
     };
 
-    currentParcours.splice(index, 0, newStop);
+    // insert stop
+    current.splice(index, 0, newStop);
 
-    const updatedParcours = currentParcours.map((stop, idx) => {
-      const isStopDeleted = stop.statuts?.some(
-        (s) => s.statut === PointDeParcourStatut.SUPPRIME
-      );
+    // apply status change to shifted origin/destination
+    let targetIndex: number | null = null;
 
-      if (isOrigin && stop?.desserte?.codeUIC === originUic && !isStopDeleted) {
-        return {
-          ...stop,
-          rang: idx + 1,
-          statuts: [
-            ...(stop.statuts ?? []).filter((s) =>
-              [
-                PointDeParcourStatut.AJOUTE,
-                PointDeParcourStatut.HORAIRES_MODIFIES,
-              ].includes(s.statut)
-            ),
-            { statut: PointDeParcourStatut.ORIGINE_VERS_ARRET },
-          ],
-        };
-      } else if (
-        isDestination &&
-        stop?.desserte?.codeUIC === destinationUic &&
-        !isStopDeleted
-      ) {
-        return {
-          ...stop,
-          rang: idx + 1,
-          statuts: [
-            ...(stop.statuts ?? []).filter((s) =>
-              [
-                PointDeParcourStatut.AJOUTE,
-                PointDeParcourStatut.HORAIRES_MODIFIES,
-              ].includes(s.statut)
-            ),
-            { statut: PointDeParcourStatut.DESTINATION_VERS_ARRET },
-          ],
+    if (isInsertBeforeOrigin) {
+      // origin moved to index 1 → search forward
+      targetIndex = findNextNonDeleted(current, index + 1, destinationUic);
+    }
+
+    if (isInsertAfterDestination) {
+      // destination moved backward → search backward
+      targetIndex = findPrevNonDeleted(current, index - 1, originUic);
+    }
+
+    const updated = current.map((stop, idx) => {
+      let next = { ...stop, rang: idx + 1 };
+
+      // apply status to identified target
+      if (targetIndex === idx) {
+        const newStatut = isInsertBeforeOrigin
+          ? PointDeParcourStatut.ORIGINE_VERS_ARRET
+          : PointDeParcourStatut.DESTINATION_VERS_ARRET;
+
+        next = {
+          ...next,
+          statuts: [{ statut: newStatut }],
         };
       }
 
-      return {
-        ...stop,
-        rang: idx + 1,
-      };
+      return next;
     });
 
-    setFieldValue(`parcours.pointDeParcours`, updatedParcours);
-
+    setFieldValue(`parcours.pointDeParcours`, updated);
     onClose();
   };
 
@@ -124,8 +146,8 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
       title="Ajouter une desserte"
       okButtonProps={{
         disabled:
-          (!isOrigin && !times.arrivee) ||
-          (!isDestination && !times.depart) ||
+          (!isInsertBeforeOrigin && !times.arrivee) ||
+          (!isInsertAfterDestination && !times.depart) ||
           !station,
       }}
     >
@@ -161,7 +183,7 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
                 format="HH:mm"
                 className="w-full"
                 needConfirm={false}
-                disabled={isOrigin}
+                disabled={isInsertBeforeOrigin}
                 value={times.arrivee}
                 onChange={(date) =>
                   setTimes((prev) => ({ ...prev, arrivee: date }))
@@ -204,7 +226,7 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
                 className="w-full"
                 needConfirm={false}
                 value={times.depart}
-                disabled={isDestination}
+                disabled={isInsertAfterDestination}
                 onChange={(date) =>
                   setTimes((prev) => ({ ...prev, depart: date }))
                 }
