@@ -3,6 +3,15 @@ import type {
   InformationsConjoncturelle,
 } from "../dto/create-circulation";
 
+export enum EPublishStatus {
+  AwaitingPublish = "awaiting_publish",
+  Publishing = "publishing",
+  Success = "success",
+  Error = "error",
+  Rejected = "rejected",
+  WaitingAsyncResponse = "awaiting_async-response",
+}
+
 export interface ICirculation {
   date: string;
   destinationInitiale?: string;
@@ -19,7 +28,7 @@ export interface ICirculation {
   statut: string;
   transporteur: IdLabel;
   id: string;
-  publishStatus: string;
+  publishStatus: EPublishStatus;
   chainageCourseSuivante?: ChainageCourseSuivante;
   compositions?: CompositionsList[];
 }

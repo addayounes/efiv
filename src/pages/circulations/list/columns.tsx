@@ -11,6 +11,10 @@ import type { ItemType } from "antd/es/menu/interface";
 import { DATE_FORMAT_NO_TIME } from "@/constants/date-format";
 import type { ICirculation } from "@/types/entity/circulation";
 import { Trash, Pencil, History, Eye, EllipsisVertical } from "lucide-react";
+import {
+  PublishStatusLabelMap,
+  PublishStatusTagColorMap,
+} from "@/constants/circulation-publish-status";
 
 export enum CirculationListActions {
   VIEW = "view",
@@ -118,16 +122,14 @@ export const useCirculationsListColumns = (options?: {
       },
     },
     {
-      title: "Statut",
-      dataIndex: "statut",
-      key: "statut",
+      title: "Statut de publication",
+      dataIndex: "publishStatus",
+      key: "publishStatus",
       render(_, record) {
-        return record?.statut ? (
-          <Tag
-            color={record.publishStatus === "published" ? "default" : "green"}
-          >
-            {record.publishStatus === "published" ? "Non envoyé" : "envoyé"}
-          </Tag>
+        const statusLabel = PublishStatusLabelMap[record.publishStatus];
+        const statusColor = PublishStatusTagColorMap[record.publishStatus];
+        return statusLabel ? (
+          <Tag color={statusColor}>{statusLabel}</Tag>
         ) : (
           "N/A"
         );
