@@ -3,11 +3,13 @@ import {
   type PointDeParcour,
   PointDeParcourStatut,
 } from "@/types/entity/circulation";
-import { useState } from "react";
-import { type Dayjs } from "@/lib/dayjs";
+import { dayjs } from "@/lib/dayjs";
 import { DatePicker, Modal } from "antd";
+import { useMemo, useState } from "react";
 import { useFormikContext } from "formik";
 import type { StopDto } from "@/services/ref";
+import { getDisabledTimes, type StopTimes } from "@/utils/stop-disabled-time";
+import { findNextNonDeleted, findPrevNonDeleted } from "@/utils/parcours.utils";
 import { StationsFieldWithoutFormik } from "@/pages/circulations/create-form/steps/components/stations-field";
 
 interface AddStopModalProps {
@@ -16,12 +18,62 @@ interface AddStopModalProps {
   onClose: () => void;
 }
 
-interface StopTimes {
-  arrivee: Dayjs | undefined;
-  depart: Dayjs | undefined;
+const defaultTimes: StopTimes = { arrivee: undefined, depart: undefined };
+
+function _findNextNonDeleted(
+  stops: PointDeParcour[],
+  start: number,
+  forbidUIC?: string
+) {
+  return findNextNonDeleted(
+    stops.map((s) => ({
+      codeUIC: s.desserte?.codeUIC,
+      isDeleted: s.statuts?.some(
+        (st) => st.statut === PointDeParcourStatut.SUPPRIME
+      ),
+    })),
+    start,
+    forbidUIC
+  );
 }
 
-const defaultTimes: StopTimes = { arrivee: undefined, depart: undefined };
+function _findPrevNonDeleted(
+  stops: PointDeParcour[],
+  start: number,
+  forbidUIC?: string
+) {
+  return findPrevNonDeleted(
+    stops.map((s) => ({
+      codeUIC: s.desserte?.codeUIC,
+      isDeleted: s.statuts?.some(
+        (st) => st.statut === PointDeParcourStatut.SUPPRIME
+      ),
+    })),
+    start,
+    forbidUIC
+  );
+}
+
+const getNextAndPreviousStopTimes = (
+  parcours: PointDeParcour[],
+  index: number
+) => {
+  const prevIdx = _findPrevNonDeleted(parcours, index - 1);
+  const nextIdx = _findNextNonDeleted(parcours, index);
+
+  const prevStop = prevIdx !== null ? parcours[prevIdx] : null;
+  const nextStop = nextIdx !== null ? parcours[nextIdx] : null;
+
+  const prevDeparture = prevStop?.arret?.depart?.horaire
+    ? dayjs(prevStop.arret.depart.horaire)
+    : null;
+
+  const nextArrival = nextStop?.arret?.arrivee?.horaire
+    ? dayjs(nextStop.arret.arrivee.horaire)
+    : null;
+
+  return { prevDeparture, nextArrival };
+};
 
 const AddStopModal: React.FC<AddStopModalProps> = ({
   open,
@@ -35,43 +87,17 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
   const originUic = values?.origine?.codeUIC;
   const destinationUic = values?.destination?.codeUIC;
 
+  const disabledTimes = useMemo(() => {
+    const { nextArrival, prevDeparture } = getNextAndPreviousStopTimes(
+      values.parcours?.pointDeParcours || [],
+      index
+    );
+    return getDisabledTimes(times, prevDeparture, nextArrival);
+  }, [times, values.parcours?.pointDeParcours, index]);
+
   const isInsertBeforeOrigin = index === 0;
   const isInsertAfterDestination =
     index === values?.parcours?.pointDeParcours?.length;
-
-  // helper: find first non-deleted stop going forward
-  function findNextNonDeleted(
-    stops: PointDeParcour[],
-    start: number,
-    forbidUIC?: string
-  ) {
-    for (let i = start; i < stops.length; i++) {
-      const s = stops[i];
-      const isDeleted = s.statuts?.some(
-        (st) => st.statut === PointDeParcourStatut.SUPPRIME
-      );
-
-      if (!isDeleted && s.desserte?.codeUIC !== forbidUIC) return i;
-    }
-    return null;
-  }
-
-  // helper: find first non-deleted stop going backward
-  function findPrevNonDeleted(
-    stops: PointDeParcour[],
-    start: number,
-    forbidUIC?: string
-  ) {
-    for (let i = start; i >= 0; i--) {
-      const s = stops[i];
-      const isDeleted = s.statuts?.some(
-        (st) => st.statut === PointDeParcourStatut.SUPPRIME
-      );
-
-      if (!isDeleted && s.desserte?.codeUIC !== forbidUIC) return i;
-    }
-    return null;
-  }
 
   const onStopAdd = () => {
     const current = [...(values.parcours?.pointDeParcours || [])];
@@ -106,12 +132,12 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
 
     if (isInsertBeforeOrigin) {
       // origin moved to index 1 → search forward
-      targetIndex = findNextNonDeleted(current, index + 1, destinationUic);
+      targetIndex = _findNextNonDeleted(current, index + 1, destinationUic);
     }
 
     if (isInsertAfterDestination) {
       // destination moved backward → search backward
-      targetIndex = findPrevNonDeleted(current, index - 1, originUic);
+      targetIndex = _findPrevNonDeleted(current, index - 1, originUic);
     }
 
     const updated = current.map((stop, idx) => {
@@ -183,31 +209,12 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
                 format="HH:mm"
                 className="w-full"
                 needConfirm={false}
-                disabled={isInsertBeforeOrigin}
                 value={times.arrivee}
+                disabled={isInsertBeforeOrigin}
+                disabledTime={disabledTimes.arrivalDisabledTime}
                 onChange={(date) =>
                   setTimes((prev) => ({ ...prev, arrivee: date }))
                 }
-                disabledTime={() => {
-                  return {
-                    disabledHours() {
-                      if (times.depart) {
-                        return Array.from({ length: 24 }, (_, i) => i).filter(
-                          (hour) => hour > times.depart!.hour()
-                        );
-                      }
-                      return [];
-                    },
-                    disabledMinutes(hour) {
-                      if (times.depart && hour === times.depart.hour()) {
-                        return Array.from({ length: 60 }, (_, i) => i).filter(
-                          (minute) => minute > times.depart!.minute()
-                        );
-                      }
-                      return [];
-                    },
-                  };
-                }}
               />
             </div>
           </div>
@@ -226,30 +233,11 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
                 className="w-full"
                 needConfirm={false}
                 value={times.depart}
-                disabled={isInsertAfterDestination}
+                disabledTime={disabledTimes.departureDisabledTime}
+                disabled={isInsertAfterDestination || !times.arrivee}
                 onChange={(date) =>
                   setTimes((prev) => ({ ...prev, depart: date }))
                 }
-                disabledTime={() => {
-                  return {
-                    disabledHours() {
-                      if (times.arrivee) {
-                        return Array.from({ length: 24 }, (_, i) => i).filter(
-                          (hour) => hour < times.arrivee!.hour()
-                        );
-                      }
-                      return [];
-                    },
-                    disabledMinutes(hour) {
-                      if (times.arrivee && hour === times.arrivee.hour()) {
-                        return Array.from({ length: 60 }, (_, i) => i).filter(
-                          (minute) => minute < times.arrivee!.minute()
-                        );
-                      }
-                      return [];
-                    },
-                  };
-                }}
               />
             </div>
           </div>
