@@ -8,7 +8,7 @@ import { useFormikContext } from "formik";
 import { alignArraysBy } from "@/utils/array.utils";
 import { Select as AntSelect, Checkbox } from "antd";
 import { useEffect, useMemo, useState } from "react";
-import { fetchOperationalCirculationService } from "@/services/circulations";
+import { getCouplableCirculationService } from "@/services/circulations";
 import type { ICirculation, PointDeParcour } from "@/types/entity/circulation";
 
 interface CouplageTabProps {}
@@ -16,7 +16,6 @@ interface CouplageTabProps {}
 const CreateCouplageTab: React.FC<CouplageTabProps> = () => {
   const [loading, setLoading] = useState(false);
   const [trains, setTrains] = useState<any[]>([]);
-  // const [trainSearchKeyword, setTrainSearchKeyword] = useState("");
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
   const [selectedTrain, setSelectedTrain] = useState<ICirculation | null>(null);
@@ -107,14 +106,17 @@ const CreateCouplageTab: React.FC<CouplageTabProps> = () => {
   }, [selectedStations]);
 
   useEffect(() => {
-    // TODO: replace with a proper search API call
     const fetchTrains = async () => {
       setLoading(true);
-      const data = await fetchOperationalCirculationService({
-        page: 1,
-        pageSize: 100,
-      });
-      setTrains(data?.items || []);
+      const formattedStops = values.parcours?.map((stop) => ({
+        codeUIC: stop?.station?.value!,
+        departureHour: stop?.depart?.horaire!,
+      }));
+      const data = await getCouplableCirculationService(
+        values.date || "",
+        formattedStops
+      );
+      setTrains(data || []);
       setLoading(false);
     };
 
@@ -179,9 +181,6 @@ const CreateCouplageTab: React.FC<CouplageTabProps> = () => {
                 value={selectedTrain?.id}
                 className="min-w-96 w-full"
                 placeholder="Rechercher une course"
-                //   autoClearSearchValue
-                //   searchValue={trainSearchKeyword}
-                //   onSearch={(value: string) => setTrainSearchKeyword(value)}
                 onChange={(value) => {
                   const train =
                     trains.find((train) => train.id === value) || null;

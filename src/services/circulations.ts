@@ -52,3 +52,18 @@ export const fetchCirculationByIdService = async (
   const { data } = await api.get(`${SERVICE_BASE_URL}/${id}`);
   return data;
 };
+
+export const getCouplableCirculationService = async (
+  date: string,
+  body: {
+    codeUIC: string;
+    departureHour: string;
+  }[]
+): Promise<ICirculation[]> => {
+  const { data } = await api.post(
+    `${SERVICE_BASE_URL}/searchCoupledTrains`,
+    body,
+    { params: { date } }
+  );
+  return data;
+};

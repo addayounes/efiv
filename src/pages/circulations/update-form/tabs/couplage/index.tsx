@@ -5,7 +5,7 @@ import { alignArraysBy } from "@/utils/array.utils";
 import { Select as AntSelect, Checkbox } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { CirculationStatus } from "@/constants/circulation-status";
-import { fetchOperationalCirculationService } from "@/services/circulations";
+import { getCouplableCirculationService } from "@/services/circulations";
 import type { ICirculation, PointDeParcour } from "@/types/entity/circulation";
 
 interface CouplageTabProps {}
@@ -13,7 +13,6 @@ interface CouplageTabProps {}
 const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   const [loading, setLoading] = useState(false);
   const [trains, setTrains] = useState<ICirculation[]>([]);
-  // const [trainSearchKeyword, setTrainSearchKeyword] = useState("");
   const { values, setFieldValue } = useFormikContext<ICirculation>();
   const [selectedStations, setSelectedStations] = useState<string[]>([]);
   const [selectedTrain, setSelectedTrain] = useState<ICirculation | null>(null);
@@ -124,20 +123,23 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   }, [selectedStations]);
 
   useEffect(() => {
-    // TODO: replace with a proper search API call
     const fetchTrains = async () => {
       setLoading(true);
-      const data = await fetchOperationalCirculationService({
-        page: 1,
-        pageSize: 100,
-      });
-      setTrains(data?.items || []);
+      const formattedStops = values.parcours?.pointDeParcours?.map((stop) => ({
+        codeUIC: stop.desserte?.codeUIC,
+        departureHour: stop.arret.depart?.horaire,
+      }));
+      const data = await getCouplableCirculationService(
+        values.date || "",
+        formattedStops
+      );
+      setTrains(data);
       handleSetFirstCommonStation();
       setLoading(false);
     };
 
     fetchTrains();
-  }, []);
+  }, [values.parcours?.pointDeParcours, values.date]);
 
   return (
     <div className="flex flex-col gap-4 -mt-4">
@@ -201,9 +203,6 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
                 disabled={isTrainDeleted}
                 className="min-w-96 w-full"
                 placeholder="Rechercher une course"
-                //   autoClearSearchValue
-                //   searchValue={trainSearchKeyword}
-                //   onSearch={(value: string) => setTrainSearchKeyword(value)}
                 onChange={(value) => {
                   const train =
                     trains.find((train) => train.id === value) || null;
