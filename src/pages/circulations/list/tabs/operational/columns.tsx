@@ -10,6 +10,7 @@ import { __routes__ } from "@/constants/routes";
 import TrainParcours from "@/components/parcours";
 import { CirculationListActions } from "../../columns";
 import type { ItemType } from "antd/es/menu/interface";
+import { getParcoursStatuses } from "@/utils/parcours.utils";
 import type { ICirculation } from "@/types/entity/circulation";
 import { EllipsisVertical, History, Pencil } from "lucide-react";
 
@@ -66,6 +67,7 @@ export const useOperationalCirculationsColumns =
         title: "Parcours",
         dataIndex: "parcours",
         key: "parcours",
+        width: 500,
         render(_, record) {
           return (
             <TrainParcours parcours={record?.parcours?.pointDeParcours ?? []} />
@@ -73,7 +75,24 @@ export const useOperationalCirculationsColumns =
         },
       },
       {
-        title: "Statut",
+        title: "Statut parcours",
+        dataIndex: "statut",
+        key: "statut",
+        render(_, record) {
+          const parcoursStatus = getParcoursStatuses(record?.parcours);
+          return (
+            <div>
+              {parcoursStatus.map((status) => (
+                <Tag className="font-medium" color={status.color}>
+                  {status.label}
+                </Tag>
+              ))}
+            </div>
+          );
+        },
+      },
+      {
+        title: "Statut circulation",
         dataIndex: "statut",
         key: "statut",
         render(_, record) {

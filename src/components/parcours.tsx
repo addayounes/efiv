@@ -9,7 +9,7 @@ const TrainParcours: React.FC<TrainParcoursProps> = ({ parcours }) => {
   const departure = parcours[0];
   const arrival = parcours[parcours.length - 1];
   return (
-    <div className="flec flex-col w-fit">
+    <div className="flec flex-col w-96">
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-500 font-medium">
           {dayjs(departure?.arret?.depart?.horaire).format("HH:mm")}
@@ -22,12 +22,17 @@ const TrainParcours: React.FC<TrainParcoursProps> = ({ parcours }) => {
         <h3 className="font-medium text-base">
           {departure?.desserte?.libelle12}
         </h3>
-        <div className="flex items-center flex-col flex-1 -translate-y-1.5">
-          <span className="text-xs px-1 translate-y-2 bg-white z-20 text-gray-500">
-            {parcours.length === 2 ? "Direct" : `${parcours.length} dessertes`}
+
+        <div className="flex items-center flex-1 translate-y-0.5 justify-center">
+          <span className="w-[5rem] h-0.5 rounded-r rounded-l border-dashed border-1 border-gray-500" />
+          <span className="text-xs px-1 z-20 text-gray-500">
+            {parcours.length === 2
+              ? "Direct"
+              : `${parcours.length - 2} passages`}
           </span>
-          <span className="w-[10rem] h-0.5 rounded-r rounded-l border-dashed border-1 border-gray-500" />
+          <span className="w-[5rem] h-0.5 rounded-r rounded-l border-dashed border-1 border-gray-500" />
         </div>
+
         <h3 className="font-medium text-base">
           {arrival?.desserte?.libelle12}
         </h3>
