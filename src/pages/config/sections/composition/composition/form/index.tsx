@@ -8,9 +8,9 @@ import PageHeader from "@/components/page-header";
 import FormikForm from "@/components/formik/form";
 import { createCompositionService } from "@/services/composition";
 import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
+import { compositionSchema } from "@/validation/create-composition";
 import { type CreateComposition } from "@/types/dto/create-circulation";
 import { mapCreateCompositionToDto } from "@/mappers/create-composition";
-import { compositionSchema } from "@/validation/create-composition";
 
 interface CompositionFormProps {}
 
@@ -50,6 +50,7 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
       onSubmit={handleSubmitForm}
       validationSchema={compositionSchema}
       initialValues={{
+        code: "",
         name: "",
         materielRoulant: [] as CreateComposition["materielRoulant"],
       }}

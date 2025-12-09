@@ -1,16 +1,24 @@
 import { Trash2 } from "lucide-react";
 import type { ColumnType } from "antd/es/table";
-import type { CreateComposition } from "@/types/dto/create-circulation";
 import CompositionPreview from "@/components/composition-preview";
+import type { CreateComposition } from "@/types/dto/create-circulation";
 
 export const useCompositionColumns = (): ColumnType<CreateComposition>[] => {
   return [
+    {
+      key: "code",
+      dataIndex: "code",
+      title: "Code",
+      render(_, record) {
+        return <span className="font-medium">{record.code}</span>;
+      },
+    },
     {
       key: "libelle",
       dataIndex: "libelle",
       title: "Libelle",
       render(_, record) {
-        return <span className="font-medium">{record.name}</span>;
+        return <span>{record.name}</span>;
       },
     },
     {

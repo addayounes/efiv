@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import { ElementMaterielRoulantType } from "@/types/dto/create-circulation";
 
 export const compositionSchema = Yup.object({
+  code: Yup.string().required("Le code de la composition est requis"),
   name: Yup.string().required("Le nom de la composition est requis"),
   materielRoulant: Yup.array()
     .of(

@@ -10,7 +10,13 @@ const CreateCompositionGeneralInfo: React.FC<
     <div className="border border-gray-200 rounded p-4 bg-white h-full space-y-4">
       <h2 className="font-medium text-lg">Informations Générales</h2>
 
-      <div className="max-w-[50%]">
+      <div className="flex items-center gap-4">
+        <Field
+          name="code"
+          label="Code"
+          as={TextField}
+          placeholder="Code de la composition"
+        />
         <Field
           name="name"
           as={TextField}
