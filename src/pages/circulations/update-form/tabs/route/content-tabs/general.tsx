@@ -66,30 +66,65 @@ const UpdateContentGeneralTab: React.FC<UpdateContentGeneralTabProps> = ({
 
           <div className="flex gap-4">
             <div className="w-68">
-              <h4 className="text-sm text-gray-700 font-medium mb-1">
+              <h4 className="text-sm text-gray-700 font-medium mb-2">
                 Retard à l'arrivée
               </h4>
-              <p className="text-base text-orange-500">
-                <span className="font-medium">
-                  +
-                  {minutesToDuration(
-                    currentStop?.arret?.arrivee?.retardReel ?? 0
-                  )}
-                </span>
-              </p>
+
+              <div className="flex items-center gap-2">
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Interne</p>
+                  <p className="text-sm text-gray-500">Voyageur</p>
+                </div>
+                <div>
+                  <p className="text-base text-orange-500">
+                    <span className="font-medium">
+                      +
+                      {minutesToDuration(
+                        currentStop?.arret?.arrivee?.retardReel ?? 0
+                      )}
+                    </span>
+                  </p>
+
+                  <p className="text-base text-orange-500">
+                    <span className="font-medium">
+                      +
+                      {minutesToDuration(
+                        currentStop?.arret?.arrivee?.retardVoyageur ?? 0
+                      )}
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="w-68">
               <h4 className="text-sm text-gray-700 font-medium mb-1">
                 Retard au départ
               </h4>
-              <p className="text-base text-orange-500">
-                <span className="font-medium">
-                  +
-                  {minutesToDuration(
-                    currentStop?.arret?.depart?.retardReel ?? 0
-                  )}
-                </span>
-              </p>
+              <div className="flex items-center gap-2">
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Interne</p>
+                  <p className="text-sm text-gray-500">Voyageur</p>
+                </div>
+                <div>
+                  <p className="text-base text-orange-500">
+                    <span className="font-medium">
+                      +
+                      {minutesToDuration(
+                        currentStop?.arret?.depart?.retardReel ?? 0
+                      )}
+                    </span>
+                  </p>
+
+                  <p className="text-base text-orange-500">
+                    <span className="font-medium">
+                      +
+                      {minutesToDuration(
+                        currentStop?.arret?.depart?.retardVoyageur ?? 0
+                      )}
+                    </span>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 

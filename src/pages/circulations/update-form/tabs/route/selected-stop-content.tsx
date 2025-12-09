@@ -9,7 +9,6 @@ import DelayModal from "./delay-modal";
 import { useFormikContext } from "formik";
 import DeleteStopModal from "./delete-modal";
 import UpdateContentGeneralTab from "./content-tabs/general";
-import DeletedStopBadge from "@/components/deleted-stop-badge";
 import UpdateInfoConjoncturelle from "./content-tabs/info-conj";
 import { CirculationStatus } from "@/constants/circulation-status";
 import UpdateContentCompositionTab from "./content-tabs/composition";
@@ -33,11 +32,6 @@ const RouteTabSelectedStopContent: React.FC<
     (s) => s.statut === PointDeParcourStatut.SUPPRIME
   );
 
-  const isDeletedDiffusable =
-    (stop.arret?.arrivee?.suppressionDiffusable ||
-      stop.arret?.depart?.suppressionDiffusable) &&
-    isDeleted;
-
   const cancelDeletion = () => {
     const updatedStatuts = stop.statuts.filter(
       (s) => s.statut !== PointDeParcourStatut.SUPPRIME
@@ -55,10 +49,6 @@ const RouteTabSelectedStopContent: React.FC<
       <div className="flex items-center justify-between">
         <h2 className="flex items-center gap-4 font-medium text-2xl">
           {stop?.desserte?.libelle23}
-
-          {isDeleted && (
-            <DeletedStopBadge isDiffusable={!!isDeletedDiffusable} />
-          )}
         </h2>
 
         {!isTrainDeleted && (

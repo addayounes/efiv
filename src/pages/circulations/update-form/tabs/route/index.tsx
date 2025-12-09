@@ -18,9 +18,9 @@ const UpdateOperationalRouteTab: React.FC = () => {
 
   return (
     <div className="h-full -mt-4">
-      <div className="flex gap-6">
-        <div className="w-1/3 max-w-[400px] h-[calc(100vh-225px)] py-6">
-          <div className="overflow-y-auto space-y-2">
+      <div className="flex gap-0">
+        <div className="w-1/3 max-w-[400px] h-[calc(100vh-225px)] overflow-y-auto py-6 pr-4">
+          <div className="space-y-2">
             {(values?.parcours?.pointDeParcours ?? [])?.map(
               (point, index, arr) => {
                 return (

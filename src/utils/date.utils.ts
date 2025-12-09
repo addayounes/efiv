@@ -8,4 +8,4 @@ export const minutesToDuration = (minutes: number) => {
 };
 
 export const roundToNearest = (value: number, nearest: number) =>
-  Math.round(value / nearest) * nearest;
+  Math.floor(value / nearest) * nearest;

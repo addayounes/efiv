@@ -115,6 +115,7 @@ const UpdateOperationlCirculation: React.FC<
         return (
           <div className="bg-primary-bg">
             <PageHeader
+              backTo={__routes__.Circulations.Operational}
               title={`Mise à jour de la circulation N° ${
                 circulationData?.numeroCommercial || "-"
               }`}

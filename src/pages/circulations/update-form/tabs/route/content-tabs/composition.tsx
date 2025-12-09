@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import { cn } from "@/utils/cn";
+import toast from "react-hot-toast";
 import Switch from "@/components/formik/switch";
 import { Field, useFormikContext } from "formik";
 import { ArrowLeft, Trash2 } from "lucide-react";
@@ -59,6 +60,8 @@ const UpdateContentCompositionTab: React.FC<
     );
 
     setFieldValue("parcours.pointDeParcours", updatedParcours);
+
+    toast.success("Composition appliquée");
   };
 
   const handleDeleteMaterielRoulant = (mrIndex: number) => {

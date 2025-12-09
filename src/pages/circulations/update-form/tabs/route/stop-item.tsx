@@ -27,6 +27,9 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
   const isDeleted = stop.statuts?.find(
     (s) => s.statut === PointDeParcourStatut.SUPPRIME
   );
+  const isAdded = stop.statuts?.find(
+    (s) => s.statut === PointDeParcourStatut.AJOUTE
+  );
 
   const isDeletedDiffusable =
     (stop.arret?.arrivee?.suppressionDiffusable ||
@@ -70,18 +73,23 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
         <h4 className="text-base font-medium">{stop?.desserte?.libelle12}</h4>
       </div>
       <div className="flex items-center gap-4">
-        <div className="">
+        <div>
           {isDeleted && (
             <DeletedStopBadge isDiffusable={!!isDeletedDiffusable} />
+          )}
+          {isAdded && (
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-600 text-xs font-medium">
+              Ajouté
+            </span>
           )}
         </div>
 
         <div className="flex flex-col items-end text-xs space-y-2 text-right font-medium">
           {stop?.arret?.arrivee?.horaire ? (
             <div className="flex items-center gap-2">
-              {stop?.arret?.arrivee?.retardReel ? (
+              {stop?.arret?.arrivee?.retardVoyageur ? (
                 <p className="px-1 text-xs text-orange-500 bg-orange-100 rounded-full">
-                  +{minutesToDuration(stop?.arret?.arrivee?.retardReel)}
+                  +{minutesToDuration(stop?.arret?.arrivee?.retardVoyageur)}
                 </p>
               ) : (
                 ""
@@ -96,9 +104,9 @@ const UpdateRouteStopItem: React.FC<UpdateRouteStopItemProps> = ({
 
           {stop?.arret?.depart?.horaire ? (
             <div className="flex items-center gap-2">
-              {stop?.arret?.depart?.retardReel ? (
+              {stop?.arret?.depart?.retardVoyageur ? (
                 <p className="px-1 text-xs text-orange-500 bg-orange-100 rounded-full">
-                  +{minutesToDuration(stop?.arret?.depart?.retardReel)}
+                  +{minutesToDuration(stop?.arret?.depart?.retardVoyageur)}
                 </p>
               ) : (
                 ""

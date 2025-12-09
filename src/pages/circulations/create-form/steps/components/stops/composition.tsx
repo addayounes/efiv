@@ -39,6 +39,7 @@ const CompositionConfigContent: React.FC<CompositionConfigContentProps> = ({
       return { ...stop, composition: currentStop?.composition };
     });
     setFieldValue("parcours", updatedParcours);
+    toast.success("Composition appliquée");
   };
 
   useEffect(() => {

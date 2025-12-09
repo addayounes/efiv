@@ -149,10 +149,30 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
           ? PointDeParcourStatut.ORIGINE_VERS_ARRET
           : PointDeParcourStatut.DESTINATION_VERS_ARRET;
 
-        next = {
-          ...next,
-          statuts: [{ statut: newStatut }],
-        };
+        // check if it's already the new origin/destination
+        if (
+          next.statuts.some((s) =>
+            [
+              PointDeParcourStatut.ARRET_VERS_ORIGINE,
+              PointDeParcourStatut.ARRET_VERS_DESTINATION,
+            ].includes(s.statut)
+          )
+        )
+          next = {
+            ...next,
+            statuts: next.statuts.filter(
+              (s) =>
+                ![
+                  PointDeParcourStatut.ARRET_VERS_ORIGINE,
+                  PointDeParcourStatut.ARRET_VERS_DESTINATION,
+                ].includes(s.statut)
+            ),
+          };
+        else
+          next = {
+            ...next,
+            statuts: [{ statut: newStatut }],
+          };
       }
 
       return next;
@@ -234,7 +254,10 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
                 needConfirm={false}
                 value={times.depart}
                 disabledTime={disabledTimes.departureDisabledTime}
-                disabled={isInsertAfterDestination || !times.arrivee}
+                disabled={
+                  isInsertAfterDestination ||
+                  (!isInsertBeforeOrigin && !times.arrivee)
+                }
                 onChange={(date) =>
                   setTimes((prev) => ({ ...prev, depart: date }))
                 }
