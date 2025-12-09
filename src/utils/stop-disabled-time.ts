@@ -67,7 +67,12 @@ export const getDisabledTimes = (
             for (let h = 0; h < times.arrivee.hour(); h++) disabled.add(h);
           }
 
-          // 2- departure must be <= nextStop.arrival (NEW RULE)
+          // 2 — departure >= previous stop departure
+          if (prevDeparture) {
+            for (let h = 0; h < prevDeparture.hour(); h++) disabled.add(h);
+          }
+
+          // 3- departure must be <= nextStop.arrival
           if (nextArrival) {
             for (let h = nextArrival.hour() + 1; h < 24; h++) disabled.add(h);
           }
@@ -78,12 +83,17 @@ export const getDisabledTimes = (
         disabledMinutes(hour: number) {
           const disabled = new Set<number>();
 
-          // rule: departure >= arrival
+          // 1: departure >= arrival
           if (times.arrivee && hour === times.arrivee.hour()) {
             for (let m = 0; m < times.arrivee.minute(); m++) disabled.add(m);
           }
 
-          // rule: departure <= nextArrival
+          // 2 — departure >= previous stop departure
+          if (prevDeparture && hour === prevDeparture.hour()) {
+            for (let m = 0; m < prevDeparture.minute(); m++) disabled.add(m);
+          }
+
+          // 3: departure <= nextArrival
           if (nextArrival && hour === nextArrival.hour()) {
             for (let m = nextArrival.minute() + 1; m < 60; m++) disabled.add(m);
           }
