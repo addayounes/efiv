@@ -19,13 +19,13 @@ const TrainParcours: React.FC<TrainParcoursProps> = ({ parcours }) => {
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <h3 className="font-medium text-base">
+        <h3 className="font-medium text-base whitespace-nowrap">
           {departure?.desserte?.libelle12}
         </h3>
 
         <div className="flex items-center flex-1 translate-y-0.5 justify-center">
           <span className="w-[5rem] h-0.5 rounded-r rounded-l border-dashed border-1 border-gray-500" />
-          <span className="text-xs px-1 z-20 text-gray-500">
+          <span className="text-xs px-1 z-20 text-gray-500 whitespace-nowrap">
             {parcours.length === 2
               ? "Direct"
               : `${parcours.length - 2} passages`}
@@ -33,7 +33,7 @@ const TrainParcours: React.FC<TrainParcoursProps> = ({ parcours }) => {
           <span className="w-[5rem] h-0.5 rounded-r rounded-l border-dashed border-1 border-gray-500" />
         </div>
 
-        <h3 className="font-medium text-base">
+        <h3 className="font-medium text-base whitespace-nowrap">
           {arrival?.desserte?.libelle12}
         </h3>
       </div>

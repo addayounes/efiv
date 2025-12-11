@@ -92,13 +92,14 @@ const DelayModal: React.FC<DelayModalProps> = ({
           `${fieldPrefix}.arrivee.retardVoyageur`,
           roundToNearest(delay.arrival ?? 0, 5)
         );
+
         if (selectedMotif) {
           setFieldValue(`${fieldPrefix}.arrivee.motifTransporteurAsync`, {
-            code: selectedMotif?.id,
+            code: selectedMotif?.id?.toString(),
             libelle: selectedMotif?.interne,
           });
           setFieldValue(`${fieldPrefix}.arrivee.motifVoyageur`, {
-            code: selectedMotif?.id,
+            code: selectedMotif?.id?.toString(),
             libelle: selectedMotif?.externe,
           });
         }
@@ -113,11 +114,11 @@ const DelayModal: React.FC<DelayModalProps> = ({
         );
         if (selectedMotif) {
           setFieldValue(`${fieldPrefix}.depart.motifTransporteurAsync`, {
-            code: selectedMotif?.id,
+            code: selectedMotif?.id?.toString(),
             libelle: selectedMotif?.interne,
           });
           setFieldValue(`${fieldPrefix}.depart.motifVoyageur`, {
-            code: selectedMotif?.id,
+            code: selectedMotif?.id?.toString(),
             libelle: selectedMotif?.externe,
           });
         }
@@ -129,13 +130,20 @@ const DelayModal: React.FC<DelayModalProps> = ({
 
   useEffect(() => {
     setApplyToFollowingStops(false);
-    setMotif(
-      stop.arret.arrivee?.motifTransporteurAsync?.id ??
-        stop.arret.depart?.motifTransporteurAsync?.id
-    );
+    const motifCode =
+      stop.arret.arrivee?.motifTransporteurAsync?.code ??
+      stop.arret.depart?.motifTransporteurAsync?.code ??
+      stop.arret.arrivee?.motifVoyageur?.code ??
+      stop.arret.depart?.motifVoyageur?.code;
+
+    setMotif(motifCode);
     setDelay({
-      arrival: stop.arret.arrivee?.retardReel || 0,
-      departure: stop.arret.depart?.retardReel || 0,
+      arrival:
+        stop.arret.arrivee?.retardReel ||
+        stop.arret.arrivee?.retardVoyageur ||
+        0,
+      departure:
+        stop.arret.depart?.retardReel || stop.arret.depart?.retardVoyageur || 0,
     });
   }, [stop]);
 
@@ -143,6 +151,7 @@ const DelayModal: React.FC<DelayModalProps> = ({
     <Modal
       open={open}
       onOk={onDelay}
+      destroyOnHidden
       onCancel={onClose}
       okText="Confirmer"
       cancelText="Annuler"

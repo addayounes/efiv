@@ -8,7 +8,7 @@ export enum ParcoursStatus {
 
 export const StatusLabelMap: Record<ParcoursStatus, string> = {
   [ParcoursStatus.DELAY]: "Retard(s)",
-  [ParcoursStatus.STOP_ADDED]: "Arrêt(s) ajouté(s)",
+  [ParcoursStatus.STOP_ADDED]: "Arrêt(s) supplémentaire(s)",
   [ParcoursStatus.STOP_DELETED]: "Arrêt(s) supprimé(s)",
 };
 

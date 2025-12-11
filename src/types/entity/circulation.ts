@@ -55,6 +55,11 @@ export interface IdLabel {
   libelle: string;
 }
 
+export interface CodeLabel {
+  code: string;
+  libelle: string;
+}
+
 export interface Parcours {
   pointDeParcours: PointDeParcour[];
 }
@@ -83,8 +88,8 @@ export interface ArriveeDepart {
   mentionVia?: boolean;
   mentionDirect?: boolean;
   numeroSillon?: string;
-  motifVoyageur?: IdLabel;
-  motifTransporteurAsync?: IdLabel;
+  motifVoyageur?: CodeLabel;
+  motifTransporteurAsync?: CodeLabel;
   // TODO: remove this and only keep reference
   composition?: Composition;
   referenceIdComposition?: string;
