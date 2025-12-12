@@ -52,9 +52,13 @@ export interface InformationsConjoncturelleDto {
 }
 
 export interface CreateCirculationAddOnsDto {
+  endDate?: string;
   dateType?: string;
   startDate?: string;
-  endDate?: string;
+  dateFrequency?: string;
+
+  weeklyDays?: number[];
+  monthDays?: number[];
 }
 
 //

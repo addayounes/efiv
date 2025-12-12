@@ -1,15 +1,17 @@
 import {
-  CirculationDateType,
-  CIRCULATION_DATE_OPTIONS,
-  DATE_FREQUENCY_OPTIONS,
   DateFrequency,
+  CirculationDateType,
+  DATE_FREQUENCY_OPTIONS,
+  CIRCULATION_DATE_OPTIONS,
 } from "@/constants/circulation-date-types";
-import { Field, useFormikContext } from "formik";
+import { dayjs } from "@/lib/dayjs";
 import Radio from "@/components/formik/radio";
+import { Field, useFormikContext } from "formik";
 import FormGroupTitle from "@/components/group-title";
 import DateTimePicker from "@/components/formik/date-time";
+import WeeklyDateFrequency from "./components/date-frquency/weekly";
+import MonthlyDateFrequency from "./components/date-frquency/monthly";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
-import dayjs from "dayjs";
 
 interface DateStepProps {}
 
@@ -23,10 +25,7 @@ const DateStep: React.FC<DateStepProps> = ({}) => {
           name="dateType"
           optionType="button"
           buttonStyle="solid"
-          // TODO: Enable calendar option when feature is ready
-          options={CIRCULATION_DATE_OPTIONS.map((_, i) =>
-            i === 1 ? { ..._, disabled: true } : _
-          )}
+          options={CIRCULATION_DATE_OPTIONS}
           defaultValue={CirculationDateType.Single}
         />
       </div>
@@ -40,6 +39,11 @@ const DateStep: React.FC<DateStepProps> = ({}) => {
 
 const DateSettingsRenderer: React.FC = () => {
   const { values } = useFormikContext<CreateCirculationDto>();
+
+  const FrequencySettingsMap = {
+    [DateFrequency.Weekly]: <WeeklyDateFrequency />,
+    [DateFrequency.Monthly]: <MonthlyDateFrequency />,
+  };
 
   const DateSettingsMap = {
     [CirculationDateType.Single]: (
@@ -66,8 +70,10 @@ const DateSettingsRenderer: React.FC = () => {
           buttonStyle="solid"
           name="dateFrequency"
           options={DATE_FREQUENCY_OPTIONS}
-          defaultValue={DateFrequency.Daily}
+          defaultValue={DateFrequency.Weekly}
         />
+
+        {FrequencySettingsMap[values.dateFrequency as DateFrequency]}
       </div>
     ),
   };

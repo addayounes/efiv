@@ -13,13 +13,11 @@ export const CIRCULATION_DATE_OPTIONS = Object.values(CirculationDateType).map(
 );
 
 export enum DateFrequency {
-  Daily = "Daily",
   Weekly = "Weekly",
   Monthly = "Monthly",
 }
 
 export const FrequencyLabelMap: Record<DateFrequency, string> = {
-  [DateFrequency.Daily]: "Quotidien",
   [DateFrequency.Weekly]: "Hebdomadaire",
   [DateFrequency.Monthly]: "Mensuel",
 };

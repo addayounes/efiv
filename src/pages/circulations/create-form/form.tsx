@@ -6,6 +6,10 @@ import type {
   ParcoursDto,
   CreateCirculationDto,
 } from "@/types/dto/create-circulation";
+import {
+  DateFrequency,
+  CirculationDateType,
+} from "@/constants/circulation-date-types";
 import FormActions from "./actions";
 import toast from "react-hot-toast";
 import { dayjs } from "@/lib/dayjs";
@@ -18,7 +22,6 @@ import FormContentRenderer from "./content-renderer";
 import { useNavigate, useParams } from "react-router-dom";
 import { createCirculationService } from "@/services/circulations";
 import { useCirculationMapper } from "@/mappers/create-circulation";
-import { CirculationDateType } from "@/constants/circulation-date-types";
 import { CreateCirculationSchema } from "@/validation/create-circulation.validation";
 
 interface FormContentProps {}
@@ -166,6 +169,7 @@ export const defaultStop: ParcoursDto = {
 };
 
 const initialValues: CreateCirculationDto = {
+  dateFrequency: DateFrequency.Weekly,
   dateType: CirculationDateType.Single,
   parcours: [
     { ...defaultStop, descenteInterdite: true },
