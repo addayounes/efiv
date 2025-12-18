@@ -1,6 +1,10 @@
 import * as yup from "yup";
 import { CreateCirculationSteps } from "@/constants/create-form-steps";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
+import {
+  CirculationDateType,
+  DateFrequency,
+} from "@/constants/circulation-date-types";
 
 const parcoursItemSchema = yup.object().shape({
   station: yup.mixed().required("La gare est requise"),
@@ -36,6 +40,10 @@ const parcoursItemSchema = yup.object().shape({
 export const CreateCirculationSchema = yup
   .object<CreateCirculationDto>()
   .shape({
+    endDate: yup.string(),
+    startDate: yup.string(),
+    monthDays: yup.array().of(yup.number()),
+    weeklyDays: yup.array().of(yup.number()),
     date: yup.string().required("Veuillez choisir un type de date"),
     numeroCommercial: yup.string().required("Le numéro commercial est requis"),
     nomCommercial: yup.string(),
@@ -81,7 +89,9 @@ export const CreateCirculationSchema = yup
       }),
   });
 
-export const FieldsToValidateByStep: Record<string, string[]> = {
+export const getFieldsToValidateByStep = (
+  values: CreateCirculationDto
+): Record<string, string[]> => ({
   [CreateCirculationSteps.GENERAL]: [
     "numeroCommercial",
     "nomCommercial",
@@ -98,6 +108,15 @@ export const FieldsToValidateByStep: Record<string, string[]> = {
     "serviceDeCourse",
   ],
   [CreateCirculationSteps.ROUTE]: ["parcours"],
-  [CreateCirculationSteps.DATE]: ["date"],
+  [CreateCirculationSteps.DATE]:
+    values.dateType === CirculationDateType.Calendar
+      ? [
+          "endDate",
+          "startDate",
+          values.dateFrequency === DateFrequency.Monthly
+            ? "monthDays"
+            : "weeklyDays",
+        ]
+      : ["date"],
   [CreateCirculationSteps.SUMMARY]: [],
-};
+});

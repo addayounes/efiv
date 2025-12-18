@@ -67,3 +67,16 @@ export const getCouplableCirculationService = async (
   );
   return data;
 };
+
+export const getRecurringDatesService = async (params: {
+  startDate: string;
+  endDate: string;
+  dateFrequency: string;
+  weeklyDays?: number[];
+  monthDays?: number[];
+}): Promise<string[]> => {
+  const { data } = await api.get(`${SERVICE_BASE_URL}/recurringDates`, {
+    params,
+  });
+  return data;
+};

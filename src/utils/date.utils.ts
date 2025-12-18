@@ -1,3 +1,5 @@
+import { dayjs } from "@/lib/dayjs";
+
 export const minutesToDuration = (minutes: number) => {
   if (!minutes) minutes = 0;
   if (minutes < 60) return `${minutes} min`;
@@ -9,3 +11,12 @@ export const minutesToDuration = (minutes: number) => {
 
 export const roundToNearest = (value: number, nearest: number) =>
   Math.floor(value / nearest) * nearest;
+
+export function groupByMonth(dates: string[]) {
+  return dates.reduce<Record<string, string[]>>((acc, date) => {
+    const key = dayjs(date).format("YYYY-MM");
+    acc[key] = acc[key] || [];
+    acc[key].push(date);
+    return acc;
+  }, {});
+}

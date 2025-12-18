@@ -26,129 +26,6 @@ import { CreateCirculationSchema } from "@/validation/create-circulation.validat
 
 interface FormContentProps {}
 
-// @ts-ignore
-const sampleCirculation = {
-  dateType: "Single",
-  parcours: [
-    {
-      station: {
-        label: "Lyon Perrache",
-        value: "87722025",
-        key: "87722025",
-        title: "Lyon Perr.",
-      },
-      voieTransporteur: "A",
-      monteeInterdite: false,
-      descenteInterdite: true,
-      arrivee: {},
-      depart: {
-        horaire: dayjs("2025-10-12T11:08:00.000Z"),
-      },
-      informationsConjoncturelles: [],
-    },
-    {
-      station: {
-        label: "Bordeaux Saint-Jean",
-        value: "87581009",
-        key: "87581009",
-        title: "Bordeaux",
-      },
-      voieTransporteur: "C",
-      monteeInterdite: false,
-      descenteInterdite: false,
-      arrivee: {
-        horaire: dayjs("2025-10-12T12:04:00.000Z"),
-      },
-      depart: {
-        horaire: dayjs("2025-10-12T12:08:00.000Z"),
-      },
-      informationsConjoncturelles: [],
-    },
-    {
-      station: {
-        label: "Toulouse",
-        value: "87440347",
-        key: "87440347",
-        title: "Toulouse",
-      },
-      monteeInterdite: false,
-      descenteInterdite: false,
-      arrivee: {
-        horaire: dayjs("2025-10-12T14:35:00.000Z"),
-      },
-      depart: {
-        horaire: dayjs("2025-10-12T14:38:00.000Z"),
-      },
-      informationsConjoncturelles: [],
-    },
-    {
-      station: {
-        label: "Avignon TGV",
-        value: "87318964",
-        key: "87318964",
-        title: "Avignon TGV",
-      },
-      voieTransporteur: "12",
-      monteeInterdite: false,
-      descenteInterdite: false,
-      inversionComposition: false,
-      arrivee: {
-        horaire: dayjs("2025-10-12T16:19:00.000Z"),
-      },
-      depart: {
-        horaire: dayjs("2025-10-12T16:25:00.000Z"),
-      },
-      informationsConjoncturelles: [],
-    },
-    {
-      station: {
-        label: "Marseille Saint-Charles",
-        value: "87751008",
-        key: "87751008",
-        title: "Marseille",
-      },
-      monteeInterdite: true,
-      descenteInterdite: false,
-      arrivee: {
-        horaire: dayjs("2025-10-12T20:05:00.000Z"),
-      },
-      depart: {},
-      informationsConjoncturelles: [],
-    },
-  ],
-  informationsConjoncturelles: [
-    {
-      categorie: "PERTURBATION",
-      typeInformation: "GARE",
-      texte:
-        "Réutilisation d'un train - Le train a été mis à disposition tardivement à la suite du retard sur un trajet précédent.",
-      dateHeureDebutPublication: dayjs("2025-10-12T06:15:00.000Z"),
-      dateHeureFinPublication: dayjs("2025-10-14T15:30:00.000Z"),
-    },
-  ],
-  numeroCommercial: "6620",
-  nomCommercial: "",
-  marqueCommerciale: "TGV INOUI",
-  ligneCommerciale: "C17",
-  mode: "ferré",
-  sousMode: "train",
-  longueur: "court",
-  origine: {
-    label: "Lyon Perrache",
-    value: "87722025",
-    key: "87722025",
-    title: "Lyon Perr.",
-  },
-  destination: {
-    label: "Marseille Saint-Charles",
-    value: "87751008",
-    key: "87751008",
-    title: "Marseille",
-  },
-  serviceDeCourse: ["OCEVP", "OCENY", "OCEWF"],
-  date: dayjs("2025-10-14T22:00:00.000Z"),
-};
-
 export const defaultStop: ParcoursDto = {
   station: undefined,
   voieTransporteur: undefined,
@@ -202,7 +79,6 @@ const FormContent: React.FC<FormContentProps> = () => {
       withLoadingToast
       onSubmit={handleSubmitForm}
       initialValues={initialValues}
-      // initialValues={sampleCirculation as any}
       validationSchema={CreateCirculationSchema}
     >
       {() => {

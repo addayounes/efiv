@@ -3,13 +3,14 @@ import App from "./App.tsx";
 import { StrictMode } from "react";
 import { ConfigProvider } from "antd";
 import { store } from "./redux/store.ts";
+import franceLocale from "antd/locale/fr_FR";
 import { createRoot } from "react-dom/client";
 import { AntdTheme } from "./utils/antd-theme.ts";
 import { Provider as ReduxProvider } from "react-redux";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ConfigProvider theme={AntdTheme}>
+    <ConfigProvider theme={AntdTheme} locale={franceLocale}>
       <ReduxProvider store={store}>
         <App />
       </ReduxProvider>

@@ -12,7 +12,7 @@ import { useCirculationMapper } from "@/mappers/create-circulation";
 import { createDraftCirculationService } from "@/services/circulations";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 import { flattenErrors, buildNestedTouched } from "@/utils/formik-helpers";
-import { FieldsToValidateByStep } from "@/validation/create-circulation.validation";
+import { getFieldsToValidateByStep } from "@/validation/create-circulation.validation";
 
 interface FormActionsProps {}
 
@@ -53,7 +53,7 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
     const errors = await validateForm();
 
     const fieldsToValidate =
-      FieldsToValidateByStep[step as CreateCirculationSteps];
+      getFieldsToValidateByStep(values)[step as CreateCirculationSteps];
 
     const flattenedErrors = flattenErrors(errors);
 
