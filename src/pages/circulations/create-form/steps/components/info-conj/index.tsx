@@ -120,7 +120,6 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
                 title: "Contenu",
                 dataIndex: "texte",
                 key: "texte",
-                ellipsis: viewMode,
                 render(_v, _r, infoIndex) {
                   if (viewMode) return _v || "N/A";
 

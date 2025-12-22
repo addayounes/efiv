@@ -19,6 +19,8 @@ export interface ICirculation {
   destination: Destination;
   origine: Origine;
   marqueCommerciale: IdLabel;
+  ligneCommerciale: IdLabel;
+  nomCommercial: string;
   mode: string;
   numeroCommercial: string;
   parcours: Parcours;
@@ -28,9 +30,18 @@ export interface ICirculation {
   statut: string;
   transporteur: IdLabel;
   id: string;
+  videVoyageur?: boolean;
+  longueur?: string;
   publishStatus: EPublishStatus;
   chainageCourseSuivante?: ChainageCourseSuivante;
   compositions?: CompositionsList[];
+  informationsConjoncturelles?: InformationsConjoncturelle[];
+  speciale?: Speciale;
+}
+
+export interface Speciale {
+  courseSpeciale?: boolean;
+  libelleCourseSpeciale?: string;
 }
 
 export interface CompositionsList {
@@ -78,6 +89,7 @@ export interface Arret {
   depart: ArriveeDepart;
   descenteInterdite: boolean;
   monteeInterdite: boolean;
+  inversionComposition: boolean;
 }
 
 export interface ArriveeDepart {

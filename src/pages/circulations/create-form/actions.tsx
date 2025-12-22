@@ -7,8 +7,8 @@ import { Button } from "antd";
 import toast from "react-hot-toast";
 import { useFormikContext } from "formik";
 import { __routes__ } from "@/constants/routes";
-import { useNavigate, useParams } from "react-router-dom";
 import { useCirculationMapper } from "@/mappers/create-circulation";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { createDraftCirculationService } from "@/services/circulations";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 import { flattenErrors, buildNestedTouched } from "@/utils/formik-helpers";
@@ -19,6 +19,7 @@ interface FormActionsProps {}
 const FormActions: React.FC<FormActionsProps> = ({}) => {
   const { step } = useParams();
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { mapCreateCirculationToDto } = useCirculationMapper();
   const { validateForm, setTouched, setSubmitting, values, isSubmitting } =
     useFormikContext<CreateCirculationDto>();
@@ -32,7 +33,9 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
   const onPrevious = () => {
     const prevStep = getPreviousStep(step as CreateCirculationSteps);
     if (!prevStep) return;
-    navigate(__routes__.Circulations.Create.replace(":step", prevStep));
+    navigate(__routes__.Circulations.Create.replace(":step", prevStep), {
+      state,
+    });
   };
 
   const onCancel = () => {
@@ -46,7 +49,9 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
 
     const nextStep = getNextStep(step as CreateCirculationSteps);
     if (!nextStep) return;
-    navigate(__routes__.Circulations.Create.replace(":step", nextStep));
+    navigate(__routes__.Circulations.Create.replace(":step", nextStep), {
+      state,
+    });
   };
 
   const validateStep = async () => {

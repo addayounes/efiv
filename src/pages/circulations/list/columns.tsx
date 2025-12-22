@@ -1,33 +1,45 @@
 import {
+  Eye,
+  Plus,
+  Trash,
+  Pencil,
+  History,
+  EllipsisVertical,
+} from "lucide-react";
+import {
   ModeLabelMap,
   CirculationMode,
   SubModeLabelMap,
   CirculationSubMode,
 } from "@/constants/mode-sub-mode";
-import { dayjs } from "@/lib/dayjs";
-import { Dropdown, Tag } from "antd";
-import type { ColumnType } from "antd/es/table";
-import type { ItemType } from "antd/es/menu/interface";
-import { DATE_FORMAT_NO_TIME } from "@/constants/date-format";
-import type { ICirculation } from "@/types/entity/circulation";
-import { Trash, Pencil, History, Eye, EllipsisVertical } from "lucide-react";
 import {
   PublishStatusLabelMap,
   PublishStatusTagColorMap,
 } from "@/constants/circulation-publish-status";
+import { dayjs } from "@/lib/dayjs";
+import { Dropdown, Tag } from "antd";
+import { useNavigate } from "react-router-dom";
+import type { ColumnType } from "antd/es/table";
+import { __routes__ } from "@/constants/routes";
+import type { ItemType } from "antd/es/menu/interface";
+import { DATE_FORMAT_NO_TIME } from "@/constants/date-format";
+import type { ICirculation } from "@/types/entity/circulation";
 
 export enum CirculationListActions {
   VIEW = "view",
   EDIT = "edit",
   DELETE = "delete",
   HISTORY = "history",
+  CREATE_VARIANT = "create_variant",
 }
 
 export const useCirculationsListColumns = (options?: {
   actions: CirculationListActions[];
 }): ColumnType<ICirculation>[] => {
+  const navigate = useNavigate();
+
   // TODO: handle click
-  const actionsMenu: ItemType[] = [
+  const actionsMenu = (record: ICirculation): ItemType[] => [
     {
       key: CirculationListActions.VIEW,
       label: (
@@ -45,6 +57,20 @@ export const useCirculationsListColumns = (options?: {
           Modifier
         </span>
       ),
+    },
+    {
+      key: CirculationListActions.CREATE_VARIANT,
+      label: (
+        <span className="flex items-center gap-2">
+          <Plus className="text-gray-600" size={16} />
+          Créer une variation
+        </span>
+      ),
+      onClick: () => {
+        navigate(__routes__.Circulations.Create, {
+          state: { ...record },
+        });
+      },
     },
     {
       key: CirculationListActions.HISTORY,
@@ -140,14 +166,14 @@ export const useCirculationsListColumns = (options?: {
       title: "Actions",
       dataIndex: "actions",
       key: "actions",
-      render(_) {
+      render(_, record) {
         return (
           <div className="flex items-center gap-4">
             <Dropdown
               trigger={["click"]}
               placement="bottomRight"
               menu={{
-                items: actionsMenu.filter((a) =>
+                items: actionsMenu(record).filter((a) =>
                   options?.actions.includes(a!.key as CirculationListActions)
                 ),
               }}

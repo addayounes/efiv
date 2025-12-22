@@ -12,17 +12,17 @@ import {
 } from "@/constants/circulation-date-types";
 import FormActions from "./actions";
 import toast from "react-hot-toast";
-import { dayjs } from "@/lib/dayjs";
-import type { StepProps } from "antd";
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import CirculationFormStepper from "./stepper";
 import { __routes__ } from "@/constants/routes";
 import FormikForm from "@/components/formik/form";
 import FormContentRenderer from "./content-renderer";
-import { useNavigate, useParams } from "react-router-dom";
+import type { ICirculation } from "@/types/entity/circulation";
 import { createCirculationService } from "@/services/circulations";
 import { useCirculationMapper } from "@/mappers/create-circulation";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CreateCirculationSchema } from "@/validation/create-circulation.validation";
+import { mapCirculationToCreateCirculationDto } from "@/mappers/circulation-to-create-dto";
 
 interface FormContentProps {}
 
@@ -45,7 +45,7 @@ export const defaultStop: ParcoursDto = {
   informationsConjoncturelles: [],
 };
 
-const initialValues: CreateCirculationDto = {
+const defaultInitialValues: CreateCirculationDto = {
   dateFrequency: DateFrequency.Weekly,
   dateType: CirculationDateType.Single,
   parcours: [
@@ -58,9 +58,13 @@ const initialValues: CreateCirculationDto = {
 const FormContent: React.FC<FormContentProps> = () => {
   const { step } = useParams();
   const navigate = useNavigate();
+  const { state } = useLocation();
   const { mapCreateCirculationToDto } = useCirculationMapper();
 
-  const [steps] = useState<StepProps[]>(CREATE_CIRCULATION_FORM_STEPS);
+  const initialValues = useMemo<CreateCirculationDto>(() => {
+    if (!state?.id) return defaultInitialValues;
+    return mapCirculationToCreateCirculationDto(state as ICirculation);
+  }, [state]);
 
   const handleSubmitForm = async (data: CreateCirculationDto) => {
     const mappedData = await mapCreateCirculationToDto(data);
@@ -84,7 +88,7 @@ const FormContent: React.FC<FormContentProps> = () => {
       {() => {
         return (
           <main className="px-6">
-            <CirculationFormStepper steps={steps} />
+            <CirculationFormStepper steps={CREATE_CIRCULATION_FORM_STEPS} />
             <div className="flex flex-col shadow border border-gray-200  rounded h-[calc(100vh-174px)] bg-white">
               <div className="flex-1 overflow-y-auto">
                 <FormContentRenderer step={step as CreateCirculationSteps} />

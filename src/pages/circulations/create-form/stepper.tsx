@@ -6,7 +6,7 @@ import {
 import { useEffect, useMemo } from "react";
 import { Steps, type StepProps } from "antd";
 import { __routes__ } from "@/constants/routes";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 interface CirculationFormStepperProps {
   steps: StepProps[];
@@ -17,6 +17,7 @@ const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
 }) => {
   const { step } = useParams();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const currentStep = useMemo(
     () => getStepIndex(step as CreateCirculationSteps),
@@ -31,7 +32,8 @@ const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
       __routes__.Circulations.Create.replace(
         ":step",
         CreateCirculationSteps.GENERAL
-      )
+      ),
+      { state }
     );
   }, [step]);
 

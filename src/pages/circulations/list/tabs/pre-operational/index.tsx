@@ -29,6 +29,7 @@ const PreOperationalCirculations: React.FC<
       CirculationListActions.VIEW,
       CirculationListActions.EDIT,
       CirculationListActions.HISTORY,
+      CirculationListActions.CREATE_VARIANT,
     ],
   });
 
