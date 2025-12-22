@@ -13,7 +13,8 @@ interface StationCardProps {
 }
 
 const StationCard: React.FC<StationCardProps> = ({ index }) => {
-  const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
+  const { values, setFieldValue, errors } =
+    useFormikContext<CreateCirculationDto>();
 
   const isOrigin = index === 0;
   const currentStation = values.parcours?.[index];
@@ -41,8 +42,13 @@ const StationCard: React.FC<StationCardProps> = ({ index }) => {
   return (
     <div className="flex gap-4">
       <div className="flex-1">
-        <Collapse>
+        <Collapse defaultActiveKey="0">
           <Collapse.Panel
+            style={{
+              border: errors.parcours?.[index]
+                ? "1px solid #fb2c36"
+                : undefined,
+            }}
             key={index}
             header={
               <div className="flex items-center justify-between cursor-pointer">
