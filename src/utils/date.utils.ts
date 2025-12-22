@@ -10,7 +10,7 @@ export const minutesToDuration = (minutes: number) => {
 };
 
 export const roundToNearest = (value: number, nearest: number) =>
-  Math.floor(value / nearest) * nearest;
+  Math.ceil(value / nearest) * nearest;
 
 export function groupByMonth(dates: string[]) {
   return dates.reduce<Record<string, string[]>>((acc, date) => {
