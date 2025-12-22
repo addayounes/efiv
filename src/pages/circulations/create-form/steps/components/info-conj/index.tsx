@@ -126,7 +126,7 @@ const InfoConjConfig: React.FC<{ viewMode?: boolean }> = ({ viewMode }) => {
 
                   return (
                     <Field
-                      rows={1}
+                      rows={3}
                       as={TextArea}
                       placeholder="Texte"
                       className="min-w-[100px]"

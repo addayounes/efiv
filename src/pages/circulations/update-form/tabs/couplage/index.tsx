@@ -10,6 +10,8 @@ import type { ICirculation, PointDeParcour } from "@/types/entity/circulation";
 
 interface CouplageTabProps {}
 
+// TODO: handle set selected train if already coupled
+
 const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   const [loading, setLoading] = useState(false);
   const [trains, setTrains] = useState<ICirculation[]>([]);
@@ -33,8 +35,8 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
     return { currentTrain: arr1, trainToCouple: arr2, stopsLineData: merged };
   }, [values?.parcours?.pointDeParcours, selectedTrain]);
 
-  const handleApplyChanges = () => {
-    if (!selectedStations?.length) return;
+  const handleApplyChanges = (newSelectedStations: string[]) => {
+    if (!newSelectedStations?.length) return;
 
     const currentParcours = [...(values.parcours?.pointDeParcours || [])];
 
@@ -114,13 +116,15 @@ const UpdateCouplageTab: React.FC<CouplageTabProps> = () => {
   };
 
   const onChangeStopSelection = (codeUIC: string, checked: boolean) => {
-    if (checked) setSelectedStations((prev) => [...prev, codeUIC]);
-    else setSelectedStations((prev) => prev.filter((x) => x !== codeUIC));
-  };
+    const newSelectedStations = checked
+      ? [...selectedStations, codeUIC]
+      : selectedStations.filter((x) => x !== codeUIC);
 
-  useEffect(() => {
-    handleApplyChanges();
-  }, [selectedStations]);
+    setSelectedStations(newSelectedStations);
+    handleApplyChanges(newSelectedStations);
+    console.log("updated");
+  };
+  console.log("in body");
 
   useEffect(() => {
     const fetchTrains = async () => {

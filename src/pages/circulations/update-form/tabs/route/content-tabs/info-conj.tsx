@@ -115,7 +115,7 @@ const UpdateInfoConjoncturelle: React.FC<UpdateInfoConjoncturelleProps> = ({
               render(_v, _r, infoIndex) {
                 return (
                   <Field
-                    rows={1}
+                    rows={3}
                     size="medium"
                     as={TextArea}
                     placeholder="Texte"
