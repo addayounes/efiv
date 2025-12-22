@@ -134,8 +134,11 @@ export interface MotifVoyageur {
   libelle: string;
 }
 
-// TODO
-export interface ZoneEmbarquement {}
+export interface ZoneEmbarquement {
+  voieVoyageur: string;
+  dateAffichage: string;
+  statutVoie: string;
+}
 
 export interface Partenaire {
   id: string;

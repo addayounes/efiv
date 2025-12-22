@@ -75,8 +75,15 @@ export const getRecurringDatesService = async (params: {
   weeklyDays?: number[];
   monthDays?: number[];
 }): Promise<string[]> => {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (!value) return;
+    if (Array.isArray(value))
+      value.forEach((item) => query.append(key, item.toString()));
+    else query.append(key, value);
+  });
   const { data } = await api.get(`${SERVICE_BASE_URL}/recurringDates`, {
-    params,
+    params: query,
   });
   return data;
 };

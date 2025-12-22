@@ -156,7 +156,7 @@ const GeneratedDaysList: React.FC = () => {
         const result = await getRecurringDatesService({
           startDate: dayjs(values.startDate).format("YYYY-MM-DD"),
           endDate: dayjs(values.endDate).format("YYYY-MM-DD"),
-          dateFrequency: values.dateFrequency,
+          dateFrequency: values.dateFrequency?.toLowerCase(),
           weeklyDays: values.weeklyDays,
           monthDays: values.monthDays,
         });
