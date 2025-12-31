@@ -44,7 +44,7 @@ export const CreateCirculationSchema = yup
     startDate: yup.string(),
     monthDays: yup.array().of(yup.number()),
     weeklyDays: yup.array().of(yup.number()),
-    date: yup.string().required("Veuillez choisir un type de date"),
+    // date: yup.string().required("Veuillez choisir un type de date"),
     numeroCommercial: yup.string().required("Le numéro commercial est requis"),
     nomCommercial: yup.string(),
     marqueCommerciale: yup.string(),

@@ -5,6 +5,7 @@ import type {
 } from "@/types/dto/create-circulation";
 import { dayjs } from "@/lib/dayjs";
 import { CirculationStatus } from "@/constants/circulation-status";
+import { CirculationDateType } from "@/constants/circulation-date-types";
 
 export const useCirculationMapper = () => {
   const mapStopComposition = (
@@ -32,9 +33,23 @@ export const useCirculationMapper = () => {
   const mapCreateCirculationToDto = async (
     data: CreateCirculationDto
   ): Promise<CreateCirculationApiPayload> => {
+    const planningData =
+      data.dateType == CirculationDateType.Calendar
+        ? {
+            calendar: {
+              endDate: dayjs(data.endDate).format(),
+              startDate: dayjs(data.startDate).format(),
+              monthDays: data.monthDays ?? [],
+              weeklyDays: data.weeklyDays ?? [],
+              // TODO: update this to dateFrequency
+              dateDateFrequency: data.dateFrequency?.toLowerCase(),
+            },
+          }
+        : { date: dayjs(data.date).format().split("T")[0] };
+
     return {
       id: "-",
-      date: dayjs(data.date).toISOString().split("T")[0],
+      ...planningData,
       destination: {
         codeUIC: data.destination?.value!,
         libelle12: data.destination?.title!,
@@ -64,7 +79,7 @@ export const useCirculationMapper = () => {
       partenaire: {
         id: "EFIV",
         nom: "EFIV",
-        dateEnvoi: new Date().toISOString(),
+        dateEnvoi: dayjs().toISOString(),
       },
       serviceDeCourse: (data.serviceDeCourse ?? []).map((service) => ({
         id: service,
@@ -84,18 +99,18 @@ export const useCirculationMapper = () => {
       informationsConjoncturelles: data.informationsConjoncturelles.map(
         (info) => ({
           ...info,
-          dateHeureDebutPublication: new Date(
+          dateHeureDebutPublication: dayjs(
             info.dateHeureDebutPublication
           ).toISOString(),
           dateHeureFinPublication: info?.dateHeureFinPublication
-            ? new Date(info?.dateHeureFinPublication).toISOString()
+            ? dayjs(info?.dateHeureFinPublication).toISOString()
             : undefined,
         })
       ),
       videVoyageur: data.videVoyageur,
       parcours: {
         pointDeParcours: (data.parcours ?? []).map((point, index) => {
-          const arrivalDateTime = new Date(data.date!);
+          const arrivalDateTime = data.date ? new Date(data.date) : new Date();
           if (point.arrivee?.horaire) {
             arrivalDateTime.setHours(
               new Date(point.arrivee?.horaire).getHours()
@@ -104,7 +119,9 @@ export const useCirculationMapper = () => {
               new Date(point.arrivee?.horaire).getMinutes()
             );
           }
-          const departureDateTime = new Date(data.date!);
+          const departureDateTime = data.date
+            ? new Date(data.date)
+            : new Date();
           if (point.depart?.horaire) {
             departureDateTime.setHours(
               new Date(point.depart?.horaire).getHours()

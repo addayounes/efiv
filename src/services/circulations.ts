@@ -1,7 +1,7 @@
 import { api } from "@/lib/axios";
-import type { IPaginatedResponse, IPaginationParams } from "@/types/pagination";
 import type { ICirculation } from "@/types/entity/circulation";
 import type { IFetchDraftParams } from "@/types/dto/fetch-draft-params";
+import type { IPaginatedResponse, IPaginationParams } from "@/types/pagination";
 import type { CreateCirculationApiPayload } from "@/types/dto/create-circulation";
 
 const SERVICE_BASE_URL = "/api/Course";
@@ -9,7 +9,7 @@ const SERVICE_BASE_URL = "/api/Course";
 export const createCirculationService = async (
   body: CreateCirculationApiPayload
 ) => {
-  const { data } = await api.post(`${SERVICE_BASE_URL}/postCourse`, body);
+  const { data } = await api.post(`${SERVICE_BASE_URL}/createCourse`, body);
   return data;
 };
 

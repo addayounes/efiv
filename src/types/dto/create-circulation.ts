@@ -65,7 +65,7 @@ export interface CreateCirculationAddOnsDto {
 
 export interface CreateCirculationApiPayload {
   id: string;
-  date: string;
+  date?: string;
   destination: Desserte;
   destinationInitiale?: string;
   ligneCommerciale?: IdLabel;
@@ -86,6 +86,7 @@ export interface CreateCirculationApiPayload {
   informationsConjoncturelles?: InformationsConjoncturelle[];
   videVoyageur?: boolean;
   chainageCourseSuivante?: ChainageCourseSuivante;
+  calendar?: CreateCirculationAddOnsDto;
 }
 
 export interface Parcours {

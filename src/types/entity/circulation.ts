@@ -87,9 +87,9 @@ export interface PointDeParcour {
 export interface Arret {
   arrivee: ArriveeDepart;
   depart: ArriveeDepart;
-  descenteInterdite: boolean;
-  monteeInterdite: boolean;
-  inversionComposition: boolean;
+  descenteInterdite?: boolean;
+  monteeInterdite?: boolean;
+  inversionComposition?: boolean;
 }
 
 export interface ArriveeDepart {
@@ -147,9 +147,9 @@ export interface MotifVoyageur {
 }
 
 export interface ZoneEmbarquement {
-  voieVoyageur: string;
-  dateAffichage: string;
-  statutVoie: string;
+  voieVoyageur?: string;
+  dateAffichage?: string;
+  statutVoie?: string;
 }
 
 export interface Partenaire {
