@@ -16,12 +16,6 @@ interface StepsGeneralTabProps {
 }
 
 function _findNextNonDeleted(stops: ParcoursDto[], start: number) {
-  console.log(
-    stops.map((s) => ({
-      codeUIC: s.station?.value!,
-      isDeleted: false,
-    }))
-  );
   return findNextNonDeleted(
     stops.map((s) => ({
       codeUIC: s.station?.value!,
