@@ -8,6 +8,7 @@ import CreateCirculationForm from "@/pages/circulations/create-form";
 import UpdateOperationlCirculation from "@/pages/circulations/update-form";
 import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
 import CompositionForm from "@/pages/config/sections/composition/composition/form";
+import MotifForm from "@/pages/config/sections/motif/form";
 
 export interface RouteType {
   path: string;
@@ -57,6 +58,14 @@ export const privateRoutes: RouteType[] = [
       ConfigSidebarElementsNames.Composition
     ),
     element: <CompositionForm />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Config.SubSections.Create.replace(
+      ":section",
+      ConfigSidebarElementsNames.MotifRetard
+    ),
+    element: <MotifForm />,
     withLayout: true,
   },
 ];

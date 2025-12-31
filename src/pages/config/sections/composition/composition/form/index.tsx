@@ -61,6 +61,10 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
             <div className="max-w-7xl mx-auto">
               <PageHeader
                 title="Créer une composition"
+                backTo={__routes__.Config.SubSections.Main.replace(
+                  ":section",
+                  ConfigSidebarElementsNames.Composition
+                )}
                 rightComponent={
                   <Button htmlType="submit" type="primary">
                     Enregistrer
