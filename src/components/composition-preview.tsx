@@ -12,6 +12,7 @@ interface CompositionPreviewProps {
   size?: CompositionPreviewSize;
   showDetails?: boolean;
   composition: Composition;
+  renderTrainExtra?: (mr: MaterielRoulant, mrIndex: number) => React.ReactNode;
 }
 
 const SIZE_CLASSES = {
@@ -35,6 +36,7 @@ const SIZE_CLASSES = {
 const CompositionPreview: React.FC<CompositionPreviewProps> = ({
   composition,
   size = "small",
+  renderTrainExtra,
   showDetails = false,
 }) => {
   return (
@@ -46,12 +48,15 @@ const CompositionPreview: React.FC<CompositionPreviewProps> = ({
             size={SIZE_CLASSES[size].arrow}
           />
           {composition.materielRoulant?.map((mr, index) => (
-            <CompositionTrain
-              mr={mr}
-              size={size}
-              key={index}
-              showDetails={showDetails}
-            />
+            <div className="flex flex-col items-center">
+              <CompositionTrain
+                mr={mr}
+                size={size}
+                key={index}
+                showDetails={showDetails}
+              />
+              {renderTrainExtra && renderTrainExtra(mr, index)}
+            </div>
           ))}
         </div>
       ) : (

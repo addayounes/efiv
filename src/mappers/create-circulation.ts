@@ -13,14 +13,30 @@ export const useCirculationMapper = () => {
     previousStop: ParcoursDto | null
   ) => {
     const departureComposition = {
-      materielRoulant: currentStop?.composition?.title?.materielRoulant!,
+      materielRoulant: (
+        currentStop?.composition?.title?.materielRoulant ?? []
+      ).map((mr) => ({
+        ...mr,
+        ouvertAuxVoyageurs:
+          typeof mr.ouvertAuxVoyageurs === "boolean"
+            ? mr.ouvertAuxVoyageurs
+            : true,
+      })),
     };
 
     const arrivalComposition = previousStop
       ? currentStop?.composition?.value === previousStop?.composition?.value
         ? departureComposition
         : {
-            materielRoulant: previousStop?.composition?.title?.materielRoulant!,
+            materielRoulant: (
+              previousStop?.composition?.title?.materielRoulant ?? []
+            ).map((mr) => ({
+              ...mr,
+              ouvertAuxVoyageurs:
+                typeof mr.ouvertAuxVoyageurs === "boolean"
+                  ? mr.ouvertAuxVoyageurs
+                  : true,
+            })),
           }
       : departureComposition;
 

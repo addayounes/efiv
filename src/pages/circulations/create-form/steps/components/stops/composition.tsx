@@ -6,6 +6,7 @@ import { Button } from "antd";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import Select from "@/components/formik/select";
+import Switch from "@/components/formik/switch";
 import { Field, useFormikContext } from "formik";
 import CompositionPreview from "@/components/composition-preview";
 import { getAllCompositionsService } from "@/services/composition";
@@ -88,9 +89,30 @@ const CompositionConfigContent: React.FC<CompositionConfigContentProps> = ({
       <div className="pt-8 overflow-x-auto w-[calc(100vw-1000px)] mx-auto">
         {selectedComposition ? (
           <CompositionPreview
-            size="medium"
             showDetails
+            size="medium"
             composition={selectedComposition}
+            renderTrainExtra={(_mr, mrIndex) => {
+              const isOpenToPassengersValue =
+                currentStop?.composition?.title?.materielRoulant?.[mrIndex]
+                  ?.ouvertAuxVoyageurs;
+
+              return (
+                <div>
+                  <Field
+                    inline
+                    as={Switch}
+                    label="Ouvert aux voyageurs"
+                    value={
+                      typeof isOpenToPassengersValue === "boolean"
+                        ? isOpenToPassengersValue
+                        : true
+                    }
+                    name={`parcours.${index}.composition.title.materielRoulant.${mrIndex}.ouvertAuxVoyageurs`}
+                  />
+                </div>
+              );
+            }}
           />
         ) : (
           <p className="flex items-center justify-center text-gray-500">
