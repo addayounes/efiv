@@ -40,11 +40,49 @@ const parcoursItemSchema = yup.object().shape({
 export const CreateCirculationSchema = yup
   .object<CreateCirculationDto>()
   .shape({
-    endDate: yup.string(),
-    startDate: yup.string(),
-    monthDays: yup.array().of(yup.number()),
-    weeklyDays: yup.array().of(yup.number()),
-    // date: yup.string().required("Veuillez choisir un type de date"),
+    endDate: yup.string().when("dateType", {
+      is: (val: any) => val == CirculationDateType.Calendar,
+      then: (s) => s.required("Veuillez choisir la date de fin"),
+      otherwise: (s) => s,
+    }),
+    startDate: yup.string().when("dateType", {
+      is: (val: any) => val == CirculationDateType.Calendar,
+      then: (s) => s.required("Veuillez choisir la date de début"),
+      otherwise: (s) => s,
+    }),
+    monthDays: yup
+      .array()
+      .of(yup.number())
+      .when("dateType", {
+        is: (val: any) => {
+          return val == CirculationDateType.Calendar;
+        },
+        then: (s) =>
+          s
+            .required("Veuillez sélectionner au moins un jour du mois")
+            .min(1, "Veuillez sélectionner au moins un jour du mois"),
+        otherwise: (s) => s,
+      }),
+    weeklyDays: yup
+      .array()
+      .of(yup.number())
+      .when("dateType", {
+        is: (val: any) => {
+          return val == CirculationDateType.Calendar;
+        },
+        then: (s) =>
+          s
+            .required("Veuillez sélectionner au moins un jour de la semaine")
+            .min(1, "Veuillez sélectionner au moins un jour de la semaine"),
+        otherwise: (s) => s,
+      }),
+    date: yup.string().when("dateType", {
+      is: (val: any) => {
+        return val == CirculationDateType.Single;
+      },
+      then: (s) => s.required("Veuillez choisir la date de la circulation"),
+      otherwise: (s) => s,
+    }),
     numeroCommercial: yup.string().required("Le numéro commercial est requis"),
     nomCommercial: yup.string(),
     marqueCommerciale: yup.string(),

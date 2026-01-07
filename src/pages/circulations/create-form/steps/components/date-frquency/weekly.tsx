@@ -3,10 +3,9 @@ import { useFormikContext } from "formik";
 import { WEEKDAYS } from "@/constants/days-of-week";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
-interface WeeklyDateFrequencyProps {}
-
-const WeeklyDateFrequency: React.FC<WeeklyDateFrequencyProps> = ({}) => {
-  const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
+const WeeklyDateFrequency: React.FC = () => {
+  const { values, errors, setFieldValue } =
+    useFormikContext<CreateCirculationDto>();
 
   const toggleDay = (dayValue: number) => {
     const currentDays = values.weeklyDays ?? [];
@@ -44,6 +43,10 @@ const WeeklyDateFrequency: React.FC<WeeklyDateFrequencyProps> = ({}) => {
           );
         })}
       </div>
+
+      {errors.weeklyDays && (
+        <div className="text-sm text-red-600 mt-1">{errors.weeklyDays}</div>
+      )}
     </div>
   );
 };

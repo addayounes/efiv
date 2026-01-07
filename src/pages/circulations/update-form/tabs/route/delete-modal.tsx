@@ -44,7 +44,7 @@ const DeleteStopModal: React.FC<DeleteStopModalProps> = ({
       {
         statut: PointDeParcourStatut.SUPPRIME,
         motifTransporteur: {
-          id: motif,
+          code: motif,
           libelle: motif,
         },
       },

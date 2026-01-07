@@ -3,7 +3,7 @@ import {
   type ICirculation,
 } from "@/types/entity/circulation";
 import {
-  createCirculationService,
+  updateCirculationService,
   fetchCirculationByIdService,
 } from "@/services/circulations";
 import toast from "react-hot-toast";
@@ -31,7 +31,7 @@ const UpdateOperationlCirculation: React.FC<
   );
 
   const handleSubmitForm = async (data: ICirculation) => {
-    const result = await createCirculationService(data as any);
+    const result = await updateCirculationService(data as any);
 
     if (!result)
       throw new Error("Erreur lors de la mise à jour de la circulation.");

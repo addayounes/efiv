@@ -60,7 +60,11 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
     const fieldsToValidate =
       getFieldsToValidateByStep(values)[step as CreateCirculationSteps];
 
+    console.log(fieldsToValidate);
+
     const flattenedErrors = flattenErrors(errors);
+
+    console.log(flattenedErrors);
 
     const stepErrors = flattenedErrors.filter((errPath) =>
       fieldsToValidate.some((field) => errPath.startsWith(field))

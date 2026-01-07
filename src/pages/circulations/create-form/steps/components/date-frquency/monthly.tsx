@@ -2,10 +2,9 @@ import { cn } from "@/utils/cn";
 import { useFormikContext } from "formik";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
-interface MonthlyDateFrequencyProps {}
-
-const MonthlyDateFrequency: React.FC<MonthlyDateFrequencyProps> = ({}) => {
-  const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
+const MonthlyDateFrequency: React.FC = () => {
+  const { values, errors, setFieldValue } =
+    useFormikContext<CreateCirculationDto>();
 
   const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
 
@@ -47,6 +46,10 @@ const MonthlyDateFrequency: React.FC<MonthlyDateFrequencyProps> = ({}) => {
           );
         })}
       </div>
+
+      {errors.monthDays && (
+        <div className="text-sm text-red-600 mt-1">{errors.monthDays}</div>
+      )}
     </div>
   );
 };

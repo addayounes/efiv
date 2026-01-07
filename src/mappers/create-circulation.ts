@@ -53,12 +53,11 @@ export const useCirculationMapper = () => {
       data.dateType == CirculationDateType.Calendar
         ? {
             calendar: {
-              endDate: dayjs(data.endDate).format(),
-              startDate: dayjs(data.startDate).format(),
               monthDays: data.monthDays ?? [],
               weeklyDays: data.weeklyDays ?? [],
-              // TODO: update this to dateFrequency
-              dateDateFrequency: data.dateFrequency?.toLowerCase(),
+              dateFrequency: data.dateFrequency?.toLowerCase(),
+              endDate: dayjs(data.endDate).format().split("T")[0],
+              startDate: dayjs(data.startDate).format().split("T")[0],
             },
           }
         : { date: dayjs(data.date).format().split("T")[0] };
