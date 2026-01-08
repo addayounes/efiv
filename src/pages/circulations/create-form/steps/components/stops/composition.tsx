@@ -66,7 +66,7 @@ const CompositionConfigContent: React.FC<CompositionConfigContentProps> = ({
           allowClear
           as={Select}
           labelInValue
-          size="medium"
+          size="middle"
           loading={loading}
           label="Composition"
           className="min-w-[360px]"

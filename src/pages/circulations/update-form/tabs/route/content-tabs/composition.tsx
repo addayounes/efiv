@@ -1,12 +1,15 @@
-import { Button } from "antd";
 import { cn } from "@/utils/cn";
 import toast from "react-hot-toast";
+import { Button, Select } from "antd";
+import { useEffect, useState } from "react";
 import Switch from "@/components/formik/switch";
 import { Field, useFormikContext } from "formik";
 import { ArrowLeft, Trash2 } from "lucide-react";
 import type { ICirculation } from "@/types/entity/circulation";
 import { CompositionCar } from "@/components/composition-preview";
+import { getAllCompositionsService } from "@/services/composition";
 import NoPassengersIcon from "@/components/icons/no-passenger-icon";
+import type { DbComposition } from "@/types/dto/create-circulation";
 
 interface UpdateContentCompositionTabProps {
   index: number;
@@ -15,7 +18,10 @@ interface UpdateContentCompositionTabProps {
 const UpdateContentCompositionTab: React.FC<
   UpdateContentCompositionTabProps
 > = ({ index }) => {
+  const [loading, setLoading] = useState(false);
   const { values, setFieldValue } = useFormikContext<ICirculation>();
+  const [compositions, setCompositions] = useState<DbComposition[]>([]);
+  const [selectedComposition, setSelectedComposition] = useState();
 
   const compositionPlace =
     index === values.parcours.pointDeParcours.length - 1 ? "arrivee" : "depart";
@@ -24,15 +30,24 @@ const UpdateContentCompositionTab: React.FC<
     values.parcours.pointDeParcours?.[index]?.arret?.[compositionPlace]
       ?.composition;
 
-  // const stopComposition =
-  //   values.parcours.pointDeParcours?.[index]?.arret?.depart
-  //     ?.referenceIdComposition;
+  const compositionsOptions = compositions.map((composition) => ({
+    label: composition.name,
+    value: composition._id,
+    title: composition,
+  }));
 
-  //   const selectedComposition = stopComposition?.length
-  //     ? (values.compositions ?? []).find(
-  //         (c) => c.generatedId === stopComposition
-  //       )?.composition!
-  //     : null;
+  const onSelectComposition = (value: any, option: any) => {
+    setSelectedComposition(value);
+
+    const materielRoulant = (option?.title?.materielRoulant || []).map(
+      (mr: any) => ({ ...mr, ouvertAuxVoyageurs: true })
+    );
+
+    setFieldValue(
+      `parcours.pointDeParcours.${index}.arret.${compositionPlace}.composition.materielRoulant`,
+      materielRoulant
+    );
+  };
 
   const handleApplyToFollowingStops = () => {
     const updatedParcours = [...values.parcours.pointDeParcours].map(
@@ -95,6 +110,22 @@ const UpdateContentCompositionTab: React.FC<
     );
   };
 
+  useEffect(() => {
+    const fetchCompositions = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllCompositionsService();
+        setCompositions((data ?? []) as DbComposition[]);
+      } catch (error) {
+        toast.error("Erreur lors du chargement des compositions");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompositions();
+  }, []);
+
   return (
     <div className="space-y-4">
       <div className="flex items-end justify-between">
@@ -115,9 +146,19 @@ const UpdateContentCompositionTab: React.FC<
         </Button>
       </div>
 
+      <Select
+        size="middle"
+        loading={loading}
+        className="min-w-[360px]"
+        value={selectedComposition}
+        onSelect={onSelectComposition}
+        options={compositionsOptions as any[]}
+        placeholder="Selectionner une composition"
+      />
+
       <div className="py-16 px-10 overflow-x-auto w-[calc(100vw-650px)] mx-auto">
-        {stopComposition ? (
-          stopComposition.materielRoulant.length ? (
+        {stopComposition?.materielRoulant ? (
+          stopComposition.materielRoulant?.length ? (
             <div className="flex gap-4 items-center">
               <div>
                 <ArrowLeft size={30} className="text-primary -translate-y-2" />

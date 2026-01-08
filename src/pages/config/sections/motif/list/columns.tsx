@@ -27,35 +27,35 @@ export const useMotifRetardColumns = (): ColumnType<IMotifRetard>[] => {
         return <span className="font-medium">{record.externe}</span>;
       },
     },
-    {
-      width: 80,
-      align: "right",
-      key: "actions",
-      title: "Actions",
-      dataIndex: "actions",
-      render(_, record) {
-        return (
-          <div className="flex justify-end px-4">
-            <Popconfirm
-              title={<>Voulez-vous vraiment supprimer ce motif ?</>}
-              okText="Oui"
-              cancelText="Non"
-              placement="left"
-              okButtonProps={{ danger: true }}
-              onConfirm={() => onDelete(record)}
-            >
-              <Tooltip title="Supprimer">
-                <Button type="text" className="-my-2">
-                  <Trash2
-                    className="-mx-1 cursor-pointer text-red-500"
-                    size={16}
-                  />
-                </Button>
-              </Tooltip>
-            </Popconfirm>{" "}
-          </div>
-        );
-      },
-    },
+    // {
+    //   width: 80,
+    //   align: "right",
+    //   key: "actions",
+    //   title: "Actions",
+    //   dataIndex: "actions",
+    //   render(_, record) {
+    //     return (
+    //       <div className="flex justify-end px-4">
+    //         <Popconfirm
+    //           title={<>Voulez-vous vraiment supprimer ce motif ?</>}
+    //           okText="Oui"
+    //           cancelText="Non"
+    //           placement="left"
+    //           okButtonProps={{ danger: true }}
+    //           onConfirm={() => onDelete(record)}
+    //         >
+    //           <Tooltip title="Supprimer">
+    //             <Button type="text" className="-my-2">
+    //               <Trash2
+    //                 className="-mx-1 cursor-pointer text-red-500"
+    //                 size={16}
+    //               />
+    //             </Button>
+    //           </Tooltip>
+    //         </Popconfirm>{" "}
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 };
