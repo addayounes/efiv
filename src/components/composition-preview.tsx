@@ -77,6 +77,8 @@ export const CompositionTrain: React.FC<CompositionTrainProps> = ({
   size,
   showDetails,
 }) => {
+  const listOfDetails = [mr.serie, mr.sousSerie, mr.sousSerie2];
+  const hasDetails = listOfDetails.filter(Boolean).length > 0;
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="flex items-center gap-1 group/innertrain">
@@ -95,9 +97,9 @@ export const CompositionTrain: React.FC<CompositionTrainProps> = ({
         })}
       </div>
 
-      {showDetails && (
+      {showDetails && hasDetails && (
         <div className="font-medium flex items-center gap-6 text-sm">
-          {[mr.serie, mr.sousSerie, mr.sousSerie2].filter(Boolean).join(" - ")}
+          {listOfDetails.join(" - ")}
         </div>
       )}
     </div>

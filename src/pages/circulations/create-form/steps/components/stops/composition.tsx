@@ -98,7 +98,7 @@ const CompositionConfigContent: React.FC<CompositionConfigContentProps> = ({
                   ?.ouvertAuxVoyageurs;
 
               return (
-                <div>
+                <div className="mt-4">
                   <Field
                     inline
                     as={Switch}
