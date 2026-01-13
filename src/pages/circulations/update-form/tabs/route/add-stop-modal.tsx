@@ -211,6 +211,11 @@ const AddStopModal: React.FC<AddStopModalProps> = ({
             placeholder="Choisir une gare"
             className="w-full min-w-[350px]"
             onStationChange={(value) => setStation(value)}
+            selectedStations={
+              values?.parcours?.pointDeParcours?.map(
+                (stop) => stop.desserte.codeUIC
+              ) || []
+            }
           />
         </div>
 

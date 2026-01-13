@@ -42,18 +42,15 @@ const StationsField: React.FC<any> = ({ ...props }) => {
 export const StationsFieldWithoutFormik: React.FC<
   {
     value: string | undefined;
+    selectedStations?: string[];
     onStationChange: (value: StopDto) => void;
   } & SelectProps
-> = ({ value, onStationChange, ...props }) => {
+> = ({ value, selectedStations, onStationChange, ...props }) => {
   const [stationSearchKeyword, setStationSearchKeyword] = useState("");
   const { stations, loading } = useStations(stationSearchKeyword);
-  const { values } = useFormikContext<CreateCirculationDto>();
 
-  const selectedStations =
-    values.parcours?.map((stop) => stop.station?.value) || [];
-
-  const filteredStations = stations.filter(
-    (station) => !selectedStations.includes(station.id)
+  const filteredStations = stations.filter((station) =>
+    selectedStations ? !selectedStations.includes(station.id) : true
   );
 
   return (

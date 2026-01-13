@@ -3,6 +3,7 @@ import {
   PointDeParcourStatut,
   type ICirculation,
 } from "@/types/entity/circulation";
+import toast from "react-hot-toast";
 import { useFormikContext } from "formik";
 import { Info, Loader } from "lucide-react";
 import { useMotifs } from "@/hooks/use-motifs";
@@ -81,6 +82,9 @@ const DelayModal: React.FC<DelayModalProps> = ({
   };
 
   const onDelay = () => {
+    if (delay.arrival == 0 || delay.departure == 0)
+      return toast.error("Veuillez renseigner les retards.");
+
     for (const s of affectedStops) {
       const stopIndex = parcours.findIndex((p) => p.rang === s.rang);
       const fieldPrefix = `parcours.pointDeParcours.${stopIndex}.arret`;
