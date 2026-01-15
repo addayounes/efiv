@@ -41,13 +41,13 @@ const CompositionPreview: React.FC<CompositionPreviewProps> = ({
 }) => {
   return (
     <div>
-      {composition.materielRoulant.length ? (
+      {composition?.materielRoulant?.length ? (
         <div className="flex items-center justify-center gap-2 w-full">
           <ArrowLeft
             className={cn("text-primary", { "-translate-y-4.5": showDetails })}
             size={SIZE_CLASSES[size].arrow}
           />
-          {composition.materielRoulant?.map((mr, index) => (
+          {composition?.materielRoulant?.map((mr, index) => (
             <div className="flex flex-col items-center">
               <CompositionTrain
                 mr={mr}

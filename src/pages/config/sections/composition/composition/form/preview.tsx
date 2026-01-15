@@ -86,11 +86,11 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
       sousSerie2: "",
     };
     setFieldValue("materielRoulant", [
-      ...values.materielRoulant,
+      ...values?.materielRoulant,
       newMaterielRoulant,
     ]);
 
-    setSelected({ car: 0, train: values.materielRoulant.length });
+    setSelected({ car: 0, train: values?.materielRoulant.length });
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -98,7 +98,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
     if (!over) return;
 
     if (active.id !== over.id) {
-      const updatedMaterielRoulant = [...values.materielRoulant];
+      const updatedMaterielRoulant = [...values?.materielRoulant];
 
       const [activeTrainIndex, activeCarIndex] = active.id
         ?.toString()
@@ -150,10 +150,10 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
         </Button>
       </div>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        {values.materielRoulant.length ? (
+        {values?.materielRoulant?.length ? (
           <div className="flex items-center justify-center gap-2 py-5 w-full overflow-x-auto">
             <ArrowLeft className="-translate-y-4 text-primary" />
-            {values.materielRoulant?.map((mr, index) => (
+            {values?.materielRoulant?.map((mr, index) => (
               <div
                 key={index}
                 className="flex flex-col gap-4 items-center group/train"

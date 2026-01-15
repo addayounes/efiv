@@ -24,10 +24,12 @@ const UpdateContentCompositionTab: React.FC<
   const [selectedComposition, setSelectedComposition] = useState();
 
   const compositionPlace =
-    index === values.parcours.pointDeParcours.length - 1 ? "arrivee" : "depart";
+    index === values?.parcours?.pointDeParcours?.length - 1
+      ? "arrivee"
+      : "depart";
 
   const stopComposition =
-    values.parcours.pointDeParcours?.[index]?.arret?.[compositionPlace]
+    values?.parcours?.pointDeParcours?.[index]?.arret?.[compositionPlace]
       ?.composition;
 
   const compositionsOptions = compositions.map((composition) => ({
@@ -50,7 +52,7 @@ const UpdateContentCompositionTab: React.FC<
   };
 
   const handleApplyToFollowingStops = () => {
-    const updatedParcours = [...values.parcours.pointDeParcours].map(
+    const updatedParcours = [...values?.parcours?.pointDeParcours].map(
       (stop, i) => {
         if (i <= index) return stop;
         return {
@@ -138,7 +140,7 @@ const UpdateContentCompositionTab: React.FC<
           htmlType="button"
           onClick={handleApplyToFollowingStops}
           disabled={
-            index == values.parcours.pointDeParcours.length - 1 ||
+            index == values?.parcours?.pointDeParcours?.length - 1 ||
             !stopComposition
           }
         >
@@ -177,7 +179,7 @@ const UpdateContentCompositionTab: React.FC<
                         "grayscale-100 opacity-70": !isOpenToPassengers,
                       })}
                     >
-                      {mr.elementMaterielRoulant.map((el, elIndex) => {
+                      {mr?.elementMaterielRoulant?.map((el, elIndex) => {
                         const isHead = elIndex === 0;
                         const isTail =
                           elIndex === mr.elementMaterielRoulant.length - 1;

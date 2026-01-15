@@ -15,7 +15,7 @@ const DoorControl: React.FC<DoorControlProps> = ({ selected }) => {
 
   const handleAddDoor = () => {
     const doors =
-      values.materielRoulant?.[selected.train]?.elementMaterielRoulant?.[
+      values?.materielRoulant?.[selected.train]?.elementMaterielRoulant?.[
         selected.car
       ]?.porte || [];
 
@@ -27,7 +27,7 @@ const DoorControl: React.FC<DoorControlProps> = ({ selected }) => {
 
   const handleDeleteDoor = (index: number) => {
     const doors =
-      values.materielRoulant?.[selected.train]?.elementMaterielRoulant?.[
+      values?.materielRoulant?.[selected.train]?.elementMaterielRoulant?.[
         selected.car
       ]?.porte || [];
 
@@ -49,7 +49,7 @@ const DoorControl: React.FC<DoorControlProps> = ({ selected }) => {
       <Table
         size="middle"
         data={
-          values.materielRoulant?.[selected.train]?.elementMaterielRoulant?.[
+          values?.materielRoulant?.[selected.train]?.elementMaterielRoulant?.[
             selected.car
           ]?.porte
         }

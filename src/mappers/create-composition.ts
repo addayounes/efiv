@@ -7,10 +7,10 @@ export const mapCreateCompositionToDto = (
     id: "",
     code: data.code,
     name: data.name,
-    materielRoulant: data.materielRoulant.map((mr, i1) => ({
+    materielRoulant: data?.materielRoulant?.map((mr, i1) => ({
       ...mr,
       rang: i1 + 1,
-      elementMaterielRoulant: mr.elementMaterielRoulant.map((emr, i2) => ({
+      elementMaterielRoulant: mr?.elementMaterielRoulant.map((emr, i2) => ({
         ...emr,
         rang: i2 + 1,
         porte: (emr.porte ?? []).map((p, i3) => ({ ...p, rang: i3 + 1 })),
