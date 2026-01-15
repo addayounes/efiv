@@ -1,12 +1,12 @@
-import { Trash2 } from "lucide-react";
+// import { Trash2 } from "lucide-react";
 import type { ColumnType } from "antd/es/table";
-import { Button, Popconfirm, Tooltip } from "antd";
+// import { Button, Popconfirm, Tooltip } from "antd";
 import type { IMotifRetard } from "@/types/entity/motif-retard";
 
 export const useMotifRetardColumns = (): ColumnType<IMotifRetard>[] => {
-  const onDelete = (record: IMotifRetard) => {
-    console.log("Delete", record);
-  };
+  // const onDelete = (record: IMotifRetard) => {
+  //   console.log("Delete", record);
+  // };
 
   return [
     {
