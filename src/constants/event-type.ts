@@ -15,3 +15,10 @@ export const EventTypeTagColorMap: Record<EventActionType, TagProps["color"]> =
     [EventActionType.STOP_CANCELLATION]: "error",
     [EventActionType.ADDITIONAL_STOP]: "blue",
   };
+
+export const EVENT_TYPE_OPTIONS = Object.values(EventActionType).map(
+  (status) => ({
+    label: EventTypeLabelMap[status],
+    value: status,
+  }),
+);

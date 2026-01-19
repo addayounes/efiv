@@ -12,3 +12,10 @@ export const EventStatusTagColorMap: Record<EventStatus, TagProps["color"]> = {
   [EventStatus.ONGOING]: "orange",
   [EventStatus.RESOLVED]: "green",
 };
+
+export const EVENT_STATUS_OPTIONS = Object.values(EventStatus).map(
+  (status) => ({
+    label: EventStatusLabelMap[status],
+    value: status,
+  }),
+);

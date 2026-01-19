@@ -58,7 +58,14 @@ export const useEventsColumns = (): ColumnType<IEvent>[] => {
       dataIndex: "source",
       key: "source",
       render(_, record) {
-        return <span>{EventSourceLabelMap[record.source]}</span>;
+        return (
+          <div>
+            <p className="font-medium">{record.createdBy.name}</p>
+            <p className="text-sm text-gray-500">
+              {EventSourceLabelMap[record.source]}
+            </p>
+          </div>
+        );
       },
     },
     {
