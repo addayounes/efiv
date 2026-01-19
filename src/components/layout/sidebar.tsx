@@ -3,7 +3,7 @@ import { cn } from "@/utils/cn";
 import { __routes__ } from "@/constants/routes";
 import { Link, useLocation } from "react-router-dom";
 import { configSidebarElements } from "@/pages/config/sidebar";
-import { Activity, House, Settings, TrainFront } from "lucide-react";
+import { Activity, House, Mail, Settings, TrainFront } from "lucide-react";
 
 const SidebarElements = [
   {
@@ -22,11 +22,16 @@ const SidebarElements = [
     route: __routes__.Circulations.Main,
   },
   {
+    label: "Événements de communication",
+    icon: <Mail color="white" />,
+    route: __routes__.Events.Main,
+  },
+  {
     label: "Configuration",
     icon: <Settings color="white" />,
     route: __routes__.Config.Main.replace(
       ":section",
-      configSidebarElements[0].name
+      configSidebarElements[0].name,
     ), // Default to first config section
   },
 ];
@@ -46,7 +51,7 @@ const Sidebar: React.FC = () => {
                 "flex items-center py-4 px-4",
                 pathname === item.route
                   ? "bg-primary-dark"
-                  : "hover:bg-primary-dark"
+                  : "hover:bg-primary-dark",
               )}
             >
               <Link to={item.route}>{item.icon}</Link>

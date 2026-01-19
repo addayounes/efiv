@@ -1,5 +1,9 @@
 export const __routes__ = {
   Dashboard: "/",
+  Events: {
+    Main: "/events",
+    Details: "/events/:id",
+  },
   Circulations: {
     Main: "/circulations",
     Operational: "/operational-circulations",

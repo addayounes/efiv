@@ -9,6 +9,7 @@ import UpdateOperationlCirculation from "@/pages/circulations/update-form";
 import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
 import CompositionForm from "@/pages/config/sections/composition/composition/form";
 import MotifForm from "@/pages/config/sections/motif/form";
+import Communication from "@/pages/communication";
 
 export interface RouteType {
   path: string;
@@ -55,7 +56,7 @@ export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Config.SubSections.Create.replace(
       ":section",
-      ConfigSidebarElementsNames.Composition
+      ConfigSidebarElementsNames.Composition,
     ),
     element: <CompositionForm />,
     withLayout: true,
@@ -63,9 +64,14 @@ export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Config.SubSections.Create.replace(
       ":section",
-      ConfigSidebarElementsNames.MotifRetard
+      ConfigSidebarElementsNames.MotifRetard,
     ),
     element: <MotifForm />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Events.Main,
+    element: <Communication />,
     withLayout: true,
   },
 ];
