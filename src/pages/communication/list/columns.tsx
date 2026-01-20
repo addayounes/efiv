@@ -20,6 +20,7 @@ import { __routes__ } from "@/constants/routes";
 import { ChevronRight, Eye } from "lucide-react";
 import { DATE_FORMAT } from "@/constants/date-format";
 import { EventSourceLabelMap } from "@/constants/event-source";
+import { EventSeverityTagColorMap } from "@/constants/event-severity";
 
 export const useEventsColumns = (): ColumnType<IEvent>[] => {
   const navigate = useNavigate();
@@ -91,7 +92,13 @@ export const useEventsColumns = (): ColumnType<IEvent>[] => {
       dataIndex: "severity",
       key: "severity",
       render(_, record) {
-        return <span className="font-medium">{record.severity}</span>;
+        return (
+          <span
+            className={`font-medium ${EventSeverityTagColorMap[record.severity]}`}
+          >
+            {record.severity}
+          </span>
+        );
       },
     },
     {

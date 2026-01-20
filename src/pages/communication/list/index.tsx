@@ -26,8 +26,8 @@ const EventsList: React.FC = () => {
     <div className="px-6">
       <EventsFilters
         filters={filters}
-        setFilters={setFilters}
         section={section}
+        setFilters={setFilters}
         setSection={setSection}
       />
       <Table data={eventsMock} head={columns} bordered />

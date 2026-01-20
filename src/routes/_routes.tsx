@@ -10,6 +10,7 @@ import OperationalCirculations from "@/pages/circulations/list/tabs/operational"
 import CompositionForm from "@/pages/config/sections/composition/composition/form";
 import MotifForm from "@/pages/config/sections/motif/form";
 import Communication from "@/pages/communication";
+import EventDetails from "@/pages/communication/details";
 
 export interface RouteType {
   path: string;
@@ -72,6 +73,11 @@ export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Events.Main,
     element: <Communication />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Events.Details,
+    element: <EventDetails />,
     withLayout: true,
   },
 ];
