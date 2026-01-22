@@ -4,6 +4,7 @@ import { ConfigSidebarElementsNames } from "./sidebar";
 import MotifRetardConfigSection from "./sections/motif";
 import { useNavigate, useParams } from "react-router-dom";
 import CompositionConfigSection from "./sections/composition";
+import CommunicationTemplateConfig from "./sections/communication-template";
 
 const ConfigSectionRenderer: React.FC = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const ConfigSectionRenderer: React.FC = () => {
 
   const sectionMap: Record<string, React.ReactNode> = {
     [ConfigSidebarElementsNames.Composition]: <CompositionConfigSection />,
-    [ConfigSidebarElementsNames.Templates]: <div></div>,
+    [ConfigSidebarElementsNames.Templates]: <CommunicationTemplateConfig />,
     [ConfigSidebarElementsNames.MotifRetard]: <MotifRetardConfigSection />,
   };
 
@@ -21,8 +22,8 @@ const ConfigSectionRenderer: React.FC = () => {
       navigate(
         __routes__.Config.Main.replace(
           ":section",
-          ConfigSidebarElementsNames.Composition
-        )
+          ConfigSidebarElementsNames.Composition,
+        ),
       );
     }
   }, [section, sectionMap]);

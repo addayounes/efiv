@@ -2,15 +2,16 @@ import Login from "@/pages/auth/login";
 import ConfigPage from "@/pages/config";
 import Dashboard from "@/pages/dashboard";
 import { __routes__ } from "@/constants/routes";
+import Communication from "@/pages/communication";
 import CirculationsList from "@/pages/circulations/list";
+import EventDetails from "@/pages/communication/details";
+import MotifForm from "@/pages/config/sections/motif/form";
 import { ConfigSidebarElementsNames } from "@/pages/config/sidebar";
 import CreateCirculationForm from "@/pages/circulations/create-form";
 import UpdateOperationlCirculation from "@/pages/circulations/update-form";
 import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
 import CompositionForm from "@/pages/config/sections/composition/composition/form";
-import MotifForm from "@/pages/config/sections/motif/form";
-import Communication from "@/pages/communication";
-import EventDetails from "@/pages/communication/details";
+import CommunicationTemplateEditor from "@/pages/config/sections/communication-template/editor";
 
 export interface RouteType {
   path: string;
@@ -78,6 +79,22 @@ export const privateRoutes: RouteType[] = [
   {
     path: __routes__.Events.Details,
     element: <EventDetails />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Config.SubSections.Create.replace(
+      ":section",
+      ConfigSidebarElementsNames.Templates,
+    ),
+    element: <CommunicationTemplateEditor />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Config.SubSections.Update.replace(
+      ":section",
+      ConfigSidebarElementsNames.Templates,
+    ),
+    element: <CommunicationTemplateEditor />,
     withLayout: true,
   },
 ];
