@@ -1,7 +1,7 @@
-import { Switch } from "antd";
 import FlowAction from "../action";
 import { dayjs } from "@/lib/dayjs";
 import StageConnector from "./connector";
+import ExecuteStageButton from "./execute-button";
 import { TIME_FORMAT } from "@/constants/date-format";
 import AddActionButton from "../action/add-action-button";
 import type { Stage } from "@/types/entity/communication";
@@ -18,17 +18,13 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
         {/* Header */}
         <div className="p-4 flex items-center justify-between border-b border-gray-200 cursor-pointer ">
           <h3 className="text-sm font-medium">{stage.name}</h3>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <p className="text-sm text-gray-500">
               {dayjs(stage.executedAt).format(TIME_FORMAT)}
             </p>
-            <p className="text-sm text-gray-500">
-              <Switch
-                checked={stage.active}
-                checkedChildren="Actif"
-                unCheckedChildren="Inactif"
-              />
-            </p>
+            <div>
+              <ExecuteStageButton stage={stage} />
+            </div>
           </div>
         </div>
 
