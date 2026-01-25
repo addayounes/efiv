@@ -1,3 +1,4 @@
+import { cn } from "@/utils/cn";
 import FlowAction from "../action";
 import { dayjs } from "@/lib/dayjs";
 import StageConnector from "./connector";
@@ -5,6 +6,8 @@ import ExecuteStageButton from "./execute-button";
 import { TIME_FORMAT } from "@/constants/date-format";
 import AddActionButton from "../action/add-action-button";
 import type { Stage } from "@/types/entity/communication";
+import { useAppDispatch, useAppSelector } from "@/redux/utils";
+import { setSelectedStage } from "@/redux/slices/communication";
 
 interface FlowStageProps {
   stage: Stage;
@@ -12,11 +15,26 @@ interface FlowStageProps {
 }
 
 const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
+  const dispatch = useAppDispatch();
+  const { selectedStage } = useAppSelector((s) => s.communication);
+
+  const handleOnClick = () => dispatch(setSelectedStage(stage));
+
   return (
     <div className="group relative">
-      <div className="rounded bg-white shadow-md min-w-xl border border-transparent hover:border-gray-400 ease-out duration-200">
+      <div
+        className={cn(
+          "rounded bg-white shadow-md min-w-xl border transition-transform ease-out duration-200",
+          selectedStage?.id == stage.id
+            ? "border-2 border-primary"
+            : "border-transparent hover:border-gray-400",
+        )}
+      >
         {/* Header */}
-        <div className="p-4 flex items-center justify-between border-b border-gray-200 cursor-pointer ">
+        <div
+          onClick={handleOnClick}
+          className="p-4 flex items-center justify-between border-b border-gray-200 cursor-pointer "
+        >
           <h3 className="text-sm font-medium">{stage.name}</h3>
           <div className="flex items-center gap-2">
             <p className="text-sm text-gray-500">

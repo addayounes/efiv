@@ -4,6 +4,7 @@ import ActionSMSVariant from "./action-variants/sms-variant";
 interface FlowActionRendererProps {
   action: Action;
 }
+
 const FlowActionRenderer: React.FC<FlowActionRendererProps> = ({ action }) => {
   switch (action.type) {
     case ActionType.SMS:
