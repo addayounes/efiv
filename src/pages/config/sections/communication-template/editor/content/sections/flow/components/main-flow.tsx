@@ -3,18 +3,21 @@ import FlowStage from "./stage";
 import StageDetails from "./stage/details";
 import { useAppSelector } from "@/redux/utils";
 import type { CommunicationTemplate } from "@/types/entity/communication";
+import ActionDetails from "./action/details";
 
 interface MainFlowContentProps {
   template: CommunicationTemplate;
 }
 
 const MainFlowContent: React.FC<MainFlowContentProps> = ({ template }) => {
-  const { selectedStage } = useAppSelector((s) => s.communication);
+  const { selectedStage, selectedAction } = useAppSelector(
+    (s) => s.communication,
+  );
   return (
     <div>
       <div
         className={cn("transition-transform ease-out duration-500", {
-          "-translate-x-[25%]": !!selectedStage,
+          "-translate-x-[25%]": !!selectedStage || !!selectedAction,
         })}
       >
         {(template.stages ?? []).map((stage, index) => {
@@ -23,6 +26,7 @@ const MainFlowContent: React.FC<MainFlowContentProps> = ({ template }) => {
       </div>
 
       <StageDetails stage={selectedStage} />
+      <ActionDetails action={selectedAction} />
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { cn } from "@/utils/cn";
 import FlowActionRenderer from "./action-renderer";
 import type { Action } from "@/types/entity/communication";
+import { useAppDispatch, useAppSelector } from "@/redux/utils";
+import { setSelectedAction } from "@/redux/slices/communication";
 import { FlowActionTypeConfigMap } from "@/constants/flow-action-type";
 
 interface FlowActionProps {
@@ -8,12 +10,21 @@ interface FlowActionProps {
 }
 
 const FlowAction: React.FC<FlowActionProps> = ({ action }) => {
+  const dispatch = useAppDispatch();
+  const { selectedAction } = useAppSelector((s) => s.communication);
+
+  const handleClickAction = () => dispatch(setSelectedAction(action));
+
   const actionConfig = FlowActionTypeConfigMap[action.type];
 
   return (
     <div
+      onClick={handleClickAction}
       className={cn(
-        "rounded bg-white shadow border border-gray-200 p-4 cursor-pointer hover:border-gray-400",
+        "rounded bg-white shadow border p-4 cursor-pointer ",
+        selectedAction?.id === action.id
+          ? "border-2 border-primary"
+          : "hover:border-gray-400 border-gray-200",
       )}
     >
       <div

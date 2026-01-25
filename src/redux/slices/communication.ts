@@ -13,7 +13,7 @@ const initialState: CommunicationState = {
 };
 
 export const communicationSlice = createSlice({
-  name: "auth",
+  name: "communication",
   initialState,
   reducers: {
     setSelectedStage: (state, action: PayloadAction<Stage | undefined>) => {

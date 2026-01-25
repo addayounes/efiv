@@ -1,5 +1,5 @@
+import ActionSMSVariant from "./action-variants/sms/sms-variant";
 import { ActionType, type Action } from "@/types/entity/communication";
-import ActionSMSVariant from "./action-variants/sms-variant";
 
 interface FlowActionRendererProps {
   action: Action;
