@@ -55,3 +55,10 @@ export const FlowActionTypeConfigMap: Record<ActionType, EventTypeInfo> = {
     },
   },
 };
+
+export const FlowActionTypes = Object.keys(FlowActionTypeConfigMap).map(
+  (key) => ({
+    ...FlowActionTypeConfigMap[key as ActionType],
+    value: key,
+  }),
+);

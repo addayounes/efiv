@@ -7,8 +7,8 @@ interface ExecuteStageButtonProps {
 }
 
 const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({ stage }) => {
-  const executeStage = async () => {
-    //
+  const executeStage = async (e?: React.MouseEvent<HTMLElement>) => {
+    e?.stopPropagation();
   };
 
   return (
@@ -20,6 +20,7 @@ const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({ stage }) => {
     >
       <Button
         type="text"
+        onClick={(e) => e.stopPropagation()}
         className="group/play-button"
         icon={
           <Play

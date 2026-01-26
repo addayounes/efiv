@@ -17,7 +17,7 @@ export interface Stage {
 export interface Action {
   id: string;
   type: ActionType;
-  details: ActionDetails;
+  details: any;
 }
 
 export enum ActionType {

@@ -1,17 +1,24 @@
-import { Button } from "antd";
 import { Plus } from "lucide-react";
+import { Button, Popover } from "antd";
+import EditorActions from "../../../actions";
 
-const AddActionButton: React.FC = () => {
-  const handleAddAction = () => {
-    // TODO
-  };
+interface AddActionButtonProps {
+  stageIndex: number;
+}
 
+const AddActionButton: React.FC<AddActionButtonProps> = ({ stageIndex }) => {
   return (
     <div className="flex items-center justify-center">
-      <Button onClick={handleAddAction}>
-        <Plus size={16} />
-        Ajouter une action
-      </Button>
+      <Popover
+        trigger="click"
+        placement="right"
+        content={<EditorActions stageIndex={stageIndex} />}
+      >
+        <Button>
+          <Plus size={16} />
+          Ajouter une action
+        </Button>
+      </Popover>
     </div>
   );
 };

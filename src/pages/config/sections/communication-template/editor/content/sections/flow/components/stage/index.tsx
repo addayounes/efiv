@@ -48,18 +48,17 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
 
         {/* Content */}
         <div className="p-4 space-y-2">
-          {!stage?.actions?.length ? (
-            <AddActionButton />
-          ) : (
-            stage.actions.map((action) => {
-              return <FlowAction action={action} key={action.id} />;
-            })
-          )}
+          {stage.actions.map((action) => {
+            return <FlowAction action={action} key={action.id} />;
+          })}
+          <div className="mt-4">
+            <AddActionButton stageIndex={index} />
+          </div>
         </div>
       </div>
 
       {/* Connector */}
-      <StageConnector />
+      <StageConnector index={index} />
 
       {/* Stage Number */}
       <div className="absolute -left-14 top-1 w-12 h-12 bg-white text-gray-400 rounded flex items-center justify-center font-medium shadow-md">
