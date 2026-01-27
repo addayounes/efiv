@@ -2,7 +2,7 @@ import { Field } from "formik";
 import FormikForm from "@/components/formik/form";
 import TextArea from "@/components/formik/textarea";
 import TextField from "@/components/formik/textfield";
-import type { Action } from "@/types/entity/communication";
+import type { Action, EmailActionDetails } from "@/types/entity/communication";
 
 interface ActionEmailVariantDetailsProps {
   action: Action;
@@ -11,9 +11,12 @@ interface ActionEmailVariantDetailsProps {
 const ActionEmailVariantDetails: React.FC<
   ActionEmailVariantDetailsProps
 > = ({}) => {
-  const initialValues = {};
+  const initialValues: EmailActionDetails = {
+    body: "",
+    subject: "",
+  };
 
-  const handleSubmitForm = (values: typeof initialValues) => {
+  const handleSubmitForm = (values: EmailActionDetails) => {
     console.log(values);
   };
 

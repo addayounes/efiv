@@ -28,8 +28,15 @@ export enum ActionType {
   ShareOnFacebook = "ShareOnFacebook",
 }
 
-export interface ActionDetails {
+export interface ActionDetails {}
+
+// Variants
+
+export interface SMSActionDetails extends ActionDetails {
+  body: string;
+}
+
+export interface EmailActionDetails extends ActionDetails {
   subject: string;
   body: string;
-  recipients: string[];
 }
