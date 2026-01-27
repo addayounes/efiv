@@ -17,6 +17,14 @@ const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({ stage }) => {
       okText="Executer"
       onConfirm={executeStage}
       title="Voulez-vous exécuter ce stage?"
+      okButtonProps={{
+        htmlType: "button",
+        onClick: (e) => e?.stopPropagation(),
+      }}
+      cancelButtonProps={{
+        htmlType: "button",
+        onClick: (e) => e?.stopPropagation(),
+      }}
     >
       <Button
         type="text"

@@ -18,6 +18,7 @@ const ActionDetails: React.FC<ActionDetailsProps> = ({ action }) => {
   return (
     <Drawer
       mask={false}
+      width="30vw"
       open={!!action}
       onClose={onClose}
       title="Détails de l'action"
