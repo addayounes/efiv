@@ -6,7 +6,7 @@ interface ExecuteStageButtonProps {
   stage: Stage;
 }
 
-const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({ stage }) => {
+const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({}) => {
   const executeStage = async (e?: React.MouseEvent<HTMLElement>) => {
     e?.stopPropagation();
   };
