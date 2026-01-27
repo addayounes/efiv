@@ -1,5 +1,5 @@
-import type { Action, SMSActionDetails } from "@/types/entity/communication";
 import EmptyAction from "../../empty-action";
+import type { Action, SMSActionDetails } from "@/types/entity/communication";
 
 interface ActionSMSVariantProps {
   action: Action;

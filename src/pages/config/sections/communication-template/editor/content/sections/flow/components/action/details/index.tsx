@@ -1,19 +1,19 @@
-import { Button, Drawer } from "antd";
+import { Drawer } from "antd";
 import { useAppDispatch } from "@/redux/utils";
 import ActionDetailsRenderer from "./details-renderer";
-import { type Action } from "@/types/entity/communication";
 import { setSelectedAction } from "@/redux/slices/communication";
+import { type Action, type Stage } from "@/types/entity/communication";
 
 interface ActionDetailsProps {
+  stage?: Stage;
   action?: Action;
 }
 
-const ActionDetails: React.FC<ActionDetailsProps> = ({ action }) => {
+const ActionDetails: React.FC<ActionDetailsProps> = ({ action, stage }) => {
   const dispatch = useAppDispatch();
 
-  const onClose = () => dispatch(setSelectedAction(undefined));
-
-  const handleUpdateAction = async () => {};
+  const onClose = () =>
+    dispatch(setSelectedAction({ action: undefined, stage: undefined }));
 
   return (
     <Drawer
@@ -22,15 +22,8 @@ const ActionDetails: React.FC<ActionDetailsProps> = ({ action }) => {
       open={!!action}
       onClose={onClose}
       title="Détails de l'action"
-      extra={
-        <div className="flex items-end">
-          <Button onClick={handleUpdateAction} htmlType="button" type="primary">
-            Enregistrer
-          </Button>
-        </div>
-      }
     >
-      <ActionDetailsRenderer action={action} />
+      <ActionDetailsRenderer action={action} stage={stage} />
     </Drawer>
   );
 };

@@ -1,19 +1,21 @@
 import { cn } from "@/utils/cn";
 import FlowActionRenderer from "./action-renderer";
-import type { Action } from "@/types/entity/communication";
 import { useAppDispatch, useAppSelector } from "@/redux/utils";
 import { setSelectedAction } from "@/redux/slices/communication";
+import type { Action, Stage } from "@/types/entity/communication";
 import { FlowActionTypeConfigMap } from "@/constants/flow-action-type";
 
 interface FlowActionProps {
+  stage: Stage;
   action: Action;
 }
 
-const FlowAction: React.FC<FlowActionProps> = ({ action }) => {
+const FlowAction: React.FC<FlowActionProps> = ({ action, stage }) => {
   const dispatch = useAppDispatch();
   const { selectedAction } = useAppSelector((s) => s.communication);
 
-  const handleClickAction = () => dispatch(setSelectedAction(action));
+  const handleClickAction = () =>
+    dispatch(setSelectedAction({ action, stage }));
 
   const actionConfig = FlowActionTypeConfigMap[action.type];
 

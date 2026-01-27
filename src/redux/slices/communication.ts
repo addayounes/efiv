@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Action, ActionType, Stage } from "@/types/entity/communication";
+import type {
+  Action,
+  ActionDetails,
+  ActionType,
+  Stage,
+} from "@/types/entity/communication";
 
 const mockData: any = {
   id: "template-retard-train-001",
@@ -97,9 +102,15 @@ export const communicationSlice = createSlice({
       state.selectedAction = undefined;
       state.selectedStage = action.payload;
     },
-    setSelectedAction: (state, action: PayloadAction<Action | undefined>) => {
-      state.selectedStage = undefined;
-      state.selectedAction = action.payload;
+    setSelectedAction: (
+      state,
+      action: PayloadAction<{
+        action: Action | undefined;
+        stage: Stage | undefined;
+      }>,
+    ) => {
+      state.selectedStage = action.payload?.stage;
+      state.selectedAction = action.payload?.action;
     },
     addStageAtPosition: (
       state,
@@ -123,17 +134,49 @@ export const communicationSlice = createSlice({
       const { stageIndex, type } = action.payload;
       const newAction: Action = {
         type,
-        details: {},
+        details: {} as any,
         id: crypto.randomUUID(),
       };
       state.stages[stageIndex].actions.push(newAction);
-      if (state.selectedStage) state.selectedStage = undefined;
+      state.selectedStage = state.stages[stageIndex];
+      state.selectedAction = newAction;
+    },
+    updateAction: (
+      state,
+      action: PayloadAction<{
+        stageId: string;
+        actionId: string;
+        data: Partial<ActionDetails>;
+      }>,
+    ) => {
+      const { actionId, data, stageId } = action.payload;
+
+      const newStages = state.stages?.map((s) =>
+        s.id === stageId
+          ? {
+              ...s,
+              actions: s.actions?.map((a) =>
+                a.id === actionId
+                  ? { ...a, details: { ...a.details, ...data } }
+                  : a,
+              ),
+            }
+          : s,
+      );
+
+      state.stages = newStages;
+
+      const targetStage = newStages?.find((s) => s.id === stageId);
+      const newAction = targetStage?.actions?.find((a) => a.id === actionId);
+
+      state.selectedStage = targetStage;
       state.selectedAction = newAction;
     },
   },
 });
 
 export const {
+  updateAction,
   setSelectedStage,
   setSelectedAction,
   addStageAtPosition,

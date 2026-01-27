@@ -6,9 +6,10 @@ import { setSelectedStage } from "@/redux/slices/communication";
 
 interface StageDetailsProps {
   stage: Stage | undefined;
+  isOpen: boolean;
 }
 
-const StageDetails: React.FC<StageDetailsProps> = ({ stage }) => {
+const StageDetails: React.FC<StageDetailsProps> = ({ stage, isOpen }) => {
   const [name, setName] = useState(stage?.name);
 
   const dispatch = useAppDispatch();
@@ -27,7 +28,7 @@ const StageDetails: React.FC<StageDetailsProps> = ({ stage }) => {
   return (
     <Drawer
       mask={false}
-      open={!!stage}
+      open={isOpen}
       onClose={onClose}
       title="Détails du stage"
       extra={

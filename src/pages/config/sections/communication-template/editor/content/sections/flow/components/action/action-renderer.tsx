@@ -1,6 +1,10 @@
-import ActionEmailVariant from "./action-variants/email/email-variant";
+import {
+  ActionType,
+  type Action,
+  type Stage,
+} from "@/types/entity/communication";
 import ActionSMSVariant from "./action-variants/sms/sms-variant";
-import { ActionType, type Action } from "@/types/entity/communication";
+import ActionEmailVariant from "./action-variants/email/email-variant";
 
 interface FlowActionRendererProps {
   action: Action;
@@ -15,9 +19,9 @@ const FlowActionRenderer: React.FC<FlowActionRendererProps> = ({ action }) => {
     case ActionType.InternalEmail:
       return <ActionEmailVariant action={action} />;
     case ActionType.ShareOnFacebook:
-      return <ActionSMSVariant action={action} />;
+      return <></>;
     case ActionType.ShareOnX:
-      return <ActionSMSVariant action={action} />;
+      return <></>;
     default:
       return <div>Unsupported action type</div>;
   }

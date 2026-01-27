@@ -1,9 +1,9 @@
 import { cn } from "@/utils/cn";
 import FlowStage from "./stage";
 import StageDetails from "./stage/details";
+import ActionDetails from "./action/details";
 import { useAppSelector } from "@/redux/utils";
 import type { CommunicationTemplate } from "@/types/entity/communication";
-import ActionDetails from "./action/details";
 
 interface MainFlowContentProps {
   template: CommunicationTemplate;
@@ -25,8 +25,11 @@ const MainFlowContent: React.FC<MainFlowContentProps> = ({ template }) => {
         })}
       </div>
 
-      <StageDetails stage={selectedStage} />
-      <ActionDetails action={selectedAction} />
+      <StageDetails
+        stage={selectedStage}
+        isOpen={!!selectedStage && !selectedAction}
+      />
+      <ActionDetails action={selectedAction} stage={selectedStage} />
     </div>
   );
 };
