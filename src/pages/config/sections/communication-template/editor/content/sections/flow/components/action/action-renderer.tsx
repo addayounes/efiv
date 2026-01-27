@@ -1,3 +1,4 @@
+import ActionEmailVariant from "./action-variants/email/email-variant";
 import ActionSMSVariant from "./action-variants/sms/sms-variant";
 import { ActionType, type Action } from "@/types/entity/communication";
 
@@ -10,9 +11,9 @@ const FlowActionRenderer: React.FC<FlowActionRendererProps> = ({ action }) => {
     case ActionType.SMS:
       return <ActionSMSVariant action={action} />;
     case ActionType.ExternalEmail:
-      return <ActionSMSVariant action={action} />;
+      return <ActionEmailVariant action={action} />;
     case ActionType.InternalEmail:
-      return <ActionSMSVariant action={action} />;
+      return <ActionEmailVariant action={action} />;
     case ActionType.ShareOnFacebook:
       return <ActionSMSVariant action={action} />;
     case ActionType.ShareOnX:

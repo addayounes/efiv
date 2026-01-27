@@ -24,7 +24,7 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
     <div className="group relative">
       <div
         className={cn(
-          "rounded bg-white shadow-md min-w-xl border transition-transform ease-out duration-200",
+          "rounded bg-white shadow-md w-xl border transition-transform ease-out duration-200",
           selectedStage?.id == stage.id
             ? "border-2 border-primary"
             : "border-transparent hover:border-gray-400",

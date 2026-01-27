@@ -29,7 +29,7 @@ const FlowAction: React.FC<FlowActionProps> = ({ action }) => {
     >
       <div
         className={cn(
-          "flex items-center gap-2 px-1.5 rounded w-fit",
+          "flex items-center gap-2 px-1.5 rounded w-fit mb-4",
           actionConfig.colors.bg,
           actionConfig.colors.text,
         )}
