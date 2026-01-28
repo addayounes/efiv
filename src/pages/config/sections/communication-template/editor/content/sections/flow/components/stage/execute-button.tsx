@@ -13,15 +13,11 @@ const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({}) => {
 
   return (
     <Popconfirm
-      cancelText="Non"
       okText="Executer"
+      showCancel={false}
       onConfirm={executeStage}
       title="Voulez-vous exécuter ce stage?"
       okButtonProps={{
-        htmlType: "button",
-        onClick: (e) => e?.stopPropagation(),
-      }}
-      cancelButtonProps={{
         htmlType: "button",
         onClick: (e) => e?.stopPropagation(),
       }}

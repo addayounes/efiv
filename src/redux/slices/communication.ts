@@ -184,12 +184,35 @@ export const communicationSlice = createSlice({
 
       state.selectedStage = targetStage;
     },
+    deleteAction: (
+      state,
+      action: PayloadAction<{ stageId: string; actionId: string }>,
+    ) => {
+      const { actionId, stageId } = action.payload;
+
+      const newStages = (state.stages ?? []).map((s) =>
+        s.id === stageId
+          ? { ...s, actions: s.actions?.filter((a) => a.id !== actionId) }
+          : s,
+      );
+
+      state.stages = newStages;
+
+      if (state.selectedAction?.id === actionId)
+        state.selectedAction = undefined;
+
+      if (state.selectedStage?.id === stageId) {
+        const targetStage = newStages?.find((s) => s.id === stageId);
+        state.selectedStage = targetStage;
+      }
+    },
   },
 });
 
 export const {
   updateStage,
   updateAction,
+  deleteAction,
   setSelectedStage,
   setSelectedAction,
   addStageAtPosition,
