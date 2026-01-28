@@ -18,7 +18,6 @@ const mockData: any = {
     {
       id: "stage-information-initiale",
       name: "Information initiale",
-      executedAt: "2025-02-03T07:45:00Z",
       active: true,
       actions: [
         {
@@ -35,7 +34,6 @@ const mockData: any = {
     {
       id: "stage-mise-a-jour",
       name: "Mise à jour de la situation",
-      executedAt: "2025-02-03T08:15:00Z",
       active: true,
       actions: [
         {
@@ -61,7 +59,6 @@ const mockData: any = {
     {
       id: "stage-fin-incident",
       name: "Fin de l’incident",
-      executedAt: "2025-02-03T09:00:00Z",
       active: true,
       actions: [
         {
@@ -119,7 +116,6 @@ export const communicationSlice = createSlice({
       const newStage: Stage = {
         id: crypto.randomUUID(),
         name: "Nouveau stage",
-        executedAt: new Date().toISOString(),
         active: true,
         actions: [],
       };
@@ -151,7 +147,7 @@ export const communicationSlice = createSlice({
     ) => {
       const { actionId, data, stageId } = action.payload;
 
-      const newStages = state.stages?.map((s) =>
+      const newStages = (state.stages ?? []).map((s) =>
         s.id === stageId
           ? {
               ...s,
@@ -172,10 +168,27 @@ export const communicationSlice = createSlice({
       state.selectedStage = targetStage;
       state.selectedAction = newAction;
     },
+    updateStage: (
+      state,
+      action: PayloadAction<{ stageId: string; data: Partial<Stage> }>,
+    ) => {
+      const { data, stageId } = action.payload;
+
+      const newStages = (state.stages ?? []).map((s) =>
+        s.id === stageId ? { ...s, ...data } : s,
+      );
+
+      state.stages = newStages;
+
+      const targetStage = newStages?.find((s) => s.id === stageId);
+
+      state.selectedStage = targetStage;
+    },
   },
 });
 
 export const {
+  updateStage,
   updateAction,
   setSelectedStage,
   setSelectedAction,

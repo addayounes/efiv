@@ -1,11 +1,10 @@
 import { cn } from "@/utils/cn";
 import FlowAction from "../action";
-import { dayjs } from "@/lib/dayjs";
 import StageConnector from "./connector";
 import ExecuteStageButton from "./execute-button";
-import { TIME_FORMAT } from "@/constants/date-format";
 import AddActionButton from "../action/add-action-button";
 import type { Stage } from "@/types/entity/communication";
+import { getShortPreviewText } from "@/utils/flow-stage.utils";
 import { useAppDispatch, useAppSelector } from "@/redux/utils";
 import { setSelectedStage } from "@/redux/slices/communication";
 
@@ -38,7 +37,7 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
           <h3 className="text-sm font-medium">{stage.name}</h3>
           <div className="flex items-center gap-2">
             <p className="text-sm text-gray-500">
-              {dayjs(stage.executedAt).format(TIME_FORMAT)}
+              {getShortPreviewText(stage.timingConfig)}
             </p>
             <div>
               <ExecuteStageButton stage={stage} />

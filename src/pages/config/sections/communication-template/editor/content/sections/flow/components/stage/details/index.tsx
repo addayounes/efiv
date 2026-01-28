@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
-import { Button, Drawer, Input } from "antd";
+import { Field } from "formik";
+import { Button, Drawer } from "antd";
 import { useAppDispatch } from "@/redux/utils";
+import FormikForm from "@/components/formik/form";
+import TextField from "@/components/formik/textfield";
 import type { Stage } from "@/types/entity/communication";
-import { setSelectedStage } from "@/redux/slices/communication";
+import StageStageTimeConfigurator from "./time-configurator";
+import { setSelectedStage, updateStage } from "@/redux/slices/communication";
 
 interface StageDetailsProps {
   stage: Stage | undefined;
@@ -10,20 +13,22 @@ interface StageDetailsProps {
 }
 
 const StageDetails: React.FC<StageDetailsProps> = ({ stage, isOpen }) => {
-  const [name, setName] = useState(stage?.name);
-
   const dispatch = useAppDispatch();
-
   const onClose = () => dispatch(setSelectedStage(undefined));
 
-  const handleUpdateStage = async () => {
-    if (!name?.length) return;
+  const initialValues = {
+    name: stage?.name || "",
+    actionsCount: stage?.actions?.length ?? 0,
   };
 
-  useEffect(() => {
-    if (!stage) return;
-    setName(stage.name);
-  }, [stage]);
+  const handleUpdateStage = async (data: any) => {
+    const formattedData = {
+      name: data.name,
+      timingConfig: data.timingConfig,
+    };
+    dispatch(updateStage({ stageId: stage?.id || "", data: formattedData }));
+    dispatch(setSelectedStage(undefined));
+  };
 
   return (
     <Drawer
@@ -31,29 +36,34 @@ const StageDetails: React.FC<StageDetailsProps> = ({ stage, isOpen }) => {
       open={isOpen}
       onClose={onClose}
       title="Détails du stage"
-      extra={
-        <div className="flex items-end">
-          <Button onClick={handleUpdateStage} htmlType="button" type="primary">
-            Enregistrer
-          </Button>
-        </div>
-      }
     >
-      <div className="flex flex-col gap-4">
-        <div>
-          <p className="font-medium">Libelle</p>
-          <Input
-            size="large"
-            value={name}
-            placeholder="Libelle du stage"
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div>
-          <p className="font-medium">Nombre d'actions</p>
-          <Input size="large" disabled value={stage?.actions?.length ?? 0} />
-        </div>
-      </div>
+      <FormikForm initialValues={initialValues} onSubmit={handleUpdateStage}>
+        {() => {
+          return (
+            <div className="flex flex-col gap-4">
+              <Field
+                as={TextField}
+                name="name"
+                label="Libelle"
+                placeholder="Libelle du stage"
+              />
+              <Field
+                disabled
+                as={TextField}
+                name="actionsCount"
+                label="Nombre d'actions"
+              />
+              <StageStageTimeConfigurator name="timingConfig" />
+
+              <div className="flex justify-end mt-10">
+                <Button htmlType="submit" type="primary">
+                  Enregistrer
+                </Button>
+              </div>
+            </div>
+          );
+        }}
+      </FormikForm>
     </Drawer>
   );
 };
