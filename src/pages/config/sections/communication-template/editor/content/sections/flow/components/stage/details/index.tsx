@@ -5,6 +5,7 @@ import FormikForm from "@/components/formik/form";
 import TextField from "@/components/formik/textfield";
 import type { Stage } from "@/types/entity/communication";
 import StageStageTimeConfigurator from "./time-configurator";
+import { getPresetByConfig } from "@/constants/stage-timing";
 import { setSelectedStage, updateStage } from "@/redux/slices/communication";
 
 interface StageDetailsProps {
@@ -19,6 +20,8 @@ const StageDetails: React.FC<StageDetailsProps> = ({ stage, isOpen }) => {
   const initialValues = {
     name: stage?.name || "",
     actionsCount: stage?.actions?.length ?? 0,
+    timingConfig: stage?.timingConfig || {},
+    preset: getPresetByConfig(stage?.timingConfig || ({} as any))?.value,
   };
 
   const handleUpdateStage = async (data: any) => {
@@ -37,7 +40,11 @@ const StageDetails: React.FC<StageDetailsProps> = ({ stage, isOpen }) => {
       onClose={onClose}
       title="Détails du stage"
     >
-      <FormikForm initialValues={initialValues} onSubmit={handleUpdateStage}>
+      <FormikForm
+        enableReinitialize
+        onSubmit={handleUpdateStage}
+        initialValues={initialValues}
+      >
         {() => {
           return (
             <div className="flex flex-col gap-4">

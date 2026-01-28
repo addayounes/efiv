@@ -1,9 +1,13 @@
 import { Button } from "antd";
 import { Plus } from "lucide-react";
+import { useAppDispatch } from "@/redux/utils";
+import { addStageAtPosition } from "@/redux/slices/communication";
 
 const AddStageButton: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const handleAddStage = () => {
-    // TODO
+    dispatch(addStageAtPosition({ position: 0 }));
   };
 
   return (

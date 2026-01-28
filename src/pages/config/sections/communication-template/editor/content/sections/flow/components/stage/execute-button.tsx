@@ -6,7 +6,7 @@ interface ExecuteStageButtonProps {
   stage: Stage;
 }
 
-const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({}) => {
+const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({ stage }) => {
   const executeStage = async (e?: React.MouseEvent<HTMLElement>) => {
     e?.stopPropagation();
   };
@@ -24,8 +24,9 @@ const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({}) => {
     >
       <Button
         type="text"
-        onClick={(e) => e.stopPropagation()}
         className="group/play-button"
+        onClick={(e) => e.stopPropagation()}
+        disabled={stage.actions.length === 0}
         icon={
           <Play
             size={18}

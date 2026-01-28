@@ -1,12 +1,13 @@
 import { cn } from "@/utils/cn";
 import FlowAction from "../action";
 import StageConnector from "./connector";
+import FlowDeleteButton from "../delete-button";
 import ExecuteStageButton from "./execute-button";
 import AddActionButton from "../action/add-action-button";
 import type { Stage } from "@/types/entity/communication";
 import { getShortPreviewText } from "@/utils/flow-stage.utils";
 import { useAppDispatch, useAppSelector } from "@/redux/utils";
-import { setSelectedStage } from "@/redux/slices/communication";
+import { deleteStage, setSelectedStage } from "@/redux/slices/communication";
 
 interface FlowStageProps {
   stage: Stage;
@@ -19,12 +20,14 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
 
   const handleOnClick = () => dispatch(setSelectedStage(stage));
 
+  const handleDeleteStage = () => dispatch(deleteStage(stage.id));
+
   return (
     <div className="group relative">
       <div
         className={cn(
           "rounded bg-white shadow-md w-xl border transition-transform ease-out duration-200",
-          selectedStage?.id == stage.id
+          selectedStage?.id === stage.id
             ? "border-2 border-primary"
             : "border-transparent hover:border-gray-400",
         )}
@@ -39,9 +42,8 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
             <p className="text-sm text-gray-500">
               {getShortPreviewText(stage.timingConfig)}
             </p>
-            <div>
-              <ExecuteStageButton stage={stage} />
-            </div>
+            <ExecuteStageButton stage={stage} />
+            <FlowDeleteButton onDelete={handleDeleteStage} />
           </div>
         </div>
 

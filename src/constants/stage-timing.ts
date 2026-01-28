@@ -37,3 +37,20 @@ export const STAGE_TIMING_PRESETS: PresetOption[] = [
     config: null,
   },
 ];
+
+export const getPresetByConfig = (config: TimingConfig | undefined) => {
+  const customConfigPreset = STAGE_TIMING_PRESETS.find(
+    (p) => p.value === "custom",
+  );
+
+  if (!config || Object.keys(config).length < 3) return customConfigPreset;
+
+  const matchingPreset = STAGE_TIMING_PRESETS.find(
+    (p) =>
+      p?.config?.mode === config?.mode &&
+      p?.config?.value === config?.value &&
+      p?.config?.unit === config?.unit,
+  );
+
+  return matchingPreset || customConfigPreset;
+};

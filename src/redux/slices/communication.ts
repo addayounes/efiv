@@ -1,11 +1,11 @@
+import type {
+  Stage,
+  Action,
+  ActionType,
+  ActionDetails,
+} from "@/types/entity/communication";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type {
-  Action,
-  ActionDetails,
-  ActionType,
-  Stage,
-} from "@/types/entity/communication";
 
 const mockData: any = {
   id: "template-retard-train-001",
@@ -206,11 +206,23 @@ export const communicationSlice = createSlice({
         state.selectedStage = targetStage;
       }
     },
+    deleteStage: (state, action: PayloadAction<string>) => {
+      const newStages = (state.stages ?? []).filter(
+        (s) => s.id !== action.payload,
+      );
+
+      state.stages = newStages;
+
+      if (state.selectedStage?.id === action.payload) {
+        state.selectedStage = undefined;
+      }
+    },
   },
 });
 
 export const {
   updateStage,
+  deleteStage,
   updateAction,
   deleteAction,
   setSelectedStage,

@@ -15,7 +15,7 @@ const FlowDeleteButton: React.FC<FlowDeleteButtonProps> = ({ onDelete }) => {
         danger: true,
         htmlType: "button",
         onClick: (e) => {
-          e.preventDefault();
+          e.stopPropagation();
           onDelete();
         },
       }}
