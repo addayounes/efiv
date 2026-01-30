@@ -1,8 +1,4 @@
-import {
-  TimingMode,
-  TimingUnit,
-  type TimingConfig,
-} from "@/types/entity/communication";
+import { TimingUnit, type TimingConfig } from "@/types/entity/communication";
 
 export interface PresetOption {
   label: string;
@@ -12,24 +8,24 @@ export interface PresetOption {
 
 export const STAGE_TIMING_PRESETS: PresetOption[] = [
   {
-    label: "Premières 10 minutes",
+    label: "Dans 10 minutes",
     value: "preset_1",
-    config: { mode: TimingMode.WITHIN, value: 10, unit: TimingUnit.MINUTES },
+    config: { value: 10, unit: TimingUnit.MINUTES },
   },
   {
-    label: "Premières 30 minutes",
+    label: "Dans 30 minutes",
     value: "preset_2",
-    config: { mode: TimingMode.WITHIN, value: 30, unit: TimingUnit.MINUTES },
+    config: { value: 30, unit: TimingUnit.MINUTES },
   },
   {
-    label: "Après 1 heure",
+    label: "Dans 1 heure",
     value: "preset_3",
-    config: { mode: TimingMode.AFTER, value: 1, unit: TimingUnit.HOURS },
+    config: { value: 1, unit: TimingUnit.HOURS },
   },
   {
-    label: "Après 2 heures",
+    label: "Dans 2 heures",
     value: "preset_4",
-    config: { mode: TimingMode.AFTER, value: 2, unit: TimingUnit.HOURS },
+    config: { value: 2, unit: TimingUnit.HOURS },
   },
   {
     label: "Personnalisé…",
@@ -47,9 +43,7 @@ export const getPresetByConfig = (config: TimingConfig | undefined) => {
 
   const matchingPreset = STAGE_TIMING_PRESETS.find(
     (p) =>
-      p?.config?.mode === config?.mode &&
-      p?.config?.value === config?.value &&
-      p?.config?.unit === config?.unit,
+      p?.config?.value === config?.value && p?.config?.unit === config?.unit,
   );
 
   return matchingPreset || customConfigPreset;

@@ -49,16 +49,6 @@ const StageTimingConfigurator = ({ name }: StageTimingConfiguratorProps) => {
         <div>
           <div className="flex items-center gap-4">
             <Field
-              as={Select}
-              placeholder="Mode"
-              className="w-full min-w-28"
-              name={`${name}.mode`}
-              options={[
-                { label: "Dans les", value: "WITHIN" },
-                { label: "Après", value: "AFTER" },
-              ]}
-            />
-            <Field
               min={1}
               max={96}
               type="number"

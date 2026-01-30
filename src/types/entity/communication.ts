@@ -6,17 +6,12 @@ export interface CommunicationTemplate {
   stages: Stage[];
 }
 
-export enum TimingMode {
-  WITHIN = "WITHIN",
-  AFTER = "AFTER",
-}
 export enum TimingUnit {
   MINUTES = "MINUTES",
   HOURS = "HOURS",
 }
 
 export interface TimingConfig {
-  mode: TimingMode;
   value: number;
   unit: TimingUnit;
 }
