@@ -31,11 +31,12 @@ export interface Action {
 }
 
 export enum ActionType {
-  SMS = "SMS",
   ShareOnX = "ShareOnX",
+  ExternalSMS = "ExternalSMS",
   ExternalEmail = "ExternalEmail",
-  InternalEmail = "InternalEmail",
-  ShareOnFacebook = "ShareOnFacebook",
+  StationPublish = "StationPublish",
+  ExternalNotificationPush = "ExternalNotificationPush",
+  InternalNotificationPush = "InternalNotificationPush",
 }
 
 export interface ActionDetails {}

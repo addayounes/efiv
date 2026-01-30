@@ -47,7 +47,7 @@ const mockData: any = {
         },
         {
           id: "action-email-interne",
-          type: "InternalEmail",
+          type: "ExternalSMS",
           details: {
             subject: "Incident ligne – Information voyageurs envoyée",
             body: "Les voyageurs du train concerné ont été informés du retard et de la reprise progressive de la circulation.",

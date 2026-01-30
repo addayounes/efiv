@@ -8,14 +8,10 @@ interface FlowActionRendererProps {
 
 const FlowActionRenderer: React.FC<FlowActionRendererProps> = ({ action }) => {
   switch (action.type) {
-    case ActionType.SMS:
+    case ActionType.ExternalSMS:
       return <ActionSMSVariant action={action} />;
     case ActionType.ExternalEmail:
       return <ActionEmailVariant action={action} />;
-    case ActionType.InternalEmail:
-      return <ActionEmailVariant action={action} />;
-    case ActionType.ShareOnFacebook:
-      return <></>;
     case ActionType.ShareOnX:
       return <></>;
     default:

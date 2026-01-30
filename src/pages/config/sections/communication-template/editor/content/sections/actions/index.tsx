@@ -35,7 +35,7 @@ const EditorActions: React.FC<EditorActionsProps> = ({ stageIndex }) => {
       </div>
       <p className="text-xs font-medium text-gray-500">Actions</p>
       {filteredActions.length ? (
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-x-2">
           {filteredActions.map((action) => {
             return (
               <div

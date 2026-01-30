@@ -1,6 +1,6 @@
 import type React from "react";
-import { Facebook, Mail, Phone, X } from "lucide-react";
 import { ActionType } from "@/types/entity/communication";
+import { Bell, Mail, Phone, X, Volume2 } from "lucide-react";
 
 export interface EventTypeInfo {
   label: string;
@@ -13,8 +13,8 @@ export interface EventTypeInfo {
 }
 
 export const FlowActionTypeConfigMap: Record<ActionType, EventTypeInfo> = {
-  [ActionType.SMS]: {
-    label: "SMS",
+  [ActionType.ExternalSMS]: {
+    label: "Envoyer un SMS aux voyageurs",
     icon: <Phone size={14} />,
     colors: {
       bg: "bg-red-100",
@@ -23,12 +23,12 @@ export const FlowActionTypeConfigMap: Record<ActionType, EventTypeInfo> = {
     },
   },
   [ActionType.ShareOnX]: {
-    label: "Share on X",
+    label: "Publier sur X",
     icon: <X size={14} />,
     colors: { bg: "bg-black", text: "text-white", border: "border-white" },
   },
   [ActionType.ExternalEmail]: {
-    label: "External Email",
+    label: "Envoyer un mail aux voyageurs",
     icon: <Mail size={14} />,
     colors: {
       bg: "bg-orange-100",
@@ -36,18 +36,27 @@ export const FlowActionTypeConfigMap: Record<ActionType, EventTypeInfo> = {
       border: "border-orange-800",
     },
   },
-  [ActionType.InternalEmail]: {
-    label: "Internal Email",
-    icon: <Mail size={14} />,
+  [ActionType.ExternalNotificationPush]: {
+    label: "Push notif aux voyageurs",
+    icon: <Bell size={14} />,
     colors: {
-      bg: "bg-teal-100",
-      text: "text-teal-800",
-      border: "border-teal-800",
+      bg: "bg-blue-100",
+      text: "text-blue-800",
+      border: "border-blue-800",
     },
   },
-  [ActionType.ShareOnFacebook]: {
-    label: "Share on Facebook",
-    icon: <Facebook size={14} />,
+  [ActionType.InternalNotificationPush]: {
+    label: "Push notif pour agent",
+    icon: <Bell size={14} />,
+    colors: {
+      bg: "bg-purple-100",
+      text: "text-purple-800",
+      border: "border-purple-800",
+    },
+  },
+  [ActionType.StationPublish]: {
+    label: "Publier dans une gare",
+    icon: <Volume2 size={14} />,
     colors: {
       bg: "bg-blue-100",
       text: "text-blue-800",

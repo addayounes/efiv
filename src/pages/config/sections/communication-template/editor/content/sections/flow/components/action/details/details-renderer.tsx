@@ -18,14 +18,10 @@ const ActionDetailsRenderer: React.FC<ActionDetailsRendererProps> = ({
   if (!action || !stage) return null;
 
   switch (action.type) {
-    case ActionType.SMS:
+    case ActionType.ExternalSMS:
       return <ActionSMSVariantDetails action={action} stage={stage} />;
     case ActionType.ExternalEmail:
       return <ActionEmailVariantDetails action={action} stage={stage} />;
-    case ActionType.InternalEmail:
-      return <ActionEmailVariantDetails action={action} stage={stage} />;
-    case ActionType.ShareOnFacebook:
-      return <></>;
     case ActionType.ShareOnX:
       return <></>;
     default:
