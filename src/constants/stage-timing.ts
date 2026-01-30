@@ -8,22 +8,22 @@ export interface PresetOption {
 
 export const STAGE_TIMING_PRESETS: PresetOption[] = [
   {
-    label: "Dans 10 minutes",
+    label: "Après 10 minutes",
     value: "preset_1",
     config: { value: 10, unit: TimingUnit.MINUTES },
   },
   {
-    label: "Dans 30 minutes",
+    label: "Après 30 minutes",
     value: "preset_2",
     config: { value: 30, unit: TimingUnit.MINUTES },
   },
   {
-    label: "Dans 1 heure",
+    label: "Après 1 heure",
     value: "preset_3",
     config: { value: 1, unit: TimingUnit.HOURS },
   },
   {
-    label: "Dans 2 heures",
+    label: "Après 2 heures",
     value: "preset_4",
     config: { value: 2, unit: TimingUnit.HOURS },
   },

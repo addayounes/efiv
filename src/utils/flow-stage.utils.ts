@@ -13,7 +13,7 @@ export const getPreviewText = (timingValue?: TimingConfig): string => {
         ? "heure"
         : "heures";
 
-  return `Cette étape sera exécutée dans ${value ?? "-"} ${unitText}.`;
+  return `Cette étape sera exécutée après ${value ?? "-"} ${unitText}.`;
 };
 
 export const getShortPreviewText = (timingValue?: TimingConfig): string => {
@@ -29,5 +29,5 @@ export const getShortPreviewText = (timingValue?: TimingConfig): string => {
         ? "heure"
         : "heures";
 
-  return `Dans ${value ?? "-"} ${unitText}`;
+  return `Après ${value ?? "-"} ${unitText}`;
 };
