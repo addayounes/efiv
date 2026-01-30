@@ -4,6 +4,7 @@ import StageDetails from "./stage/details";
 import ActionDetails from "./action/details";
 import { useAppSelector } from "@/redux/utils";
 import type { CommunicationTemplate } from "@/types/entity/communication";
+import StartOfIncident from "./stage/start-of-incident";
 
 interface MainFlowContentProps {
   template: CommunicationTemplate;
@@ -20,6 +21,8 @@ const MainFlowContent: React.FC<MainFlowContentProps> = ({ template }) => {
           "-translate-x-[25%]": !!selectedStage || !!selectedAction,
         })}
       >
+        <StartOfIncident />
+
         {(template.stages ?? []).map((stage, index) => {
           return <FlowStage key={stage.id} stage={stage} index={index} />;
         })}
