@@ -3,14 +3,19 @@ import EventHeader from "./event-header";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { eventsMock } from "../list/columns";
+import { useAppSelector } from "@/redux/utils";
 import { __routes__ } from "@/constants/routes";
 import PageHeader from "@/components/page-header";
 import type { IEvent } from "@/types/entity/event";
+import EditorFlow from "@/pages/config/sections/communication-template/editor/content/sections/flow";
 
 const EventDetails: React.FC = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [event, setEvent] = useState<IEvent | undefined>();
+  const { selectedAction, selectedStage, ...rest } = useAppSelector(
+    (s) => s.communication,
+  );
 
   useEffect(() => {
     if (!id) return;
@@ -42,6 +47,9 @@ const EventDetails: React.FC = () => {
       />
       <main className="px-6">
         <EventHeader event={event} />
+        <div className="bg-primary-bg h-[calc(100vh-180px)] overflow-y-auto dotted-bg border border-gray-200 rounded shadow my-4">
+          <EditorFlow template={rest as any} />
+        </div>
       </main>
     </div>
   );

@@ -23,16 +23,10 @@ const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({ stage }) => {
       }}
     >
       <Button
-        type="text"
-        className="group/play-button"
+        type="primary"
         onClick={(e) => e.stopPropagation()}
         disabled={stage.actions.length === 0}
-        icon={
-          <Play
-            size={18}
-            className="mt-1 !text-gray-500 group-hover/play-button:!text-primary"
-          />
-        }
+        icon={<Play size={18} className="mt-1" />}
       />
     </Popconfirm>
   );

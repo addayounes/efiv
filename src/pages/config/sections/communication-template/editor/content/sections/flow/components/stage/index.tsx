@@ -42,8 +42,8 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
             <p className="text-sm text-gray-500">
               {getShortPreviewText(stage.timingConfig)}
             </p>
-            <ExecuteStageButton stage={stage} />
             <FlowDeleteButton onDelete={handleDeleteStage} />
+            <ExecuteStageButton stage={stage} />
           </div>
         </div>
 
