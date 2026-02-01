@@ -8,6 +8,7 @@ import type { Stage } from "@/types/entity/communication";
 import { getShortPreviewText } from "@/utils/flow-stage.utils";
 import { useAppDispatch, useAppSelector } from "@/redux/utils";
 import { deleteStage, setSelectedStage } from "@/redux/slices/communication";
+import StageStatus from "./stage-status";
 
 interface FlowStageProps {
   stage: Stage;
@@ -37,11 +38,16 @@ const FlowStage: React.FC<FlowStageProps> = ({ stage, index }) => {
           onClick={handleOnClick}
           className="p-4 flex items-center justify-between border-b border-gray-200 cursor-pointer "
         >
-          <h3 className="text-sm font-medium">{stage.name}</h3>
           <div className="flex items-center gap-2">
-            <p className="text-sm text-gray-500">
-              {getShortPreviewText(stage.timingConfig)}
-            </p>
+            <StageStatus sent={false} />
+            <div className="-my-1">
+              <h3 className="text-sm font-medium">{stage.name}</h3>
+              <p className="text-xs text-gray-500">
+                {getShortPreviewText(stage.timingConfig)}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
             <FlowDeleteButton onDelete={handleDeleteStage} />
             <ExecuteStageButton stage={stage} />
           </div>

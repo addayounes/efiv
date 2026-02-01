@@ -20,8 +20,8 @@ export interface Stage {
   id: string;
   name: string;
   timingConfig?: TimingConfig;
-  active: boolean;
   actions: Action[];
+  sent?: boolean;
 }
 
 export interface Action {

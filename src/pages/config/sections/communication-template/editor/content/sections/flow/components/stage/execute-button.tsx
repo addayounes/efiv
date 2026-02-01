@@ -24,6 +24,7 @@ const ExecuteStageButton: React.FC<ExecuteStageButtonProps> = ({ stage }) => {
     >
       <Button
         type="primary"
+        className="!rounded-full"
         onClick={(e) => e.stopPropagation()}
         disabled={stage.actions.length === 0}
         icon={<Play size={18} className="mt-1" />}
