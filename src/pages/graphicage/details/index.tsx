@@ -10,7 +10,7 @@ const GraphicageDetails: React.FC<GraphicageDetailsProps> = ({
   setActiveTabs,
 }) => {
   return (
-    <div className="p-4">
+    <div className="p-4 w-full">
       <GraphicageOpenLinesTabs
         activeTabs={activeTabs}
         setActiveTabs={setActiveTabs}
