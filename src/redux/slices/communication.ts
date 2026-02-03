@@ -116,7 +116,6 @@ export const communicationSlice = createSlice({
       const newStage: Stage = {
         id: crypto.randomUUID(),
         name: "Nouveau stage",
-        active: true,
         actions: [],
       };
       state.stages.splice(action.payload.position, 0, newStage);

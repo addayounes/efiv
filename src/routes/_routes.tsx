@@ -12,6 +12,7 @@ import UpdateOperationlCirculation from "@/pages/circulations/update-form";
 import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
 import CompositionForm from "@/pages/config/sections/composition/composition/form";
 import CommunicationTemplateEditor from "@/pages/config/sections/communication-template/editor";
+import Graphicage from "@/pages/graphicage";
 
 export interface RouteType {
   path: string;
@@ -69,6 +70,16 @@ export const privateRoutes: RouteType[] = [
       ConfigSidebarElementsNames.MotifRetard,
     ),
     element: <MotifForm />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Graphicage.Main,
+    element: <Graphicage />,
+    withLayout: true,
+  },
+  {
+    path: __routes__.Graphicage.Details,
+    element: <Graphicage />,
     withLayout: true,
   },
   {

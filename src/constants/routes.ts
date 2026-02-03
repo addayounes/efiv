@@ -1,5 +1,9 @@
 export const __routes__ = {
   Dashboard: "/",
+  Graphicage: {
+    Main: "/graphicage",
+    Details: "/graphicage/:line",
+  },
   Events: {
     Main: "/events",
     Details: "/events/:id",

@@ -1,9 +1,16 @@
+import {
+  Mail,
+  House,
+  Activity,
+  Settings,
+  TrainFront,
+  ChartColumn,
+} from "lucide-react";
 import { Tooltip } from "antd";
 import { cn } from "@/utils/cn";
 import { __routes__ } from "@/constants/routes";
 import { Link, useLocation } from "react-router-dom";
 import { configSidebarElements } from "@/pages/config/sidebar";
-import { Activity, House, Mail, Settings, TrainFront } from "lucide-react";
 
 const SidebarElements = [
   {
@@ -25,6 +32,11 @@ const SidebarElements = [
     label: "Événements de communication",
     icon: <Mail color="white" />,
     route: __routes__.Events.Main,
+  },
+  {
+    label: "Graphicage",
+    icon: <ChartColumn color="white" />,
+    route: __routes__.Graphicage.Main,
   },
   {
     label: "Configuration",
