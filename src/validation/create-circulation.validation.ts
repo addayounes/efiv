@@ -33,7 +33,7 @@ const parcoursItemSchema = yup.object().shape({
       texte: yup.string().required("Le texte est requis"),
       dateHeureDebutPublication: yup.string().required("Ce champ est requis"),
       dateHeureFinPublication: yup.string(),
-    })
+    }),
   ),
 });
 
@@ -53,35 +53,41 @@ export const CreateCirculationSchema = yup
     monthDays: yup
       .array()
       .of(yup.number())
-      .when("dateType", {
-        is: (val: any) => {
-          return val == CirculationDateType.Calendar;
+      .when(["dateType", "dateFrequency"], {
+        is: (dateType: any, dateFrequency: any) => {
+          return (
+            dateType == CirculationDateType.Calendar &&
+            dateFrequency == DateFrequency.Monthly
+          );
         },
         then: (s) =>
           s
             .required("Veuillez sélectionner au moins un jour du mois")
             .min(1, "Veuillez sélectionner au moins un jour du mois"),
-        otherwise: (s) => s,
+        otherwise: (s) => s.optional().nullable(),
       }),
     weeklyDays: yup
       .array()
       .of(yup.number())
-      .when("dateType", {
-        is: (val: any) => {
-          return val == CirculationDateType.Calendar;
+      .when(["dateType", "dateFrequency"], {
+        is: (dateType: any, dateFrequency: any) => {
+          return (
+            dateType == CirculationDateType.Calendar &&
+            dateFrequency == DateFrequency.Weekly
+          );
         },
         then: (s) =>
           s
             .required("Veuillez sélectionner au moins un jour de la semaine")
             .min(1, "Veuillez sélectionner au moins un jour de la semaine"),
-        otherwise: (s) => s,
+        otherwise: (s) => s.optional().nullable(),
       }),
     date: yup.string().when("dateType", {
       is: (val: any) => {
         return val == CirculationDateType.Single;
       },
       then: (s) => s.required("Veuillez choisir la date de la circulation"),
-      otherwise: (s) => s,
+      otherwise: (s) => s.optional().nullable(),
     }),
     numeroCommercial: yup.string().required("Le numéro commercial est requis"),
     nomCommercial: yup.string(),
@@ -128,7 +134,7 @@ export const CreateCirculationSchema = yup
   });
 
 export const getFieldsToValidateByStep = (
-  values: CreateCirculationDto
+  values: CreateCirculationDto,
 ): Record<string, string[]> => ({
   [CreateCirculationSteps.GENERAL]: [
     "numeroCommercial",
