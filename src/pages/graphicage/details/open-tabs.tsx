@@ -1,15 +1,31 @@
 import { Tabs } from "antd";
-import { linesData } from "../lines";
 import { GraphicageGraph } from "./graph";
 import { __routes__ } from "@/constants/routes";
+import { GraphicageChart } from "./graph-chartjs";
 import { useNavigate, useParams } from "react-router-dom";
+import type { ICirculation } from "@/types/entity/circulation";
+import GraphV2Demo from "./versions/v2/demo";
 
 interface GraphicageOpenLinesTabsProps {
+  lines: string[];
+  loading: boolean;
+  data: ICirculation[];
   activeTabs: string[];
   setActiveTabs: React.Dispatch<React.SetStateAction<string[]>>;
 }
+function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 
 const GraphicageOpenLinesTabs: React.FC<GraphicageOpenLinesTabsProps> = ({
+  data,
+  loading,
+  lines,
   activeTabs,
   setActiveTabs,
 }) => {
@@ -20,6 +36,34 @@ const GraphicageOpenLinesTabs: React.FC<GraphicageOpenLinesTabsProps> = ({
     if (action === "remove")
       setActiveTabs((prev) => prev.filter((tab) => tab !== targetKey));
   };
+
+  const stops = (
+    data
+      ?.map((circulation) =>
+        circulation?.parcours?.pointDeParcours?.map((p) => ({
+          id: p?.desserte?.codeUIC,
+          name: p?.desserte?.libelle23,
+        })),
+      )
+      ?.flat() || []
+  ).map((s, i) => ({ ...s, order: i }));
+
+  const uniquestops = stops.filter(
+    (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
+  );
+
+  const linesData = data?.map((circulation) => ({
+    id: circulation?.id,
+    label: circulation?.numeroCommercial,
+    color: getRandomColor(),
+    stops: circulation?.parcours?.pointDeParcours
+      ?.sort((a, b) => a.rang - b.rang)
+      ?.map((p) => ({
+        stopId: p?.desserte?.codeUIC,
+        arrival: p?.arret?.arrivee?.horaire,
+        departure: p?.arret?.depart?.horaire,
+      })),
+  }));
 
   return (
     <Tabs
@@ -34,126 +78,15 @@ const GraphicageOpenLinesTabs: React.FC<GraphicageOpenLinesTabsProps> = ({
       }
     >
       {activeTabs.map((tab) => {
-        const targetLine = linesData.find((l) => l.value === tab);
+        const targetLine = lines.find((l) => l === tab);
         return (
-          <Tabs.TabPane className="pr-4" key={tab} tab={targetLine?.label}>
-            <GraphicageGraph
-              width={1200}
-              height={600}
-              stops={[
-                { id: "A", name: "Paris", order: 0 },
-                { id: "B", name: "Lyon", order: 1 },
-                { id: "C", name: "Marseille", order: 2 },
-                { id: "D", name: "Aix-en-Provence", order: 3 },
-                { id: "E", name: "Nice", order: 4 },
-              ]}
-              lines={[
-                {
-                  id: "T1",
-                  label: "Train 001",
-                  color: "blue",
-                  stops: [
-                    {
-                      stopId: "A",
-                      arrival: "2026-01-15T08:00:00Z",
-                      departure: "2026-01-15T08:15:00Z",
-                    },
-                    {
-                      stopId: "B",
-                      arrival: "2026-01-15T09:55:00Z",
-                      departure: "2026-01-15T10:00:00Z",
-                    },
-                    {
-                      stopId: "C",
-                      departure: "2026-01-15T12:30:00Z",
-                      arrival: "2026-01-15T12:30:00Z",
-                    },
-                    {
-                      stopId: "D",
-                      departure: "2026-01-15T14:00:00Z",
-                      arrival: "2026-01-15T14:00:00Z",
-                    },
-                    {
-                      stopId: "E",
-                      departure: "2026-01-15T15:30:00Z",
-                      arrival: "2026-01-15T15:30:00Z",
-                    },
-                    {
-                      stopId: "D",
-                      departure: "2026-01-15T17:10:00Z",
-                      arrival: "2026-01-15T17:10:00Z",
-                    },
-                    {
-                      stopId: "C",
-                      departure: "2026-01-15T18:50:00Z",
-                      arrival: "2026-01-15T18:50:00Z",
-                    },
-                    {
-                      stopId: "B",
-                      departure: "2026-01-15T19:30:00Z",
-                      arrival: "2026-01-15T19:30:00Z",
-                    },
-                    {
-                      stopId: "A",
-                      departure: "2026-01-15T20:55:00Z",
-                      arrival: "2026-01-15T20:55:00Z",
-                    },
-                  ],
-                },
-                {
-                  id: "T2",
-                  label: "Train 002",
-                  color: "red",
-                  stops: [
-                    {
-                      stopId: "A",
-                      departure: "2026-01-15T09:00:00Z",
-                      arrival: "2026-01-15T09:00:00Z",
-                    },
-                    {
-                      stopId: "B",
-                      departure: "2026-01-15T11:10:00Z",
-                      arrival: "2026-01-15T11:10:00Z",
-                    },
-                    {
-                      stopId: "C",
-                      departure: "2026-01-15T13:20:00Z",
-                      arrival: "2026-01-15T13:20:00Z",
-                    },
-                    {
-                      stopId: "D",
-                      departure: "2026-01-15T14:50:00Z",
-                      arrival: "2026-01-15T14:50:00Z",
-                    },
-                    {
-                      stopId: "E",
-                      departure: "2026-01-15T16:00:00Z",
-                      arrival: "2026-01-15T16:00:00Z",
-                    },
-                    {
-                      stopId: "D",
-                      departure: "2026-01-15T17:50:00Z",
-                      arrival: "2026-01-15T17:50:00Z",
-                    },
-                    {
-                      stopId: "C",
-                      departure: "2026-01-15T18:20:00Z",
-                      arrival: "2026-01-15T18:20:00Z",
-                    },
-                    {
-                      stopId: "B",
-                      departure: "2026-01-15T19:10:00Z",
-                      arrival: "2026-01-15T19:10:00Z",
-                    },
-                    {
-                      stopId: "A",
-                      departure: "2026-01-15T20:00:00Z",
-                      arrival: "2026-01-15T20:00:00Z",
-                    },
-                  ],
-                },
-              ]}
-            />
+          <Tabs.TabPane
+            key={tab}
+            tab={targetLine}
+            className="pr-4 w-[calc(100vw-376px)] overflow-x-auto"
+          >
+            <GraphV2Demo />
+            {/* <GraphicageChart lines={linesData} stops={uniquestops} /> */}
           </Tabs.TabPane>
         );
       })}

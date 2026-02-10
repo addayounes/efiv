@@ -1,8 +1,11 @@
 import { cn } from "@/utils/cn";
+import Loading from "../loading";
 import { useNavigate } from "react-router-dom";
 import { __routes__ } from "@/constants/routes";
 
 interface LinesProps {
+  lines: string[];
+  loading: boolean;
   activeTabs: string[];
   setActiveTabs: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -34,7 +37,12 @@ export const linesData = [
   { value: "bus_170", label: "Bus 170" },
 ];
 
-const Lines: React.FC<LinesProps> = ({ activeTabs, setActiveTabs }) => {
+const Lines: React.FC<LinesProps> = ({
+  lines,
+  loading,
+  activeTabs,
+  setActiveTabs,
+}) => {
   const navigate = useNavigate();
 
   const onLineClick = (lineValue: string) => {
@@ -49,22 +57,28 @@ const Lines: React.FC<LinesProps> = ({ activeTabs, setActiveTabs }) => {
   return (
     <div className="min-w-2xs py-4 border-r border-gray-200">
       <h1 className="mb-6 font-medium text-xl px-4">Liste des lignes</h1>
-      <div className="border-t border-gray-200 h-[calc(100vh-149px)] overflow-y-auto">
-        {linesData.map((item) => (
-          <div
-            key={item.value}
-            onClick={() => onLineClick(item.value)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2.5 cursor-pointer ease-out duration-300 border-b border-inherit",
-              activeTabs.includes(item.value)
-                ? "bg-primary-light text-primary"
-                : "text-gray-500 hover:bg-gray-100",
-            )}
-          >
-            <p className="text-sm font-medium">{item.label}</p>
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <div className="text-gray-500">
+          <Loading />
+        </div>
+      ) : (
+        <div className="border-t border-gray-200 h-[calc(100vh-149px)] overflow-y-auto">
+          {lines.map((item) => (
+            <div
+              key={item}
+              onClick={() => onLineClick(item)}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2.5 cursor-pointer ease-out duration-300 border-b border-inherit",
+                activeTabs.includes(item)
+                  ? "bg-primary-light text-primary"
+                  : "text-gray-500 hover:bg-gray-100",
+              )}
+            >
+              <p className="text-sm font-medium">{item}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

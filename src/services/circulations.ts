@@ -7,45 +7,45 @@ import type { CreateCirculationApiPayload } from "@/types/dto/create-circulation
 const SERVICE_BASE_URL = "/api/Course";
 
 export const createCirculationService = async (
-  body: CreateCirculationApiPayload
+  body: CreateCirculationApiPayload,
 ) => {
   const { data } = await api.post(`${SERVICE_BASE_URL}/createCourse`, body);
   return data;
 };
 
 export const updateCirculationService = async (
-  body: CreateCirculationApiPayload
+  body: CreateCirculationApiPayload,
 ) => {
   const { data } = await api.post(`${SERVICE_BASE_URL}/updateCourse`, body);
   return data;
 };
 
 export const createDraftCirculationService = async (
-  body: Partial<CreateCirculationApiPayload>
+  body: Partial<CreateCirculationApiPayload>,
 ) => {
   const { data } = await api.post(`${SERVICE_BASE_URL}/postDraftCourse`, body);
   return data;
 };
 
 export const fetchDraftCirculationService = async (
-  params: IFetchDraftParams
+  params: IFetchDraftParams,
 ) => {
   const { data } = await api.get(`${SERVICE_BASE_URL}/searchDraft`, { params });
   return data;
 };
 
 export const fetchPreOperationalCirculationService = async (
-  params: IPaginationParams
+  params: IPaginationParams,
 ): Promise<IPaginatedResponse<ICirculation>> => {
   const { data } = await api.get(
     `${SERVICE_BASE_URL}/getPresOperationelleCourse`,
-    { params }
+    { params },
   );
   return data;
 };
 
 export const fetchOperationalCirculationService = async (
-  params: IPaginationParams
+  params: IPaginationParams,
 ): Promise<IPaginatedResponse<ICirculation>> => {
   const { data } = await api.get(`${SERVICE_BASE_URL}/getOperationelleCourse`, {
     params,
@@ -54,7 +54,7 @@ export const fetchOperationalCirculationService = async (
 };
 
 export const fetchCirculationByIdService = async (
-  id: string
+  id: string,
 ): Promise<ICirculation> => {
   const { data } = await api.get(`${SERVICE_BASE_URL}/${id}`);
   return data;
@@ -65,12 +65,12 @@ export const getCouplableCirculationService = async (
   body: {
     codeUIC: string;
     departureHour: string;
-  }[]
+  }[],
 ): Promise<ICirculation[]> => {
   const { data } = await api.post(
     `${SERVICE_BASE_URL}/searchCoupledTrains`,
     body,
-    { params: { date } }
+    { params: { date } },
   );
   return data;
 };
@@ -91,6 +91,28 @@ export const getRecurringDatesService = async (params: {
   });
   const { data } = await api.get(`${SERVICE_BASE_URL}/recurringDates`, {
     params: query,
+  });
+  return data;
+};
+
+export const fetchCirculationByLineService = async (params: {
+  ligneCommerciale: string;
+  startDate?: string;
+  endDate?: string;
+  limit: number;
+}): Promise<ICirculation[]> => {
+  const { data } = await api.get(`${SERVICE_BASE_URL}/searchCoursesByLigne`, {
+    params,
+  });
+  return data;
+};
+
+export const fetchAvaialbleLinesService = async (params: {
+  startDate?: string;
+  endDate?: string;
+}): Promise<string[]> => {
+  const { data } = await api.get(`${SERVICE_BASE_URL}/getLigneCommerciale`, {
+    params,
   });
   return data;
 };
