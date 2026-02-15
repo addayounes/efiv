@@ -1,7 +1,7 @@
 import { Tabs } from "antd";
-import { GraphicageGraph } from "./graph";
+// import { GraphicageGraph } from "./graph";
 import { __routes__ } from "@/constants/routes";
-import { GraphicageChart } from "./graph-chartjs";
+// import { GraphicageChart } from "./graph-chartjs";
 import { useNavigate, useParams } from "react-router-dom";
 import type { ICirculation } from "@/types/entity/circulation";
 import GraphV2Demo from "./versions/v2/demo";
@@ -13,18 +13,10 @@ interface GraphicageOpenLinesTabsProps {
   activeTabs: string[];
   setActiveTabs: React.Dispatch<React.SetStateAction<string[]>>;
 }
-function getRandomColor() {
-  var letters = "0123456789ABCDEF";
-  var color = "#";
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
 
 const GraphicageOpenLinesTabs: React.FC<GraphicageOpenLinesTabsProps> = ({
-  data,
-  loading,
+  // data,
+  // loading,
   lines,
   activeTabs,
   setActiveTabs,
@@ -37,33 +29,33 @@ const GraphicageOpenLinesTabs: React.FC<GraphicageOpenLinesTabsProps> = ({
       setActiveTabs((prev) => prev.filter((tab) => tab !== targetKey));
   };
 
-  const stops = (
-    data
-      ?.map((circulation) =>
-        circulation?.parcours?.pointDeParcours?.map((p) => ({
-          id: p?.desserte?.codeUIC,
-          name: p?.desserte?.libelle23,
-        })),
-      )
-      ?.flat() || []
-  ).map((s, i) => ({ ...s, order: i }));
+  // const stops = (
+  //   data
+  //     ?.map((circulation) =>
+  //       circulation?.parcours?.pointDeParcours?.map((p) => ({
+  //         id: p?.desserte?.codeUIC,
+  //         name: p?.desserte?.libelle23,
+  //       })),
+  //     )
+  //     ?.flat() || []
+  // ).map((s, i) => ({ ...s, order: i }));
 
-  const uniquestops = stops.filter(
-    (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
-  );
+  // const uniquestops = stops.filter(
+  //   (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
+  // );
 
-  const linesData = data?.map((circulation) => ({
-    id: circulation?.id,
-    label: circulation?.numeroCommercial,
-    color: getRandomColor(),
-    stops: circulation?.parcours?.pointDeParcours
-      ?.sort((a, b) => a.rang - b.rang)
-      ?.map((p) => ({
-        stopId: p?.desserte?.codeUIC,
-        arrival: p?.arret?.arrivee?.horaire,
-        departure: p?.arret?.depart?.horaire,
-      })),
-  }));
+  // const linesData = data?.map((circulation) => ({
+  //   id: circulation?.id,
+  //   label: circulation?.numeroCommercial,
+  //   color: getRandomColor(),
+  //   stops: circulation?.parcours?.pointDeParcours
+  //     ?.sort((a, b) => a.rang - b.rang)
+  //     ?.map((p) => ({
+  //       stopId: p?.desserte?.codeUIC,
+  //       arrival: p?.arret?.arrivee?.horaire,
+  //       departure: p?.arret?.depart?.horaire,
+  //     })),
+  // }));
 
   return (
     <Tabs
