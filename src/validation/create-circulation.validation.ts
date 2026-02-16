@@ -1,10 +1,10 @@
+import {
+  DateFrequency,
+  CirculationDateType,
+} from "@/constants/circulation-date-types";
 import * as yup from "yup";
 import { CreateCirculationSteps } from "@/constants/create-form-steps";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
-import {
-  CirculationDateType,
-  DateFrequency,
-} from "@/constants/circulation-date-types";
 
 const parcoursItemSchema = yup.object().shape({
   station: yup.mixed().required("La gare est requise"),
@@ -23,18 +23,6 @@ const parcoursItemSchema = yup.object().shape({
     numeroSillon: yup.string(),
     couplageId: yup.string(),
   }),
-
-  informationsConjoncturelles: yup.array().of(
-    yup.object().shape({
-      categorie: yup.string().required("La catégorie est requise"),
-      typeInformation: yup
-        .string()
-        .required("Le type d'information est requis"),
-      texte: yup.string().required("Le texte est requis"),
-      dateHeureDebutPublication: yup.string().required("Ce champ est requis"),
-      dateHeureFinPublication: yup.string(),
-    }),
-  ),
 });
 
 export const CreateCirculationSchema = yup
@@ -131,6 +119,18 @@ export const CreateCirculationSchema = yup
 
         return true;
       }),
+
+    informationsConjoncturelles: yup.array().of(
+      yup.object().shape({
+        categorie: yup.string().required("La catégorie est requise"),
+        typeInformation: yup
+          .string()
+          .required("Le type d'information est requis"),
+        texte: yup.string().required("Le texte est requis"),
+        dateHeureDebutPublication: yup.string().required("Ce champ est requis"),
+        dateHeureFinPublication: yup.string(),
+      }),
+    ),
   });
 
 export const getFieldsToValidateByStep = (
@@ -151,7 +151,7 @@ export const getFieldsToValidateByStep = (
     "destination",
     "serviceDeCourse",
   ],
-  [CreateCirculationSteps.ROUTE]: ["parcours"],
+  [CreateCirculationSteps.ROUTE]: ["parcours", "informationsConjoncturelles"],
   [CreateCirculationSteps.DATE]:
     values.dateType === CirculationDateType.Calendar
       ? [

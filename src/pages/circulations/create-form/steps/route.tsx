@@ -1,3 +1,4 @@
+import { cn } from "@/utils/cn";
 import { Button, Tabs } from "antd";
 import { defaultStop } from "../form";
 import { useFormikContext } from "formik";
@@ -11,13 +12,22 @@ import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 interface RouteStepProps {}
 
 const RouteStep: React.FC<RouteStepProps> = ({}) => {
-  const { values } = useFormikContext<CreateCirculationDto>();
+  const { values, errors } = useFormikContext<CreateCirculationDto>();
   return (
     <div className="h-full p-4 pt-2">
       <Tabs className="h-full">
         <Tabs.TabPane
           key="stops"
-          tab={<p className="font-medium">Dessertes</p>}
+          tab={
+            <p
+              className={cn(
+                "font-medium",
+                errors["parcours"] && "text-red-500",
+              )}
+            >
+              Dessertes
+            </p>
+          }
         >
           <div className="flex h-full">
             <div className="w-2/3 pr-4 space-y-10 border-r border-gray-200">
@@ -30,7 +40,16 @@ const RouteStep: React.FC<RouteStepProps> = ({}) => {
         </Tabs.TabPane>
         <Tabs.TabPane
           key="info-conj"
-          tab={<p className="font-medium">Informations conjoncturelles</p>}
+          tab={
+            <p
+              className={cn(
+                "font-medium",
+                errors["informationsConjoncturelles"] && "text-red-500",
+              )}
+            >
+              Informations conjoncturelles
+            </p>
+          }
         >
           <div className="w-[99%]">
             <InfoConjConfig />
