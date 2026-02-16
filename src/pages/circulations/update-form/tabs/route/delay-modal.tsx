@@ -45,17 +45,19 @@ const DelayModal: React.FC<DelayModalProps> = ({
   const motifsOptions = useMemo(
     () =>
       motifs.map((m) => ({
-        value: m.id,
+        value: m.id?.toString(),
         label: m.interne,
         title: m.externe,
       })),
-    [motifs]
+    [motifs],
   );
 
   const selectedMotif = useMemo(
     () => motifs.find((m) => m.id === Number(motif)),
-    [motif, motifs]
+    [motif, motifs],
   );
+
+  console.log(motif, selectedMotif);
 
   const parcours = values.parcours?.pointDeParcours;
 
@@ -66,7 +68,7 @@ const DelayModal: React.FC<DelayModalProps> = ({
     if (!applyToFollowingStops) return [stop];
     return [...(parcours?.slice(index) ?? [])].filter((s) => {
       const isDeleted = s.statuts.find(
-        (st) => st.statut === PointDeParcourStatut.SUPPRIME
+        (st) => st.statut === PointDeParcourStatut.SUPPRIME,
       );
       return !isDeleted;
     });
@@ -82,7 +84,10 @@ const DelayModal: React.FC<DelayModalProps> = ({
   };
 
   const onDelay = () => {
-    if (delay.arrival == 0 || delay.departure == 0)
+    if (
+      (!isOrigin && delay.arrival == 0) ||
+      (!isDestination && delay.departure == 0)
+    )
       return toast.error("Veuillez renseigner les retards.");
 
     for (const s of affectedStops) {
@@ -94,7 +99,7 @@ const DelayModal: React.FC<DelayModalProps> = ({
         setFieldValue(`${fieldPrefix}.arrivee.retardReel`, delay.arrival);
         setFieldValue(
           `${fieldPrefix}.arrivee.retardVoyageur`,
-          roundToNearest(delay.arrival ?? 0, 5)
+          roundToNearest(delay.arrival ?? 0, 5),
         );
 
         if (selectedMotif) {
@@ -114,7 +119,7 @@ const DelayModal: React.FC<DelayModalProps> = ({
         setFieldValue(`${fieldPrefix}.depart.retardReel`, delay.departure);
         setFieldValue(
           `${fieldPrefix}.depart.retardVoyageur`,
-          roundToNearest(delay.departure ?? 0, 5)
+          roundToNearest(delay.departure ?? 0, 5),
         );
         if (selectedMotif) {
           setFieldValue(`${fieldPrefix}.depart.motifTransporteurAsync`, {
