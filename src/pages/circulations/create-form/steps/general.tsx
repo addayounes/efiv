@@ -4,12 +4,12 @@ import {
 } from "@/constants/mode-sub-mode";
 import { Collapse } from "antd";
 import { useMemo } from "react";
-import { Field, useFormikContext } from "formik";
-import StationsField from "./components/stations-field";
 import Select from "@/components/formik/select";
 import Switch from "@/components/formik/switch";
+import { Field, useFormikContext } from "formik";
 import TextField from "@/components/formik/textfield";
 import FormGroupTitle from "@/components/group-title";
+import StationsField from "./components/stations-field";
 import { OnboardServices } from "@/constants/onboard-services";
 import { TRAIN_LENGTH_OPTIONS } from "@/constants/train-length";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
@@ -21,12 +21,12 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
 
   const subModes = useMemo(
     () => getSubModesForMode(values.mode as any),
-    [values.mode]
+    [values.mode],
   );
 
   const handleOriginDestinationChange = async (
     field: "origin" | "destination",
-    newStation: any
+    newStation: any,
   ) => {
     const newParcours = [...(values.parcours ?? [])];
 
@@ -38,6 +38,24 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
         ...newParcours[newParcours.length - 1],
         station: newStation,
       };
+
+    await setFieldValue("parcours", newParcours);
+  };
+
+  const fillSillonInParcoursStops = async (sillon: string) => {
+    const newParcours = [...(values.parcours ?? [])].map((s, index, arr) => ({
+      ...s,
+      depart: s.depart
+        ? index === 0
+          ? { ...s.depart, numeroSillon: sillon }
+          : s.depart
+        : s.depart,
+      arrivee: s.arrivee
+        ? index === arr.length - 1
+          ? { ...s.arrivee, numeroSillon: sillon }
+          : s.arrivee
+        : s.arrivee,
+    }));
 
     await setFieldValue("parcours", newParcours);
   };
@@ -54,6 +72,10 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             placeholder="8960"
             label="N° commercial"
             name="numeroCommercial"
+            onChange={(e: any) => {
+              setFieldValue("numeroCommercial", e.target.value);
+              fillSillonInParcoursStops(e.target.value);
+            }}
           />
           <Field
             as={TextField}

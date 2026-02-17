@@ -21,7 +21,7 @@ function _findNextNonDeleted(stops: ParcoursDto[], start: number) {
       codeUIC: s.station?.value!,
       isDeleted: false,
     })),
-    start
+    start,
   );
 }
 
@@ -31,13 +31,13 @@ function _findPrevNonDeleted(stops: ParcoursDto[], start: number) {
       codeUIC: s.station?.value!,
       isDeleted: false,
     })),
-    start
+    start,
   );
 }
 
 const getNextAndPreviousStopTimes = (
   parcours: ParcoursDto[],
-  index: number
+  index: number,
 ) => {
   const prevIdx = _findPrevNonDeleted(parcours, index - 1);
 
@@ -65,7 +65,7 @@ const StepsGeneralTab: React.FC<StepsGeneralTabProps> = ({ index }) => {
   const disabledTimes = useMemo(() => {
     const { nextArrival, prevDeparture } = getNextAndPreviousStopTimes(
       values.parcours || [],
-      index
+      index,
     );
     return getDisabledTimes(
       {
@@ -77,7 +77,7 @@ const StepsGeneralTab: React.FC<StepsGeneralTabProps> = ({ index }) => {
           : undefined,
       },
       prevDeparture,
-      nextArrival
+      nextArrival,
     );
   }, [
     index,
@@ -108,7 +108,8 @@ const StepsGeneralTab: React.FC<StepsGeneralTabProps> = ({ index }) => {
                 size="medium"
                 label="Sillon"
                 as={TextField}
-                placeholder="155898"
+                placeholder="Numero de sillon"
+                disabled={index === 0}
                 name={`parcours.${index}.arrivee.numeroSillon`}
               />
             </div>
@@ -130,8 +131,9 @@ const StepsGeneralTab: React.FC<StepsGeneralTabProps> = ({ index }) => {
                 size="medium"
                 label="Sillon"
                 as={TextField}
-                placeholder="155898"
+                placeholder="Numero de sillon"
                 name={`parcours.${index}.depart.numeroSillon`}
+                disabled={index === values.parcours?.length - 1}
               />
             </div>
           </div>
