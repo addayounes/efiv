@@ -210,22 +210,6 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             }}
           />
         </div>
-
-        <div className="mt-12">
-          <FormGroupTitle>Services à bord</FormGroupTitle>
-        </div>
-        <div>
-          <Field
-            allowClear
-            as={Select}
-            mode="multiple"
-            className="w-full"
-            name="serviceDeCourse"
-            label="Service à bord"
-            placeholder="Sélectionner le service à bord"
-            options={OnboardServices}
-          />
-        </div>
       </div>
     </div>
   );

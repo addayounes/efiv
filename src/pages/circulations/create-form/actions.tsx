@@ -24,7 +24,7 @@ const FormActions: React.FC<FormActionsProps> = ({}) => {
   const { validateForm, setTouched, setSubmitting, values, isSubmitting } =
     useFormikContext<CreateCirculationDto>();
 
-  const isFirstStep = step === CreateCirculationSteps.GENERAL;
+  const isFirstStep = step === CreateCirculationSteps.DATE;
   const isLastStep = step === CreateCirculationSteps.SUMMARY;
 
   const showCreateDraftButton =

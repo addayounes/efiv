@@ -21,7 +21,7 @@ const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
 
   const currentStep = useMemo(
     () => getStepIndex(step as CreateCirculationSteps),
-    [step]
+    [step],
   );
 
   // reset to first step if step param is invalid
@@ -31,9 +31,9 @@ const CirculationFormStepper: React.FC<CirculationFormStepperProps> = ({
     navigate(
       __routes__.Circulations.Create.replace(
         ":step",
-        CreateCirculationSteps.GENERAL
+        CreateCirculationSteps.DATE,
       ),
-      { state }
+      { state },
     );
   }, [step]);
 

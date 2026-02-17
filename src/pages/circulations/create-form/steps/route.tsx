@@ -7,6 +7,7 @@ import StationCard from "./components/station-card";
 import InfoConjConfig from "./components/info-conj";
 import FormGroupTitle from "@/components/group-title";
 import CreateCouplageTab from "./components/couplage";
+import OnboardServices from "./components/onboard-services";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface RouteStepProps {}
@@ -55,6 +56,13 @@ const RouteStep: React.FC<RouteStepProps> = ({}) => {
             <InfoConjConfig />
           </div>
         </Tabs.TabPane>
+        <Tabs.TabPane
+          key="services-a-bord"
+          tab={<p className="font-medium">Services à bord</p>}
+        >
+          <OnboardServices />
+        </Tabs.TabPane>
+
         <Tabs.TabPane
           key="couplage"
           tab={<p className="font-medium">Couplage</p>}
