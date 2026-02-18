@@ -24,6 +24,7 @@ import { __routes__ } from "@/constants/routes";
 import type { ItemType } from "antd/es/menu/interface";
 import { DATE_FORMAT_NO_TIME } from "@/constants/date-format";
 import type { ICirculation } from "@/types/entity/circulation";
+import TrainParcours from "@/components/parcours";
 
 export enum CirculationListActions {
   VIEW = "view",
@@ -132,18 +133,13 @@ export const useCirculationsListColumns = (options?: {
       },
     },
     {
-      title: "Via",
+      title: "Parcours",
       dataIndex: "parcours",
       key: "parcours",
+      width: 500,
       render(_, record) {
         return (
-          <span>
-            {(record?.parcours?.pointDeParcours?.length ?? 0) === 2
-              ? "Direct"
-              : `${
-                  (record?.parcours?.pointDeParcours?.length ?? 0) - 2
-                } dessertes`}
-          </span>
+          <TrainParcours parcours={record?.parcours?.pointDeParcours ?? []} />
         );
       },
     },
@@ -155,9 +151,11 @@ export const useCirculationsListColumns = (options?: {
         const statusLabel = PublishStatusLabelMap[record.publishStatus];
         const statusColor = PublishStatusTagColorMap[record.publishStatus];
         return statusLabel ? (
-          <Tag color={statusColor}>{statusLabel}</Tag>
+          <Tag color={statusColor} className="font-medium">
+            {statusLabel}
+          </Tag>
         ) : (
-          "N/A"
+          <p className="text-xs font-medium text-gray-500">N/A</p>
         );
       },
     },
@@ -174,7 +172,7 @@ export const useCirculationsListColumns = (options?: {
               placement="bottomRight"
               menu={{
                 items: actionsMenu(record).filter((a) =>
-                  options?.actions.includes(a!.key as CirculationListActions)
+                  options?.actions.includes(a!.key as CirculationListActions),
                 ),
               }}
             >

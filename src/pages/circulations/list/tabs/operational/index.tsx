@@ -24,7 +24,7 @@ const OperationalCirculations: React.FC<
   OperationalCirculationsProps
 > = ({}) => {
   const [currentTab, setCurrentTab] = useState<OperationalTabs>(
-    OperationalTabs.Today
+    OperationalTabs.Today,
   );
   const [loading, setLoading] = useState(false);
   const columns = useOperationalCirculationsColumns();
@@ -57,7 +57,7 @@ const OperationalCirculations: React.FC<
       } catch (error) {
         console.error("Error fetching circulations:", error);
         toast.error(
-          "Une erreur est survenue lors du chargement des circulations."
+          "Une erreur est survenue lors du chargement des circulations.",
         );
       } finally {
         setLoading(false);
@@ -68,7 +68,7 @@ const OperationalCirculations: React.FC<
   }, [filters, pagination.current, pagination.pageSize]);
 
   return (
-    <div>
+    <div className="h-screen overflow-y-auto">
       <PageHeader title={`Suivi opérationnel (${dayjs().format("L")})`} />
 
       <div className="px-6 space-y-4">
@@ -90,10 +90,10 @@ const OperationalCirculations: React.FC<
           filters={filters}
           setFilters={setFilters}
           shownFilters={[
-            CirculationFilterKeys.Mode,
             CirculationFilterKeys.Query,
             CirculationFilterKeys.Status,
-            CirculationFilterKeys.SubMode,
+            CirculationFilterKeys.LiveStatus,
+            CirculationFilterKeys.DateRange,
           ]}
         />
 

@@ -9,7 +9,7 @@ const TrainParcours: React.FC<TrainParcoursProps> = ({ parcours }) => {
   const departure = parcours[0];
   const arrival = parcours[parcours.length - 1];
   return (
-    <div className="flec flex-col w-96">
+    <div className="flex flex-col w-96">
       <div className="flex items-center justify-between">
         <p className="text-xs text-gray-500 font-medium">
           {dayjs(departure?.arret?.depart?.horaire).format("HH:mm")}

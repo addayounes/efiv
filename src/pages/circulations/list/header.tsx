@@ -4,18 +4,16 @@ import CirculationsFilters from "./filters";
 import type { StateSetter } from "@/types/state-setter";
 
 export interface ICirulationsFilters {
-  mode?: string;
   query?: string;
   status?: string;
-  subMode?: string;
+  liveStatus?: string;
   dateRange: string[];
 }
 
 export enum CirculationFilterKeys {
-  Mode = "mode",
   Query = "query",
   Status = "status",
-  SubMode = "subMode",
+  LiveStatus = "live-status",
   DateRange = "dateRange",
 }
 
@@ -43,7 +41,7 @@ const CirculationsListHeader: React.FC<CirculationsListHeaderProps> = ({
             setFilters((prev) => ({ ...prev, query: e.target.value }))
           }
           className="max-w-xl w-full"
-          placeholder="Rechercher des circulations"
+          placeholder="Rechercher par numéro de circulation"
           prefix={<Search size={16} className="text-gray-500" />}
         />
       ) : (

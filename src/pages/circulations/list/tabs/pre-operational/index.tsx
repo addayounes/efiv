@@ -48,7 +48,7 @@ const PreOperationalCirculations: React.FC<
       } catch (error) {
         console.error("Error fetching circulations:", error);
         toast.error(
-          "Une erreur est survenue lors du chargement des circulations."
+          "Une erreur est survenue lors du chargement des circulations.",
         );
       } finally {
         setLoading(false);
@@ -64,11 +64,9 @@ const PreOperationalCirculations: React.FC<
         filters={filters}
         setFilters={setFilters}
         shownFilters={[
-          CirculationFilterKeys.Mode,
           CirculationFilterKeys.Query,
-          CirculationFilterKeys.Status,
-          CirculationFilterKeys.SubMode,
           CirculationFilterKeys.DateRange,
+          CirculationFilterKeys.LiveStatus,
         ]}
       />
 

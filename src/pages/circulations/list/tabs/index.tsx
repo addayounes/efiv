@@ -1,6 +1,5 @@
 import { Tabs, Tooltip } from "antd";
 import DraftCirculations from "./draft";
-// import RefusedCirculations from "./refused";
 import PreOperationalCirculations from "./pre-operational";
 
 interface CirculationsTabsProps {}
@@ -24,20 +23,6 @@ const CirculationsTabs: React.FC<CirculationsTabsProps> = ({}) => {
         >
           <PreOperationalCirculations />
         </Tabs.TabPane>
-        {/* <Tabs.TabPane
-          tab={
-            <Tooltip
-              placement="bottom"
-              mouseEnterDelay={1}
-              title="Trains refusés ou nécessitant une action immédiate avant publication"
-            >
-              <span className="font-medium">En anomalie</span>
-            </Tooltip>
-          }
-          key="refused"
-        >
-          <RefusedCirculations />
-        </Tabs.TabPane> */}
         <Tabs.TabPane
           tab={
             <Tooltip

@@ -13,7 +13,7 @@ const CirculationsList: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="h-screen overflow-y-auto">
       <PageHeader
         title="Circulations"
         rightComponent={

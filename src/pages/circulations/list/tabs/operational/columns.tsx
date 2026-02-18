@@ -3,6 +3,10 @@ import {
   StatusTagColorMap,
   type CirculationStatus,
 } from "@/constants/circulation-status";
+import {
+  PublishStatusLabelMap,
+  PublishStatusTagColorMap,
+} from "@/constants/circulation-publish-status";
 import { Dropdown, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import type { ColumnType } from "antd/es/table";
@@ -29,7 +33,7 @@ export const useOperationalCirculationsColumns =
         ),
         onClick: () =>
           navigate(
-            __routes__.Circulations.OperationalUpdate.replace(":id", record.id)
+            __routes__.Circulations.OperationalUpdate.replace(":id", record.id),
           ),
       },
       {
@@ -82,11 +86,15 @@ export const useOperationalCirculationsColumns =
           const parcoursStatus = getParcoursStatuses(record?.parcours);
           return (
             <div>
-              {parcoursStatus.map((status) => (
-                <Tag className="font-medium" color={status.color}>
-                  {status.label}
-                </Tag>
-              ))}
+              {parcoursStatus.length ? (
+                parcoursStatus.map((status) => (
+                  <Tag className="font-medium" color={status.color}>
+                    {status.label}
+                  </Tag>
+                ))
+              ) : (
+                <p className="text-xs font-medium text-gray-500">N/A</p>
+              )}
             </div>
           );
         },
@@ -103,6 +111,22 @@ export const useOperationalCirculationsColumns =
             >
               {StatusLabelMap[record?.statut as CirculationStatus] ?? "N/A"}
             </Tag>
+          );
+        },
+      },
+      {
+        title: "Statut de publication",
+        dataIndex: "publishStatus",
+        key: "publishStatus",
+        render(_, record) {
+          const statusLabel = PublishStatusLabelMap[record.publishStatus];
+          const statusColor = PublishStatusTagColorMap[record.publishStatus];
+          return statusLabel ? (
+            <Tag color={statusColor} className="font-medium">
+              {statusLabel}
+            </Tag>
+          ) : (
+            <p className="text-xs font-medium text-gray-500">N/A</p>
           );
         },
       },
