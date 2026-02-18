@@ -61,9 +61,14 @@ const FormContent: React.FC<FormContentProps> = () => {
   const { state } = useLocation();
   const { mapCreateCirculationToDto } = useCirculationMapper();
 
+  const isCreatingVariant = !!state?.id;
+
   const initialValues = useMemo<CreateCirculationDto>(() => {
-    if (!state?.id) return defaultInitialValues;
-    return mapCirculationToCreateCirculationDto(state as ICirculation);
+    if (!isCreatingVariant) return defaultInitialValues;
+    return mapCirculationToCreateCirculationDto({
+      ...state,
+      date: undefined,
+    } as ICirculation);
   }, [state]);
 
   const handleSubmitForm = async (data: CreateCirculationDto) => {

@@ -4,20 +4,23 @@ import {
 } from "@/constants/mode-sub-mode";
 import { Collapse } from "antd";
 import { useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import Select from "@/components/formik/select";
 import Switch from "@/components/formik/switch";
 import { Field, useFormikContext } from "formik";
 import TextField from "@/components/formik/textfield";
 import FormGroupTitle from "@/components/group-title";
 import StationsField from "./components/stations-field";
-import { OnboardServices } from "@/constants/onboard-services";
 import { TRAIN_LENGTH_OPTIONS } from "@/constants/train-length";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
 
 interface GeneralStepProps {}
 
 const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
+  const { state } = useLocation();
   const { values, setFieldValue } = useFormikContext<CreateCirculationDto>();
+
+  const isCreatingVariant = !!state?.id;
 
   const subModes = useMemo(
     () => getSubModesForMode(values.mode as any),
@@ -72,6 +75,7 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             placeholder="8960"
             label="N° commercial"
             name="numeroCommercial"
+            disabled={isCreatingVariant}
             onChange={(e: any) => {
               setFieldValue("numeroCommercial", e.target.value);
               fillSillonInParcoursStops(e.target.value);
@@ -80,14 +84,16 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
           <Field
             as={TextField}
             placeholder="XXXX"
-            label="Nom commercial"
             name="nomCommercial"
+            label="Nom commercial"
+            disabled={isCreatingVariant}
           />
           <Field
             as={TextField}
             placeholder="TGV"
-            label="Marque commercial"
             name="marqueCommerciale"
+            label="Marque commercial"
+            disabled={isCreatingVariant}
           />
         </div>
         <div className="flex items-center gap-4">
@@ -96,6 +102,7 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             placeholder="A"
             name="ligneCommerciale"
             label="Ligne commercial"
+            disabled={isCreatingVariant}
           />
           <Field
             allowClear
@@ -103,6 +110,7 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             name="mode"
             label="Mode"
             className="w-full"
+            disabled={isCreatingVariant}
             placeholder="Sélectionner un mode"
             options={CIRCULATION_MODE_OPTIONS}
             onChange={() => setFieldValue("sousMode", undefined)}
@@ -119,7 +127,7 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
                 ? "Sélectionner un mode d'abord"
                 : "Sélectionner un sous-mode"
             }
-            disabled={subModes.length === 0}
+            disabled={isCreatingVariant || subModes.length === 0}
           />
         </div>
 
@@ -130,8 +138,9 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             name="longueur"
             label="Longueur"
             className="w-full"
-            placeholder="Sélectionner une longueur"
+            disabled={isCreatingVariant}
             options={TRAIN_LENGTH_OPTIONS}
+            placeholder="Sélectionner une longueur"
           />
         </div>
 
@@ -168,9 +177,10 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
                       {values.courseSpeciale && (
                         <Field
                           as={TextField}
-                          placeholder="Ex: Livraison de matériel"
+                          disabled={isCreatingVariant}
                           name="libelleCourseSpeciale"
                           label="Libellé course spéciale"
+                          placeholder="Ex: Livraison de matériel"
                         />
                       )}
                     </div>
@@ -189,6 +199,7 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
             name="origine"
             label="Origine"
             className="w-full"
+            disabled={isCreatingVariant}
             placeholder="Sélectionner l'origine"
             onChange={async (stationValue: any) => {
               await handleOriginDestinationChange("origin", stationValue);
@@ -202,8 +213,9 @@ const GeneralStep: React.FC<GeneralStepProps> = ({}) => {
           </div>
           <StationsField
             name="destination"
-            label="Destination"
             className="w-full"
+            label="Destination"
+            disabled={isCreatingVariant}
             placeholder="Sélectionner la destination"
             onChange={async (stationValue: any) => {
               await handleOriginDestinationChange("destination", stationValue);
