@@ -14,6 +14,7 @@ import { useFormikContext } from "formik";
 import { ArrowLeft, Plus, Trash2 } from "lucide-react";
 import SortableElement from "@/components/sortable-element";
 import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import SelectExistingTrain from "./select-existing-train";
 
 interface CreateCompositionPreviewProps {
   selected: SelectedState;
@@ -31,7 +32,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
 
   const handleDeleteMaterielRoulant = (index: number) => {
     const updatedMaterielRoulant = [...values.materielRoulant].filter(
-      (_, i) => i !== index
+      (_, i) => i !== index,
     );
 
     setFieldValue("materielRoulant", updatedMaterielRoulant);
@@ -49,7 +50,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
         longueur: 0,
         libelle: "",
         type: ElementMaterielRoulantType.Vehicle,
-      }
+      },
     );
 
     setFieldValue("materielRoulant", updatedMaterielRoulant);
@@ -62,12 +63,12 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
 
   const handleDeleteElementFromMaterielRoulant = (
     mrIndex: number,
-    elIndex: number
+    elIndex: number,
   ) => {
     const updatedMaterielRoulant = [...values.materielRoulant];
     updatedMaterielRoulant[mrIndex].elementMaterielRoulant =
       updatedMaterielRoulant[mrIndex].elementMaterielRoulant.filter(
-        (_, i) => i !== elIndex
+        (_, i) => i !== elIndex,
       );
 
     setFieldValue("materielRoulant", updatedMaterielRoulant);
@@ -136,7 +137,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
 
       setFieldValue(
         `materielRoulant.${activeTrainIndex}.elementMaterielRoulant`,
-        arrayMove(arrToUpdate, oldIndex, newIndex)
+        arrayMove(arrToUpdate, oldIndex, newIndex),
       );
     }
   };
@@ -145,9 +146,12 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
     <div className="border border-gray-200 rounded p-4 bg-white h-full">
       <div className="flex items-center justify-between">
         <h2 className="font-medium text-lg">Aperçu de la composition</h2>
-        <Button htmlType="button" onClick={onClickAddMaterielRoulant}>
-          Ajouter un matériel roulant
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button htmlType="button" onClick={onClickAddMaterielRoulant}>
+            Ajouter un matériel roulant
+          </Button>
+          <SelectExistingTrain />
+        </div>
       </div>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         {values?.materielRoulant?.length ? (
@@ -164,12 +168,12 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                     "flex items-center gap-1 border p-6 rounded cursor-pointer group/innertrain",
                     selected.train === index
                       ? "bg-primary/5 border-primary"
-                      : "hover:bg-primary/5 border-transparent"
+                      : "hover:bg-primary/5 border-transparent",
                   )}
                 >
                   <SortableContext
                     items={[...mr.elementMaterielRoulant].map(
-                      (_, elIndex) => `${index}-${elIndex}`
+                      (_, elIndex) => `${index}-${elIndex}`,
                     )}
                     strategy={horizontalListSortingStrategy}
                   >
@@ -194,14 +198,14 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                                 e.stopPropagation();
                                 handleDeleteElementFromMaterielRoulant(
                                   index,
-                                  elIndex
+                                  elIndex,
                                 );
                               }}
                               className={cn(
                                 "absolute -top-1 hidden group-hover/car:block text-red-500",
                                 lastVehicle
                                   ? "left-7"
-                                  : "left-1/2 -translate-x-1/2"
+                                  : "left-1/2 -translate-x-1/2",
                               )}
                             />
                           )}
@@ -220,13 +224,13 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                                 isHead
                                   ? "bg-primary text-white relative rounded-tl-[44px] rounded-bl-2xl"
                                   : isTail
-                                  ? "bg-primary text-white relative rounded-tr-[44px] rounded-br-2xl"
-                                  : "border-3 bg-primary/15 hover:bg-primary/30",
+                                    ? "bg-primary text-white relative rounded-tr-[44px] rounded-br-2xl"
+                                    : "border-3 bg-primary/15 hover:bg-primary/30",
                                 isSelected
                                   ? isHead || isTail
                                     ? "ring-2 ring-primary ring-offset-2 ring-offset-[#F2F5F7]"
                                     : "border-primary"
-                                  : "border-transparent"
+                                  : "border-transparent",
                               )}
                             >
                               <p className="font-medium">{el.libelle}</p>
@@ -238,11 +242,11 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                                     isHead
                                       ? "rotate-[43deg] left-[4.5px] top-0"
                                       : isTail
-                                      ? "rotate-[-43deg] right-[4.5px] top-0"
-                                      : "",
+                                        ? "rotate-[-43deg] right-[4.5px] top-0"
+                                        : "",
                                     selected.train === index
                                       ? "bg-[#F2F5F7]"
-                                      : "bg-white group-hover/innertrain:bg-[#F2F5F7]"
+                                      : "bg-white group-hover/innertrain:bg-[#F2F5F7]",
                                   )}
                                 />
                               )}
@@ -258,7 +262,7 @@ const CreateCompositionPreview: React.FC<CreateCompositionPreviewProps> = ({
                                 handleAddElementToMaterielRoulant(index);
                               }}
                               className={cn(
-                                "flex items-center justify-center border-3 w-10 h-10 cursor-pointer text-primary border-primary hover:bg-primary/5"
+                                "flex items-center justify-center border-3 w-10 h-10 cursor-pointer text-primary border-primary hover:bg-primary/5",
                               )}
                             >
                               <Plus size={16} />
