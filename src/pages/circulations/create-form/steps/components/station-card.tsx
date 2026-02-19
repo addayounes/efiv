@@ -7,7 +7,6 @@ import InfoConjoncturelle from "./stops/info-conj";
 import CompositionConfigContent from "./stops/composition";
 import { Button, Collapse, Popconfirm, Tabs, Tag } from "antd";
 import type { CreateCirculationDto } from "@/types/dto/create-circulation";
-import OnboardServices from "./onboard-services";
 
 interface StationCardProps {
   index: number;

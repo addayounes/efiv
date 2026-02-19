@@ -1,5 +1,7 @@
 import { Field } from "formik";
+import Select from "@/components/formik/select";
 import TextField from "@/components/formik/textfield";
+import { CIRCULATION_MODE_OPTIONS } from "@/constants/mode-sub-mode";
 
 interface CreateCompositionGeneralInfoProps {}
 
@@ -22,6 +24,14 @@ const CreateCompositionGeneralInfo: React.FC<
           as={TextField}
           label="Libellé"
           placeholder="Libellé de la composition"
+        />
+        <Field
+          name="mode"
+          label="Mode"
+          as={Select}
+          className="w-full"
+          options={CIRCULATION_MODE_OPTIONS}
+          placeholder="Mode de la composition"
         />
       </div>
     </div>

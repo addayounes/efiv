@@ -29,7 +29,7 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
 
   const handleSubmitForm = async (values: CreateComposition) => {
     const responseData = await createCompositionService(
-      mapCreateCompositionToDto(values)
+      mapCreateCompositionToDto(values),
     );
 
     if (!responseData) throw new Error("No data returned from service");
@@ -37,8 +37,8 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
     navigate(
       __routes__.Config.SubSections.Main.replace(
         ":section",
-        ConfigSidebarElementsNames.Composition
-      )
+        ConfigSidebarElementsNames.Composition,
+      ),
     );
 
     toast.success("Composition créée avec succès");
@@ -52,6 +52,7 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
       initialValues={{
         code: "",
         name: "",
+        mode: undefined,
         materielRoulant: [] as CreateComposition["materielRoulant"],
       }}
     >
@@ -63,7 +64,7 @@ const CompositionForm: React.FC<CompositionFormProps> = ({}) => {
                 title="Créer une composition"
                 backTo={__routes__.Config.SubSections.Main.replace(
                   ":section",
-                  ConfigSidebarElementsNames.Composition
+                  ConfigSidebarElementsNames.Composition,
                 )}
                 rightComponent={
                   <Button htmlType="submit" type="primary">
