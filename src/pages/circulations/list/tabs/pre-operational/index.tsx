@@ -10,10 +10,16 @@ import toast from "react-hot-toast";
 import Table from "@/components/table";
 import { useEffect, useState } from "react";
 import { usePagination } from "@/hooks/use-pagination";
+import CirculationsCalendarView from "../../calendar-view";
 import type { ICirculation } from "@/types/entity/circulation";
 import { fetchPreOperationalCirculationService } from "@/services/circulations";
 
 interface PreOperationalCirculationsProps {}
+
+export enum CirculationsView {
+  LIST = "list",
+  CALENDAR = "calendar",
+}
 
 const PreOperationalCirculations: React.FC<
   PreOperationalCirculationsProps
@@ -21,6 +27,7 @@ const PreOperationalCirculations: React.FC<
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
   const [circulations, setCirculations] = useState<ICirculation[]>([]);
+  const [view, setView] = useState<CirculationsView>(CirculationsView.LIST);
 
   const { setTotal, ...pagination } = usePagination();
 
@@ -38,10 +45,14 @@ const PreOperationalCirculations: React.FC<
       try {
         setLoading(true);
 
-        const response = await fetchPreOperationalCirculationService({
-          page: pagination.current,
-          pageSize: pagination.pageSize,
-        });
+        const paginationConfig = {
+          page: view === CirculationsView.LIST ? pagination.current : 1,
+          pageSize:
+            view === CirculationsView.LIST ? pagination.pageSize : 999_999_999,
+        };
+
+        const response =
+          await fetchPreOperationalCirculationService(paginationConfig);
 
         setTotal(response?.totalCount || 0);
         setCirculations(response?.items || []);
@@ -56,12 +67,14 @@ const PreOperationalCirculations: React.FC<
     };
 
     fetchData();
-  }, [filters, pagination.current, pagination.pageSize]);
+  }, [view, filters, pagination.current, pagination.pageSize]);
 
   return (
     <div className="space-y-4">
       <CirculationsListHeader
+        view={view}
         filters={filters}
+        setView={setView}
         setFilters={setFilters}
         shownFilters={[
           CirculationFilterKeys.Query,
@@ -70,13 +83,17 @@ const PreOperationalCirculations: React.FC<
         ]}
       />
 
-      <Table
-        bordered
-        head={columns}
-        loading={loading}
-        data={circulations}
-        pagination={pagination}
-      />
+      {view === CirculationsView.LIST ? (
+        <Table
+          bordered
+          head={columns}
+          loading={loading}
+          data={circulations}
+          pagination={pagination}
+        />
+      ) : (
+        <CirculationsCalendarView loading={loading} data={circulations} />
+      )}
     </div>
   );
 };

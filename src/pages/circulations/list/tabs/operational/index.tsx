@@ -93,7 +93,6 @@ const OperationalCirculations: React.FC<
             CirculationFilterKeys.Query,
             CirculationFilterKeys.Status,
             CirculationFilterKeys.LiveStatus,
-            CirculationFilterKeys.DateRange,
           ]}
         />
 

@@ -1,7 +1,8 @@
-import { Input } from "antd";
-import { Search } from "lucide-react";
 import CirculationsFilters from "./filters";
+import { Input, Segmented, Tooltip } from "antd";
 import type { StateSetter } from "@/types/state-setter";
+import { CalendarDays, List, Search } from "lucide-react";
+import { CirculationsView } from "./tabs/pre-operational";
 
 export interface ICirulationsFilters {
   query?: string;
@@ -22,13 +23,17 @@ export const DEFAULT_CIRCULATIONS_FILTERS: ICirulationsFilters = {
 };
 
 interface CirculationsListHeaderProps {
+  view?: CirculationsView;
   filters: ICirulationsFilters;
   shownFilters: CirculationFilterKeys[];
   setFilters: StateSetter<ICirulationsFilters>;
+  setView?: React.Dispatch<React.SetStateAction<CirculationsView>>;
 }
 
 const CirculationsListHeader: React.FC<CirculationsListHeaderProps> = ({
+  view,
   filters,
+  setView,
   setFilters,
   shownFilters,
 }) => {
@@ -47,11 +52,42 @@ const CirculationsListHeader: React.FC<CirculationsListHeaderProps> = ({
       ) : (
         <div />
       )}
-      <CirculationsFilters
-        filters={filters}
-        setFilters={setFilters}
-        shownFilters={shownFilters}
-      />
+
+      <div className="flex items-center gap-4">
+        <CirculationsFilters
+          filters={filters}
+          setFilters={setFilters}
+          shownFilters={shownFilters}
+        />
+
+        {view && setView && (
+          <Segmented
+            value={view}
+            onChange={(value) => setView?.(value as CirculationsView)}
+            options={[
+              {
+                value: CirculationsView.LIST,
+                icon: (
+                  <Tooltip title="Liste">
+                    <List size={18} className="text-gray-600 mt-[5px]" />
+                  </Tooltip>
+                ),
+              },
+              {
+                value: CirculationsView.CALENDAR,
+                icon: (
+                  <Tooltip title="Calendrier">
+                    <CalendarDays
+                      size={18}
+                      className="text-gray-600 mt-[5px]"
+                    />
+                  </Tooltip>
+                ),
+              },
+            ]}
+          />
+        )}
+      </div>
     </div>
   );
 };
