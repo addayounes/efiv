@@ -117,3 +117,15 @@ export const fetchAvaialbleLinesService = async (params: {
   });
   return data;
 };
+
+export const fetchGroupedCirculationsService = async (params: {
+  startDate?: string;
+  endDate?: string;
+  limit?: number;
+}): Promise<string[]> => {
+  const { data } = await api.get(
+    `${SERVICE_BASE_URL}/getCoursesGroupedByNumeroCommercial`,
+    { params },
+  );
+  return data;
+};

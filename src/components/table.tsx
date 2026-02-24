@@ -25,7 +25,7 @@ function Table<T>({
   return (
     <AntTable
       columns={head}
-      dataSource={data}
+      dataSource={data.map((item, index) => ({ ...item, key: index }))}
       loading={loading}
       locale={{ emptyText: "Aucun élément" }}
       pagination={
@@ -40,7 +40,7 @@ function Table<T>({
       }
       className={cn(
         props.className,
-        bordered ? "border border-gray-100 rounded " : ""
+        bordered ? "border border-gray-100 rounded " : "",
       )}
       {...props}
     />
