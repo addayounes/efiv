@@ -5,7 +5,6 @@ import { CalendarDays, List, Search } from "lucide-react";
 import { CirculationsView } from "./tabs/pre-operational";
 
 export interface ICirulationsFilters {
-  query?: string;
   status?: string;
   liveStatus?: string;
   dateRange: string[];
@@ -28,12 +27,16 @@ interface CirculationsListHeaderProps {
   shownFilters: CirculationFilterKeys[];
   setFilters: StateSetter<ICirulationsFilters>;
   setView?: React.Dispatch<React.SetStateAction<CirculationsView>>;
+  search?: string;
+  setSearch?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CirculationsListHeader: React.FC<CirculationsListHeaderProps> = ({
   view,
+  search,
   filters,
   setView,
+  setSearch,
   setFilters,
   shownFilters,
 }) => {
@@ -41,11 +44,9 @@ const CirculationsListHeader: React.FC<CirculationsListHeaderProps> = ({
     <div className="flex items-center justify-between py-4">
       {shownFilters.includes(CirculationFilterKeys.Query) ? (
         <Input
-          value={filters.query}
-          onChange={(e) =>
-            setFilters((prev) => ({ ...prev, query: e.target.value }))
-          }
+          value={search}
           className="max-w-xl w-full"
+          onChange={(e) => setSearch?.(e.target.value)}
           placeholder="Rechercher par numéro de circulation"
           prefix={<Search size={16} className="text-gray-500" />}
         />

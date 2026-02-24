@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { usePagination } from "@/hooks/use-pagination";
 import CirculationsCalendarView from "../../calendar-view";
 import type { ICirculation } from "@/types/entity/circulation";
+import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 import { fetchPreOperationalCirculationService } from "@/services/circulations";
 
 interface PreOperationalCirculationsProps {}
@@ -27,9 +28,10 @@ const PreOperationalCirculations: React.FC<
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
   const [circulations, setCirculations] = useState<ICirculation[]>([]);
+  const { debouncedSearch, search, setSearch } = useDebouncedSearch();
   const [view, setView] = useState<CirculationsView>(CirculationsView.LIST);
 
-  const { setTotal, ...pagination } = usePagination();
+  const { setTotal, setPage, ...pagination } = usePagination();
 
   const columns = useCirculationsListColumns({
     actions: [
@@ -73,8 +75,10 @@ const PreOperationalCirculations: React.FC<
     <div className="space-y-4">
       <CirculationsListHeader
         view={view}
+        search={search}
         filters={filters}
         setView={setView}
+        setSearch={setSearch}
         setFilters={setFilters}
         shownFilters={[
           CirculationFilterKeys.Query,

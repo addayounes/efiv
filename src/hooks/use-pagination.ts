@@ -4,6 +4,7 @@ import { PAGE_SIZE } from "@/constants/pagination";
 import type { StateSetter } from "@/types/state-setter";
 
 export const usePagination = (): TablePaginationConfig & {
+  setPage: StateSetter<number>;
   setTotal: StateSetter<number>;
 } => {
   const [page, setPage] = useState(1);
@@ -15,5 +16,5 @@ export const usePagination = (): TablePaginationConfig & {
     setPageSize(newPageSize);
   };
 
-  return { current: page, pageSize, total, onChange, setTotal };
+  return { current: page, pageSize, total, onChange, setTotal, setPage };
 };

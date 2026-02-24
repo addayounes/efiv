@@ -11,23 +11,22 @@ import { useEffect, useMemo, useState } from "react";
 import { usePagination } from "@/hooks/use-pagination";
 import { useOperationalCirculationsColumns } from "./columns";
 import type { ICirculation } from "@/types/entity/circulation";
+import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 import { fetchOperationalCirculationService } from "@/services/circulations";
-
-interface OperationalCirculationsProps {}
 
 enum OperationalTabs {
   Today = "Today",
   Tomorrow = "Tomorrow",
 }
 
-const OperationalCirculations: React.FC<
-  OperationalCirculationsProps
-> = ({}) => {
+const OperationalCirculations: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<OperationalTabs>(
     OperationalTabs.Today,
   );
   const [loading, setLoading] = useState(false);
   const columns = useOperationalCirculationsColumns();
+  const { setTotal, setPage, ...pagination } = usePagination();
+  const { debouncedSearch, search, setSearch } = useDebouncedSearch();
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
   const [circulations, setCirculations] = useState<ICirculation[]>([]);
 
@@ -40,16 +39,19 @@ const OperationalCirculations: React.FC<
     });
   }, [circulations, currentTab]);
 
-  const { setTotal, ...pagination } = usePagination();
-
   useEffect(() => {
     const fetchData = async () => {
+      setPage(1);
+
       try {
         setLoading(true);
 
         const response = await fetchOperationalCirculationService({
           page: pagination.current,
           pageSize: pagination.pageSize,
+          courseStatus: filters.status,
+          liveStatus: filters.liveStatus,
+          numeroCommercial: debouncedSearch,
         });
 
         setTotal(response?.totalCount || 0);
@@ -65,7 +67,7 @@ const OperationalCirculations: React.FC<
     };
 
     fetchData();
-  }, [filters, pagination.current, pagination.pageSize]);
+  }, [filters, debouncedSearch, pagination.current, pagination.pageSize]);
 
   return (
     <div className="h-screen overflow-y-auto">
@@ -89,6 +91,8 @@ const OperationalCirculations: React.FC<
         <CirculationsListHeader
           filters={filters}
           setFilters={setFilters}
+          search={search}
+          setSearch={setSearch}
           shownFilters={[
             CirculationFilterKeys.Query,
             CirculationFilterKeys.Status,
