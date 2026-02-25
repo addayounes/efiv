@@ -1,6 +1,7 @@
-import Login from "@/pages/auth/login";
+import Login from "@/pages/auth/login2";
 import ConfigPage from "@/pages/config";
 import Dashboard from "@/pages/dashboard";
+import Graphicage from "@/pages/graphicage";
 import { __routes__ } from "@/constants/routes";
 import Communication from "@/pages/communication";
 import CirculationsList from "@/pages/circulations/list";
@@ -12,7 +13,6 @@ import UpdateOperationlCirculation from "@/pages/circulations/update-form";
 import OperationalCirculations from "@/pages/circulations/list/tabs/operational";
 import CompositionForm from "@/pages/config/sections/composition/composition/form";
 import CommunicationTemplateEditor from "@/pages/config/sections/communication-template/editor";
-import Graphicage from "@/pages/graphicage";
 
 export interface RouteType {
   path: string;

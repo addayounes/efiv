@@ -1,31 +1,24 @@
 import { dayjs } from "@/lib/dayjs";
 import { ChevronRight } from "lucide-react";
 
+import trainLoginImage from "/train-login-image.png";
+
 import "./login.css";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      {/* BG */}
-      <div className="glow-canvas">
-        <div className="blob blob-1"></div>
-        <div className="blob blob-2"></div>
-        <div className="blob blob-3"></div>
-        <div className="blob blob-4"></div>
-        <div className="blob blob-5"></div>
+    <div className="flex min-h-screen">
+      <div
+        style={{ backgroundImage: `url(${trainLoginImage})` }}
+        className="relative flex-1 h-screen bg-primary bg-no-repeat bg-cover bg-center"
+      >
+        <div className="absolute inset-0 bg-gradient-to-tl from-primary to-primary/50" />
       </div>
 
-      <div className="flex flex-col justify-between bg-white w-lg p-6 shadow-lg rounded-lg z-50">
-        <div>
-          <p className="text-2xl text-gray-800 font-medium">
-            Bienvenue sur IVGO
-          </p>
-          <p className="text-gray-500">
-            Connectez-vous pour accéder à votre compte
-          </p>
-        </div>
+      <div className="flex flex-col justify-between bg-white min-w-lg p-10">
+        <div />
 
         {/* Button */}
         <div className="my-10">
