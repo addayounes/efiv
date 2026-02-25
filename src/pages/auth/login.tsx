@@ -1,11 +1,24 @@
-import { dayjs } from "@/lib/dayjs";
-import { ChevronRight } from "lucide-react";
-
 import "./login.css";
+
+import { dayjs } from "@/lib/dayjs";
+import toast from "react-hot-toast";
+import { ChevronRight } from "lucide-react";
+import { useMsal } from "@azure/msal-react";
+import { scopes } from "@/constants/auth-secrets";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
+  const { instance } = useMsal();
+
+  const handleLogin = async () => {
+    try {
+      await instance.loginPopup({ scopes });
+    } catch (error) {
+      toast.error("Une erreur est survenue lors de la connexion.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* BG */}
@@ -38,7 +51,10 @@ const Login: React.FC<LoginProps> = ({}) => {
           </div>
 
           <div className="bg-white shadow-md hover:shadow-lg hover:-translate-y-1 rounded-md ease-out duration-200">
-            <button className="w-full flex items-center gap-4 px-5 py-4 rounded-xl text-gray-800 focus:outline-none cursor-pointer">
+            <button
+              onClick={handleLogin}
+              className="w-full flex items-center gap-4 px-5 py-4 rounded-xl text-gray-800 focus:outline-none cursor-pointer"
+            >
               <div className="grid grid-cols-2 gap-0.5 w-8 h-8 rounded-md overflow-hidden">
                 <div className="bg-[#f25022] rounded-sm"></div>
                 <div className="bg-[#7fba00] rounded-sm"></div>
