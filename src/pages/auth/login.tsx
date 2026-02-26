@@ -30,18 +30,14 @@ const Login: React.FC<LoginProps> = ({}) => {
         <div className="blob blob-5"></div>
       </div>
 
-      <div className="flex flex-col justify-between bg-white w-lg p-6 shadow-lg rounded-lg z-50">
-        <div>
-          <p className="text-2xl text-gray-800 font-medium">
-            Bienvenue sur IVGO
-          </p>
-          <p className="text-gray-500">
-            Connectez-vous pour accéder à votre compte
-          </p>
+      <div className="flex flex-col justify-between bg-white w-lg shadow-lg rounded-lg z-50">
+        <div className="bg-primary text-white p-6 rounded-t-lg">
+          <p className="text-2xl font-medium">Bienvenue sur IVGO</p>
+          <p>Connectez-vous pour accéder à votre compte</p>
         </div>
 
         {/* Button */}
-        <div className="my-10">
+        <div className="my-10 px-6">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-full border-t border-gray-100" />
             <p className="uppercase text-xs text-gray-400 whitespace-nowrap">
@@ -74,7 +70,7 @@ const Login: React.FC<LoginProps> = ({}) => {
           </div>
         </div>
 
-        <div className="text-center text-xs text-gray-500">
+        <div className="text-center text-xs text-gray-500 pb-6">
           © {dayjs().format("YYYY")} IVGO · v0.0.1
         </div>
       </div>

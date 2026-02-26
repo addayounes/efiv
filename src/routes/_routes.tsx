@@ -1,4 +1,4 @@
-import Login from "@/pages/auth/login2";
+import Login from "@/pages/auth/login";
 import ConfigPage from "@/pages/config";
 import Dashboard from "@/pages/dashboard";
 import Graphicage from "@/pages/graphicage";
