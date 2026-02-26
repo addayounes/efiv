@@ -4,6 +4,10 @@ import type { IFetchDraftParams } from "@/types/dto/fetch-draft-params";
 import type { IPaginatedResponse, IPaginationParams } from "@/types/pagination";
 import type { CreateCirculationApiPayload } from "@/types/dto/create-circulation";
 import type { IGetOperationalCirculationsParams } from "@/types/dto/get-circulations";
+import type {
+  GroupedCirculation,
+  RawGroupedCirculation,
+} from "@/types/entity/grouped-circulations";
 
 const SERVICE_BASE_URL = "/api/Course";
 
@@ -118,11 +122,13 @@ export const fetchAvaialbleLinesService = async (params: {
   return data;
 };
 
-export const fetchGroupedCirculationsService = async (params: {
-  startDate?: string;
-  endDate?: string;
-  limit?: number;
-}): Promise<string[]> => {
+export const fetchGroupedCirculationsService = async (
+  params: IPaginationParams & {
+    startDate?: string;
+    endDate?: string;
+    limit?: number;
+  },
+): Promise<IPaginatedResponse<RawGroupedCirculation>> => {
   const { data } = await api.get(
     `${SERVICE_BASE_URL}/getCoursesGroupedByNumeroCommercial`,
     { params },

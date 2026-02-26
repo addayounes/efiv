@@ -6,6 +6,10 @@ import {
   CirculationListActions,
   useCirculationsListColumns,
 } from "../../columns";
+import {
+  fetchGroupedCirculationsService,
+  fetchPreOperationalCirculationService,
+} from "@/services/circulations";
 import toast from "react-hot-toast";
 import Table from "@/components/table";
 import { useEffect, useState } from "react";
@@ -14,7 +18,8 @@ import GroupedCirculations from "./grouped-circulations";
 import CirculationsCalendarView from "../../calendar-view";
 import type { ICirculation } from "@/types/entity/circulation";
 import { useDebouncedSearch } from "@/hooks/use-debounced-search";
-import { fetchPreOperationalCirculationService } from "@/services/circulations";
+import type { GroupedCirculation } from "@/types/entity/grouped-circulations";
+import { mapRawGroupedCirculationsToGroupedCirculations } from "./grouped-circulations/mapper";
 
 interface PreOperationalCirculationsProps {}
 
@@ -32,6 +37,9 @@ const PreOperationalCirculations: React.FC<
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
   const [circulations, setCirculations] = useState<ICirculation[]>([]);
   const [view, setView] = useState<CirculationsView>(CirculationsView.LIST);
+  const [groupedCirculations, setGroupedCirculations] = useState<
+    GroupedCirculation[]
+  >([]);
 
   const { setTotal, setPage, ...pagination } = usePagination();
 
@@ -44,8 +52,9 @@ const PreOperationalCirculations: React.FC<
     ],
   });
 
-  const fetchData = async () => {
+  const fetchPreOperationalData = async () => {
     try {
+      setPage(1);
       setLoading(true);
 
       const paginationConfig = {
@@ -54,11 +63,24 @@ const PreOperationalCirculations: React.FC<
           view === CirculationsView.LIST ? pagination.pageSize : 999_999_999,
       };
 
-      const response =
-        await fetchPreOperationalCirculationService(paginationConfig);
+      if (groupByTrainNumber) {
+        const response = await fetchGroupedCirculationsService({
+          ...paginationConfig,
+          startDate: filters.dateRange[0],
+          endDate: filters.dateRange[1],
+        });
 
-      setTotal(response?.totalCount || 0);
-      setCirculations(response?.items || []);
+        setGroupedCirculations(
+          mapRawGroupedCirculationsToGroupedCirculations(response?.items || []),
+        );
+        setTotal(response?.totalCount || 0);
+      } else {
+        const response =
+          await fetchPreOperationalCirculationService(paginationConfig);
+
+        setTotal(response?.totalCount || 0);
+        setCirculations(response?.items || []);
+      }
     } catch (error) {
       console.error("Error fetching circulations:", error);
       toast.error(
@@ -70,8 +92,14 @@ const PreOperationalCirculations: React.FC<
   };
 
   useEffect(() => {
-    fetchData();
-  }, [view, filters, pagination.current, pagination.pageSize]);
+    fetchPreOperationalData();
+  }, [
+    view,
+    filters,
+    groupByTrainNumber,
+    pagination.current,
+    pagination.pageSize,
+  ]);
 
   return (
     <div className="space-y-4">
@@ -95,8 +123,8 @@ const PreOperationalCirculations: React.FC<
         groupByTrainNumber ? (
           <GroupedCirculations
             loading={loading}
-            circulations={[]}
             pagination={pagination}
+            circulations={groupedCirculations}
           />
         ) : (
           <Table

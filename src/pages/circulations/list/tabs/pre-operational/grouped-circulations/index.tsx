@@ -44,6 +44,7 @@ const GroupedCirculations: React.FC<GroupedCirculationsProps> = ({
           expandedRowRender: (record: GroupedCirculation) => (
             <Table<ICirculation>
               size="small"
+              bordered
               data={record.circulations}
               head={circulationsColumns}
             />

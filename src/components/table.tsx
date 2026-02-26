@@ -25,9 +25,10 @@ function Table<T>({
   return (
     <AntTable
       columns={head}
-      dataSource={data.map((item, index) => ({ ...item, key: index }))}
       loading={loading}
+      bordered={bordered}
       locale={{ emptyText: "Aucun élément" }}
+      dataSource={data.map((item, index) => ({ ...item, key: index }))}
       pagination={
         pagination
           ? {
