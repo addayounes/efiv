@@ -39,35 +39,37 @@ const OperationalCirculations: React.FC = () => {
     });
   }, [circulations, currentTab]);
 
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetchOperationalCirculationService({
+        page: pagination.current,
+        pageSize: pagination.pageSize,
+        courseStatus: filters.status,
+        liveStatus: filters.liveStatus,
+        numeroCommercial: debouncedSearch,
+      });
+
+      setTotal(response?.totalCount || 0);
+      setCirculations(response?.items || []);
+    } catch (error) {
+      console.error("Error fetching circulations:", error);
+      toast.error(
+        "Une erreur est survenue lors du chargement des circulations.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setPage(1);
-
-      try {
-        setLoading(true);
-
-        const response = await fetchOperationalCirculationService({
-          page: pagination.current,
-          pageSize: pagination.pageSize,
-          courseStatus: filters.status,
-          liveStatus: filters.liveStatus,
-          numeroCommercial: debouncedSearch,
-        });
-
-        setTotal(response?.totalCount || 0);
-        setCirculations(response?.items || []);
-      } catch (error) {
-        console.error("Error fetching circulations:", error);
-        toast.error(
-          "Une erreur est survenue lors du chargement des circulations.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
   }, [filters, debouncedSearch, pagination.current, pagination.pageSize]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters, debouncedSearch]);
 
   return (
     <div className="h-screen overflow-y-auto">
