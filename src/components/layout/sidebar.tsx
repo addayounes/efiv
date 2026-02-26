@@ -1,6 +1,7 @@
 import {
   Mail,
   House,
+  LogOut,
   Activity,
   Settings,
   TrainFront,
@@ -8,6 +9,7 @@ import {
 } from "lucide-react";
 import { Tooltip } from "antd";
 import { cn } from "@/utils/cn";
+import { useMsal } from "@azure/msal-react";
 import { __routes__ } from "@/constants/routes";
 import { Link, useLocation } from "react-router-dom";
 import { configSidebarElements } from "@/pages/config/sidebar";
@@ -50,27 +52,43 @@ const SidebarElements = [
 
 const Sidebar: React.FC = () => {
   const { pathname } = useLocation();
+  const { instance } = useMsal();
+
+  const handleLogout = async () => {
+    await instance.logout();
+  };
 
   return (
-    <div className="bg-primary h-screen flex flex-col items-center">
-      <ul>
-        {SidebarElements.map((item) => (
-          <li key={item.label}>
-            <Tooltip
-              placement="right"
-              title={item.label}
-              className={cn(
-                "flex items-center py-4 px-4",
-                pathname === item.route
-                  ? "bg-primary-dark"
-                  : "hover:bg-primary-dark",
-              )}
-            >
-              <Link to={item.route}>{item.icon}</Link>
-            </Tooltip>
-          </li>
-        ))}
-      </ul>
+    <div className="bg-primary h-screen flex flex-col items-center justify-between">
+      <div className="flex flex-col items-center">
+        <ul>
+          {SidebarElements.map((item) => (
+            <li key={item.label}>
+              <Tooltip
+                placement="right"
+                title={item.label}
+                className={cn(
+                  "flex items-center py-4 px-4",
+                  pathname === item.route
+                    ? "bg-primary-dark"
+                    : "hover:bg-primary-dark",
+                )}
+              >
+                <Link to={item.route}>{item.icon}</Link>
+              </Tooltip>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Tooltip
+        placement="right"
+        title="Déconnexion"
+        className={cn("flex items-center hover:bg-primary-dark cursor-pointer")}
+      >
+        <div className="py-4 px-4" onClick={handleLogout}>
+          <LogOut color="white" />
+        </div>
+      </Tooltip>
     </div>
   );
 };
