@@ -46,10 +46,9 @@ const CirculationsFilters: React.FC<CirculationsFiltersProps> = ({
         <DatePicker.RangePicker
           allowClear
           value={
-            (filters.dateRange ?? []).map((d) => dayjs(d)) as [
-              dayjs.Dayjs,
-              dayjs.Dayjs,
-            ]
+            (filters.dateRange ?? []).map((d) =>
+              d ? dayjs(d) : undefined,
+            ) as [dayjs.Dayjs, dayjs.Dayjs]
           }
           onChange={(_, dateStrings) =>
             setFilters((prev) => ({ ...prev, dateRange: dateStrings }))

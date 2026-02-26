@@ -54,7 +54,6 @@ const PreOperationalCirculations: React.FC<
 
   const fetchPreOperationalData = async () => {
     try {
-      setPage(1);
       setLoading(true);
 
       const paginationConfig = {
@@ -100,6 +99,10 @@ const PreOperationalCirculations: React.FC<
     pagination.current,
     pagination.pageSize,
   ]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters, groupByTrainNumber]);
 
   return (
     <div className="space-y-4">

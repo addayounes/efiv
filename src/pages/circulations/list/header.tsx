@@ -1,4 +1,5 @@
 import { cn } from "@/utils/cn";
+import { dayjs } from "@/lib/dayjs";
 import CirculationsFilters from "./filters";
 import { Input, Segmented, Tooltip } from "antd";
 import type { StateSetter } from "@/types/state-setter";
@@ -62,7 +63,25 @@ const CirculationsListHeader: React.FC<CirculationsListHeaderProps> = ({
       <div className="flex items-center gap-4">
         {setGroupByTrainNumber && view === CirculationsView.LIST && (
           <div
-            onClick={() => setGroupByTrainNumber((v) => !v)}
+            onClick={() =>
+              setGroupByTrainNumber((v) => {
+                const newValues = !v;
+
+                if (newValues) {
+                  const today = dayjs();
+                  const afterOneMonth = today.add(1, "month");
+                  setFilters((prev) => ({
+                    ...prev,
+                    dateRange: [
+                      today.toISOString(),
+                      afterOneMonth.toISOString(),
+                    ],
+                  }));
+                } else setFilters((prev) => ({ ...prev, dateRange: [] }));
+
+                return !v;
+              })
+            }
             className={cn(
               "text-sm flex items-center px-2 py-1 rounded border cursor-pointer duration-200 ease-out",
               groupByTrainNumber
@@ -78,15 +97,15 @@ const CirculationsListHeader: React.FC<CirculationsListHeaderProps> = ({
           </div>
         )}
 
-        {Boolean(groupByTrainNumber) ? (
-          <></>
-        ) : (
-          <CirculationsFilters
-            filters={filters}
-            setFilters={setFilters}
-            shownFilters={shownFilters}
-          />
-        )}
+        <CirculationsFilters
+          filters={filters}
+          setFilters={setFilters}
+          shownFilters={shownFilters.filter((filterKey) =>
+            Boolean(groupByTrainNumber)
+              ? filterKey == CirculationFilterKeys.DateRange
+              : true,
+          )}
+        />
 
         {view && setView && (
           <Segmented
