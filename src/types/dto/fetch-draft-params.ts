@@ -1,7 +1,5 @@
 export interface IFetchDraftParams {
-  startDate?: string;
   endDate?: string;
-  idTransporteur?: string;
-  mode?: string;
+  startDate?: string;
   numeroCommercial?: string;
 }

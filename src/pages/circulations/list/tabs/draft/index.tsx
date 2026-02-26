@@ -23,14 +23,14 @@ const DraftCirculations: React.FC<DraftCirculationsProps> = ({}) => {
       try {
         setLoading(true);
         const data = await fetchDraftCirculationService({
-          endDate: new Date().toISOString(),
+          startDate: new Date().toISOString(),
         });
         if (!data) throw new Error("No data received");
         setCirculations(data);
       } catch (error) {
         console.error("Error fetching circulations:", error);
         toast.error(
-          "Une erreur est survenue lors du chargement des circulations."
+          "Une erreur est survenue lors du chargement des circulations.",
         );
       } finally {
         setLoading(false);
