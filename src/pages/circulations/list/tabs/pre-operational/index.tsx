@@ -32,7 +32,7 @@ const PreOperationalCirculations: React.FC<
   PreOperationalCirculationsProps
 > = ({}) => {
   const [loading, setLoading] = useState(false);
-  const { debouncedSearch, search, setSearch } = useDebouncedSearch();
+  const { search, setSearch } = useDebouncedSearch();
   const [groupByTrainNumber, setGroupByTrainNumber] = useState(false);
   const [filters, setFilters] = useState(DEFAULT_CIRCULATIONS_FILTERS);
   const [circulations, setCirculations] = useState<ICirculation[]>([]);

@@ -2,12 +2,9 @@ import { api } from "@/lib/axios";
 import type { ICirculation } from "@/types/entity/circulation";
 import type { IFetchDraftParams } from "@/types/dto/fetch-draft-params";
 import type { IPaginatedResponse, IPaginationParams } from "@/types/pagination";
+import type { RawGroupedCirculation } from "@/types/entity/grouped-circulations";
 import type { CreateCirculationApiPayload } from "@/types/dto/create-circulation";
 import type { IGetOperationalCirculationsParams } from "@/types/dto/get-circulations";
-import type {
-  GroupedCirculation,
-  RawGroupedCirculation,
-} from "@/types/entity/grouped-circulations";
 
 const SERVICE_BASE_URL = "/api/Course";
 
